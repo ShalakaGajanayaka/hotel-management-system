@@ -24,14 +24,13 @@ import java.util.Calendar;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-
 /**
  *
  * @author shalaka
  */
 public class DashboardOverviewPanel extends javax.swing.JPanel {
-
-     private ChartPanel jFreeChartPanel;
+    
+    private ChartPanel jFreeChartPanel;
     private TimeSeries occupancySeries;
     private TimeSeries revenueSeries;
     private Timer animationTimer;
@@ -41,7 +40,7 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
 
     public DashboardOverviewPanel() {
         initComponents();
-        
+
         // Database connection check කරන්න
         if (testDatabaseConnection()) {
             System.out.println("Database connected - Loading real data");
@@ -52,14 +51,16 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
             isDatabaseConnected = false;
             setSampleStatistics();
         }
-        
+
         // Initialize bottom section with correct layout
         initializeBottomSection();
-        
+
         setupAnimatedChart();
         startAnimation();
         startDateTimeDisplay();
     }
+    
+ 
 
     /**
      * Test database connection
@@ -166,24 +167,24 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
         // jPanel1 layout change කරන්න BorderLayout එකට
         jPanel1.removeAll();
         jPanel1.setLayout(new BorderLayout(10, 0));
-        
+
         // Quick actions panel - left side (30%)
         quickActionsPanel.setPreferredSize(new Dimension(280, 250));
         jPanel1.add(quickActionsPanel, BorderLayout.WEST);
-        
+
         // Recent bookings panel - right side (70%)
         recentBookingsPanel.setPreferredSize(new Dimension(650, 250));
         jPanel1.add(recentBookingsPanel, BorderLayout.CENTER);
-        
+
         // Setup recent bookings table
         setupRecentBookingsTable();
-        
+
         // Load recent bookings data
         loadRecentBookingsData();
-        
+
         // Add event listeners to buttons
         addQuickActionEventListeners();
-        
+
         // Revalidate layout
         jPanel1.revalidate();
         jPanel1.repaint();
@@ -201,9 +202,9 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
                 return false; // Make table non-editable
             }
         };
-        
+
         recentBookingsTable.setModel(model);
-        
+
         // Table appearance
         recentBookingsTable.setRowHeight(25);
         recentBookingsTable.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -212,7 +213,7 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
         recentBookingsTable.setSelectionBackground(new Color(232, 242, 254));
         recentBookingsTable.setGridColor(new Color(240, 240, 240));
         recentBookingsTable.setShowVerticalLines(true);
-        
+
         // Column widths
         if (recentBookingsTable.getColumnModel().getColumnCount() >= 5) {
             recentBookingsTable.getColumnModel().getColumn(0).setPreferredWidth(80);  // Booking #
@@ -221,25 +222,25 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
             recentBookingsTable.getColumnModel().getColumn(3).setPreferredWidth(100); // Check-In
             recentBookingsTable.getColumnModel().getColumn(4).setPreferredWidth(80);  // Status
         }
-        
+
         // Center alignment for certain columns
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
-        
+
         if (recentBookingsTable.getColumnModel().getColumnCount() >= 5) {
             recentBookingsTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer); // Booking #
             recentBookingsTable.getColumnModel().getColumn(2).setCellRenderer(centerRenderer); // Room
-            
+
             // Custom renderer for status column with colors
             recentBookingsTable.getColumnModel().getColumn(4).setCellRenderer(new DefaultTableCellRenderer() {
                 @Override
-                public Component getTableCellRendererComponent(javax.swing.JTable table, Object value, 
+                public Component getTableCellRendererComponent(javax.swing.JTable table, Object value,
                         boolean isSelected, boolean hasFocus, int row, int column) {
                     Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                    
+
                     if (value != null) {
                         String status = value.toString();
-                        
+
                         if (status.equals("Confirmed")) {
                             c.setForeground(new Color(46, 204, 113)); // Green
                         } else if (status.equals("Checked-in")) {
@@ -252,7 +253,7 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
                             c.setForeground(Color.BLACK);
                         }
                     }
-                    
+
                     setHorizontalAlignment(javax.swing.JLabel.CENTER);
                     return c;
                 }
@@ -269,53 +270,53 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
                 loadSampleBookingsData();
                 return;
             }
-            
+
             // Get table model
             DefaultTableModel model = (DefaultTableModel) recentBookingsTable.getModel();
-            
+
             // Clear existing data
             model.setRowCount(0);
-            
+
             // Query for recent bookings (last 10)
-            String query = "SELECT b.booking_number, " +
-                          "CONCAT(g.first_name, ' ', g.last_name) AS guest_name, " +
-                          "r.room_number, " +
-                          "b.check_in_date, " +
-                          "b.status " +
-                          "FROM booking b " +
-                          "JOIN guest g ON b.guest_id = g.guest_id " +
-                          "JOIN booking_room br ON b.booking_id = br.booking_id " +
-                          "JOIN room r ON br.room_id = r.room_id " +
-                          "ORDER BY b.created_at DESC " +
-                          "LIMIT 10";
-            
+            String query = "SELECT b.booking_number, "
+                    + "CONCAT(g.first_name, ' ', g.last_name) AS guest_name, "
+                    + "r.room_number, "
+                    + "b.check_in_date, "
+                    + "b.status "
+                    + "FROM booking b "
+                    + "JOIN guest g ON b.guest_id = g.guest_id "
+                    + "JOIN booking_room br ON b.booking_id = br.booking_id "
+                    + "JOIN room r ON br.room_id = r.room_id "
+                    + "ORDER BY b.created_at DESC "
+                    + "LIMIT 10";
+
             ResultSet rs = DatabaseConnection.executeSearch(query);
-            
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd");
-            
+
             while (rs.next()) {
                 String bookingNumber = rs.getString("booking_number");
                 String guestName = rs.getString("guest_name");
                 String roomNumber = rs.getString("room_number");
                 Date checkInDate = rs.getDate("check_in_date");
                 String status = rs.getString("status");
-                
+
                 // Format check-in date
                 String checkIn = checkInDate != null ? dateFormat.format(checkInDate) : "N/A";
-                
+
                 // Add row to table
                 Object[] row = {bookingNumber, guestName, roomNumber, checkIn, status};
                 model.addRow(row);
             }
-            
+
             rs.close();
-            
+
             // If no data found, show message
             if (model.getRowCount() == 0) {
                 Object[] noDataRow = {"No recent bookings found", "", "", "", ""};
                 model.addRow(noDataRow);
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error loading recent bookings: " + e.getMessage());
@@ -329,7 +330,7 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
     private void loadSampleBookingsData() {
         DefaultTableModel model = (DefaultTableModel) recentBookingsTable.getModel();
         model.setRowCount(0);
-        
+
         // Sample data
         Object[][] sampleData = {
             {"B202401", "John Smith", "101", "Dec 15", "Confirmed"},
@@ -340,7 +341,7 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
             {"B202406", "Sarah Davis", "204", "Dec 10", "Checked-in"},
             {"B202407", "Michael Garcia", "301", "Dec 09", "Checked-out"}
         };
-        
+
         for (Object[] row : sampleData) {
             model.addRow(row);
         }
@@ -352,53 +353,53 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
     private void addQuickActionEventListeners() {
         newBookingBtn.addActionListener(e -> {
             System.out.println("New Booking clicked");
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "New Booking feature will be implemented soon!", 
-                "Coming Soon", 
-                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "New Booking feature will be implemented soon!",
+                    "Coming Soon",
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
         });
-        
+
         checkinBtn.addActionListener(e -> {
             System.out.println("Check-in clicked");
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "Check-in feature will be implemented soon!", 
-                "Coming Soon", 
-                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Check-in feature will be implemented soon!",
+                    "Coming Soon",
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
         });
-        
+
         checkoutBtn.addActionListener(e -> {
             System.out.println("Check-out clicked");
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "Check-out feature will be implemented soon!", 
-                "Coming Soon", 
-                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Check-out feature will be implemented soon!",
+                    "Coming Soon",
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
         });
-        
+
         roomStatusBtn.addActionListener(e -> {
             System.out.println("Room Status clicked");
-            javax.swing.JOptionPane.showMessageDialog(this, 
-                "Room Status feature will be implemented soon!", 
-                "Coming Soon", 
-                javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Room Status feature will be implemented soon!",
+                    "Coming Soon",
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
         });
-        
+
         // "See all bookings" label click listener
         lblSeeAllBookingsButton.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 System.out.println("See all bookings clicked");
-                javax.swing.JOptionPane.showMessageDialog(DashboardOverviewPanel.this, 
-                    "Booking Management feature will be implemented soon!", 
-                    "Coming Soon", 
-                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                javax.swing.JOptionPane.showMessageDialog(DashboardOverviewPanel.this,
+                        "Booking Management feature will be implemented soon!",
+                        "Coming Soon",
+                        javax.swing.JOptionPane.INFORMATION_MESSAGE);
             }
-            
+
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
                 lblSeeAllBookingsButton.setForeground(new Color(41, 128, 185));
                 lblSeeAllBookingsButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
             }
-            
+
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
                 lblSeeAllBookingsButton.setForeground(new Color(52, 73, 94));
@@ -429,21 +430,25 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
         } else {
             occupancySeries = new TimeSeries("Room Occupancy %");
         }
-        
+
         // Generate last 7 days data with current occupancy as base
         double currentOccupancy = getCurrentOccupancyPercentage();
-        
+
         Calendar calendar = Calendar.getInstance();
         for (int i = 6; i >= 0; i--) {
             calendar.setTime(new Date());
             calendar.add(Calendar.DAY_OF_MONTH, -i);
             Day day = new Day(calendar.getTime());
-            
+
             // Use current occupancy with some variation for historical data
             double occupancy = currentOccupancy + (random.nextDouble() * 20 - 10); // ±10% variation
-            if (occupancy < 0) occupancy = 0;
-            if (occupancy > 100) occupancy = 100;
-            
+            if (occupancy < 0) {
+                occupancy = 0;
+            }
+            if (occupancy > 100) {
+                occupancy = 100;
+            }
+
             occupancySeries.add(day, occupancy);
         }
     }
@@ -457,20 +462,22 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
         } else {
             revenueSeries = new TimeSeries("Daily Revenue ($)");
         }
-        
+
         // Get today's revenue as base
         double todayRevenue = getTodayRevenue();
-        
+
         Calendar calendar = Calendar.getInstance();
         for (int i = 6; i >= 0; i--) {
             calendar.setTime(new Date());
             calendar.add(Calendar.DAY_OF_MONTH, -i);
             Day day = new Day(calendar.getTime());
-            
+
             // Generate historical revenue data based on today's revenue
             double revenue = todayRevenue + (random.nextDouble() * 2000 - 1000); // ±$1000 variation
-            if (revenue < 0) revenue = 0;
-            
+            if (revenue < 0) {
+                revenue = 0;
+            }
+
             revenueSeries.add(day, revenue / 50); // Scale down for chart display
         }
     }
@@ -481,13 +488,13 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
     private double getCurrentOccupancyPercentage() throws Exception {
         String query = "SELECT (COUNT(CASE WHEN status = 'Occupied' THEN 1 END) * 100.0 / COUNT(*)) as occupancy FROM room";
         ResultSet rs = DatabaseConnection.executeSearch(query);
-        
+
         double occupancy = 0;
         if (rs.next()) {
             occupancy = rs.getDouble("occupancy");
         }
         rs.close();
-        
+
         return occupancy;
     }
 
@@ -497,13 +504,13 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
     private double getTodayRevenue() throws Exception {
         String query = "SELECT COALESCE(SUM(amount), 0) as revenue FROM payment WHERE DATE(payment_date) = CURDATE() AND status = 'Completed'";
         ResultSet rs = DatabaseConnection.executeSearch(query);
-        
+
         double revenue = 0;
         if (rs.next()) {
             revenue = rs.getDouble("revenue");
         }
         rs.close();
-        
+
         return revenue;
     }
 
@@ -516,22 +523,22 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
         } else {
             occupancySeries = new TimeSeries("Room Occupancy %");
         }
-        
+
         if (revenueSeries != null) {
             revenueSeries.clear();
         } else {
             revenueSeries = new TimeSeries("Daily Revenue ($)");
         }
-        
+
         Calendar calendar = Calendar.getInstance();
         for (int i = 6; i >= 0; i--) {
             calendar.setTime(new Date());
             calendar.add(Calendar.DAY_OF_MONTH, -i);
             Day day = new Day(calendar.getTime());
-            
+
             double occupancy = 60 + (random.nextDouble() * 40); // 60-100%
             double revenue = 2000 + (random.nextDouble() * 3000); // $2000-5000
-            
+
             occupancySeries.add(day, occupancy);
             revenueSeries.add(day, revenue / 50); // Scale down
         }
@@ -670,11 +677,11 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
             if (isDatabaseConnected) {
                 // Update statistics
                 loadStatistics();
-                
+
                 // Update chart data
                 loadLatestOccupancyData();
                 loadLatestRevenueData();
-                
+
                 // Update recent bookings (every few updates)
                 if (random.nextInt(3) == 0) { // Update bookings every ~15 seconds (3 * 5 seconds)
                     loadRecentBookingsData();
@@ -701,7 +708,7 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
      */
     private void loadLatestOccupancyData() throws Exception {
         double occupancy = getCurrentOccupancyPercentage();
-        
+
         Day today = new Day(new Date());
         if (occupancySeries.getItemCount() > 10) {
             occupancySeries.delete(0, 0); // Remove old data
@@ -714,7 +721,7 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
      */
     private void loadLatestRevenueData() throws Exception {
         double revenue = getTodayRevenue();
-        
+
         Day today = new Day(new Date());
         if (revenueSeries.getItemCount() > 10) {
             revenueSeries.delete(0, 0); // Remove old data
@@ -745,7 +752,7 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
      */
     public void stopAllTimers() {
         stopAnimation();
-        
+
         if (dateTimeTimer != null && dateTimeTimer.isRunning()) {
             dateTimeTimer.stop();
         }
@@ -779,9 +786,9 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
             setSampleStatistics();
             loadSampleChartData();
         }
-        
+
         loadRecentBookingsData();
-        
+
         if (jFreeChartPanel != null) {
             jFreeChartPanel.repaint();
         }

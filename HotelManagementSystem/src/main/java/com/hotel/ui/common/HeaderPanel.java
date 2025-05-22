@@ -4,19 +4,113 @@
  */
 package main.java.com.hotel.ui.common;
 
+import main.java.com.hotel.config.DatabaseConnection;
+import main.java.com.hotel.ui.dashboard.DashboardFrame;
+import java.sql.ResultSet;
 /**
  *
  * @author shalaka
  */
 public class HeaderPanel extends javax.swing.JPanel {
 
+      private DashboardFrame parent;
+    
     /**
-     * Creates new form HeaderPanel
+     * Creates new form HeaderPanel - Default constructor for NetBeans designer
      */
     public HeaderPanel() {
         initComponents();
     }
-
+    
+    /**
+     * Creates new form HeaderPanel with parent dashboard
+     */
+    public HeaderPanel(DashboardFrame parent) {
+        this.parent = parent;
+        initComponents();
+        
+        // Update label with user info from database
+        updateUserInfo();
+    }
+    
+    /**
+     * Set parent dashboard reference after initialization
+     */
+    public void setParent(DashboardFrame parent) {
+        this.parent = parent;
+        
+        // Update label with user info from database
+        updateUserInfo();
+    }
+    
+    /**
+     * Update the username label with information from the database
+     */
+    private void updateUserInfo() {
+        if (parent != null && parent.username != null) {
+            try {
+                String[] userInfo = getUserInfo(parent.username);
+                if (userInfo != null) {
+                    String firstName = userInfo[0];
+                    String lastName = userInfo[1];
+                    String role = userInfo[2];
+                    
+                    // Format: FirstName LastName (Role)
+                    usernameWithRoleLabel.setText(firstName + " " + lastName + " (" + role + ")");
+                    
+                    System.out.println("Updated user info label: " + firstName + " " + lastName + " (" + role + ")");
+                } else {
+                    // Fallback if user info not found
+                    usernameWithRoleLabel.setText(parent.username);
+                    System.out.println("User info not found in database, using username: " + parent.username);
+                }
+            } catch (Exception e) {
+                System.err.println("Error updating user info: " + e.getMessage());
+                // Fallback in case of error
+                usernameWithRoleLabel.setText(parent.username);
+            }
+        } else {
+            // Default text if no parent or username
+            usernameWithRoleLabel.setText("Guest User");
+        }
+    }
+    
+    /**
+     * Get user information (first name, last name, role) from database
+     * 
+     * @param username The username to look up
+     * @return Array containing [firstName, lastName, role] or null if not found
+     */
+    private String[] getUserInfo(String username) {
+        try {
+            String safeUsername = username.replace("'", "''");
+            String query = "SELECT u.first_name, u.last_name, ur.role_name " +
+                          "FROM user u " +
+                          "LEFT JOIN user_role ur ON u.user_id = ur.user_id " +
+                          "WHERE u.username = '" + safeUsername + "'";
+            
+            System.out.println("Executing query: " + query);
+            
+            ResultSet rs = DatabaseConnection.executeSearch(query);
+            
+            if (rs.next()) {
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                String role = rs.getString("role_name");
+                
+                rs.close();
+                return new String[]{firstName, lastName, role};
+            }
+            
+            rs.close();
+            return null;
+            
+        } catch (Exception e) {
+            System.err.println("Error getting user info from database: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,12 +120,12 @@ public class HeaderPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        logoLabel = new javax.swing.JLabel();
+        usernameWithRoleLabel = new javax.swing.JLabel();
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/main/resources/images/icons/logo2.png"))); // NOI18N
+        logoLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/main/resources/images/icons/logo2.png"))); // NOI18N
 
-        jLabel2.setText("Shalaka Gajanayake (Admin)");
+        usernameWithRoleLabel.setText("Shalaka Gajanayake (Admin)");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -39,9 +133,9 @@ public class HeaderPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(logoLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
-                .addComponent(jLabel2)
+                .addComponent(usernameWithRoleLabel)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -49,15 +143,15 @@ public class HeaderPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(logoLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(usernameWithRoleLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel logoLabel;
+    private javax.swing.JLabel usernameWithRoleLabel;
     // End of variables declaration//GEN-END:variables
 }

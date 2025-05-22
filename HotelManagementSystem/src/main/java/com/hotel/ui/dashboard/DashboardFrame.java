@@ -6,6 +6,7 @@ package main.java.com.hotel.ui.dashboard;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.awt.Dimension;
+import main.java.com.hotel.ui.common.DashboardOverviewPanel;
 
 /**
  *
@@ -13,15 +14,27 @@ import java.awt.Dimension;
  */
 public class DashboardFrame extends javax.swing.JFrame {
 
-    /**
-     * Creates new form DashboardFrame
-     */
+    public String username;
+    private DashboardOverviewPanel dashboardPanel;
+
     public DashboardFrame() {
 
         initComponents();
         this.setPreferredSize(new Dimension(1200, 800));
         this.setMinimumSize(new Dimension(800, 600));
         this.setLocationRelativeTo(null);
+    }
+
+    public DashboardFrame(String username) {
+        this.username = username;
+        initComponents();
+
+        // Set this dashboard as parent to header panel
+        if (headerPanel != null) {
+            headerPanel.setParent(this);
+        }
+
+        setLocationRelativeTo(null);
     }
 
     /**
