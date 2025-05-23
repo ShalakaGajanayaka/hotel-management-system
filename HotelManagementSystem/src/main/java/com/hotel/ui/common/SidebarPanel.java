@@ -4,17 +4,32 @@
  */
 package main.java.com.hotel.ui.common;
 
+import main.java.com.hotel.ui.booking.BookingsMainPanel;
+import main.java.com.hotel.ui.dashboard.DashboardFrame;
+
 /**
  *
  * @author shalaka
  */
 public class SidebarPanel extends javax.swing.JPanel {
 
+    private DashboardFrame parent;
+
     /**
      * Creates new form SidebarPanel
      */
     public SidebarPanel() {
         initComponents();
+    }
+
+    public SidebarPanel(DashboardFrame parent) {
+        this.parent = parent;
+        initComponents();
+    }
+
+    public void setParent(DashboardFrame parent) {
+        this.parent = parent;
+
     }
 
     /**
@@ -27,9 +42,9 @@ public class SidebarPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         dashboardBtnPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        dashboardBtnLabel = new javax.swing.JLabel();
         bookingBtnPanel = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        bookingBtnLabel = new javax.swing.JLabel();
         roomsBtnPanel = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         servicesBtnPanel = new javax.swing.JPanel();
@@ -47,9 +62,14 @@ public class SidebarPanel extends javax.swing.JPanel {
 
         dashboardBtnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel1.setText("Dashboard");
+        dashboardBtnLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        dashboardBtnLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        dashboardBtnLabel.setText("Dashboard");
+        dashboardBtnLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dashboardBtnLabelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout dashboardBtnPanelLayout = new javax.swing.GroupLayout(dashboardBtnPanel);
         dashboardBtnPanel.setLayout(dashboardBtnPanelLayout);
@@ -57,22 +77,27 @@ public class SidebarPanel extends javax.swing.JPanel {
             dashboardBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dashboardBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(dashboardBtnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         dashboardBtnPanelLayout.setVerticalGroup(
             dashboardBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dashboardBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(dashboardBtnLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         bookingBtnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel2.setText("Bookings");
+        bookingBtnLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        bookingBtnLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        bookingBtnLabel.setText("Bookings");
+        bookingBtnLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bookingBtnLabelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout bookingBtnPanelLayout = new javax.swing.GroupLayout(bookingBtnPanel);
         bookingBtnPanel.setLayout(bookingBtnPanelLayout);
@@ -80,14 +105,14 @@ public class SidebarPanel extends javax.swing.JPanel {
             bookingBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bookingBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addComponent(bookingBtnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                 .addContainerGap())
         );
         bookingBtnPanelLayout.setVerticalGroup(
             bookingBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bookingBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel2)
+                .addComponent(bookingBtnLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -269,14 +294,33 @@ public class SidebarPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void dashboardBtnLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboardBtnLabelMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_dashboardBtnLabelMouseClicked
+
+    private void bookingBtnLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookingBtnLabelMouseClicked
+        if (parent != null) {
+            // Create the booking management panel
+            BookingsMainPanel bookingMainPanel
+                    = new BookingsMainPanel();
+
+            // Set the booking panel as the viewport view of the scroll pane
+            parent.jScrollPane1.setViewportView(bookingMainPanel);
+
+            // Refresh the layout
+            parent.jScrollPane1.revalidate();
+            parent.jScrollPane1.repaint();
+        }
+    }//GEN-LAST:event_bookingBtnLabelMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel bookingBtnLabel;
     private javax.swing.JPanel bookingBtnPanel;
+    private javax.swing.JLabel dashboardBtnLabel;
     private javax.swing.JPanel dashboardBtnPanel;
     private javax.swing.JPanel employeesBtnPanel;
     private javax.swing.JPanel guestBtnPanel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

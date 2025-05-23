@@ -7,42 +7,37 @@ package main.java.com.hotel.ui.common;
 import main.java.com.hotel.config.DatabaseConnection;
 import main.java.com.hotel.ui.dashboard.DashboardFrame;
 import java.sql.ResultSet;
+
 /**
  *
  * @author shalaka
  */
 public class HeaderPanel extends javax.swing.JPanel {
 
-      private DashboardFrame parent;
-    
+    private DashboardFrame parent;
+
     /**
      * Creates new form HeaderPanel - Default constructor for NetBeans designer
      */
     public HeaderPanel() {
         initComponents();
     }
-    
+
     /**
      * Creates new form HeaderPanel with parent dashboard
      */
-    public HeaderPanel(DashboardFrame parent) {
-        this.parent = parent;
-        initComponents();
-        
-        // Update label with user info from database
-        updateUserInfo();
-    }
-    
+ 
+
     /**
      * Set parent dashboard reference after initialization
      */
     public void setParent(DashboardFrame parent) {
         this.parent = parent;
-        
+
         // Update label with user info from database
         updateUserInfo();
     }
-    
+
     /**
      * Update the username label with information from the database
      */
@@ -54,10 +49,10 @@ public class HeaderPanel extends javax.swing.JPanel {
                     String firstName = userInfo[0];
                     String lastName = userInfo[1];
                     String role = userInfo[2];
-                    
+
                     // Format: FirstName LastName (Role)
                     usernameWithRoleLabel.setText(firstName + " " + lastName + " (" + role + ")");
-                    
+
                     System.out.println("Updated user info label: " + firstName + " " + lastName + " (" + role + ")");
                 } else {
                     // Fallback if user info not found
@@ -74,43 +69,44 @@ public class HeaderPanel extends javax.swing.JPanel {
             usernameWithRoleLabel.setText("Guest User");
         }
     }
-    
+
     /**
      * Get user information (first name, last name, role) from database
-     * 
+     *
      * @param username The username to look up
      * @return Array containing [firstName, lastName, role] or null if not found
      */
     private String[] getUserInfo(String username) {
         try {
             String safeUsername = username.replace("'", "''");
-            String query = "SELECT u.first_name, u.last_name, ur.role_name " +
-                          "FROM user u " +
-                          "LEFT JOIN user_role ur ON u.user_id = ur.user_id " +
-                          "WHERE u.username = '" + safeUsername + "'";
-            
+            String query = "SELECT u.first_name, u.last_name, ur.role_name "
+                    + "FROM user u "
+                    + "LEFT JOIN user_role ur ON u.user_id = ur.user_id "
+                    + "WHERE u.username = '" + safeUsername + "'";
+
             System.out.println("Executing query: " + query);
-            
+
             ResultSet rs = DatabaseConnection.executeSearch(query);
-            
+
             if (rs.next()) {
                 String firstName = rs.getString("first_name");
                 String lastName = rs.getString("last_name");
                 String role = rs.getString("role_name");
-                
+
                 rs.close();
                 return new String[]{firstName, lastName, role};
             }
-            
+
             rs.close();
             return null;
-            
+
         } catch (Exception e) {
             System.err.println("Error getting user info from database: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

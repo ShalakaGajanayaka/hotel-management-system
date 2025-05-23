@@ -23,13 +23,16 @@ import java.util.Date;
 import java.util.Calendar;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import main.java.com.hotel.ui.dashboard.DashboardFrame;
 
 /**
  *
  * @author shalaka
  */
 public class DashboardOverviewPanel extends javax.swing.JPanel {
-    
+
+    private DashboardFrame parent;
+
     private ChartPanel jFreeChartPanel;
     private TimeSeries occupancySeries;
     private TimeSeries revenueSeries;
@@ -40,6 +43,11 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
 
     public DashboardOverviewPanel() {
         initComponents();
+
+    }
+
+    public void setParent(DashboardFrame parent) {
+        this.parent = parent;
 
         // Database connection check කරන්න
         if (testDatabaseConnection()) {
@@ -58,9 +66,8 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
         setupAnimatedChart();
         startAnimation();
         startDateTimeDisplay();
+
     }
-    
- 
 
     /**
      * Test database connection
