@@ -37,7 +37,8 @@ public class BookingsMainPanel extends javax.swing.JPanel {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         bookingManagementTab = new javax.swing.JPanel();
         bookingManagementPanel1 = new main.java.com.hotel.ui.booking.BookingManagementPanel();
-        jPanel2 = new javax.swing.JPanel();
+        newBookingTab = new javax.swing.JPanel();
+        newBookingPanel1 = new main.java.com.hotel.ui.booking.NewBookingPanel();
         jPanel3 = new javax.swing.JPanel();
 
         setPreferredSize(new java.awt.Dimension(930, 695));
@@ -59,18 +60,22 @@ public class BookingsMainPanel extends javax.swing.JPanel {
 
         jTabbedPane1.addTab("Booking Management", bookingManagementTab);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 930, Short.MAX_VALUE)
+        javax.swing.GroupLayout newBookingTabLayout = new javax.swing.GroupLayout(newBookingTab);
+        newBookingTab.setLayout(newBookingTabLayout);
+        newBookingTabLayout.setHorizontalGroup(
+            newBookingTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newBookingTabLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(newBookingPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 660, Short.MAX_VALUE)
+        newBookingTabLayout.setVerticalGroup(
+            newBookingTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newBookingTabLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(newBookingPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("tab2", jPanel2);
+        jTabbedPane1.addTab("New Booking", newBookingTab);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -101,8 +106,9 @@ public class BookingsMainPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private main.java.com.hotel.ui.booking.BookingManagementPanel bookingManagementPanel1;
     private javax.swing.JPanel bookingManagementTab;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private main.java.com.hotel.ui.booking.NewBookingPanel newBookingPanel1;
+    private javax.swing.JPanel newBookingTab;
     // End of variables declaration//GEN-END:variables
 }
