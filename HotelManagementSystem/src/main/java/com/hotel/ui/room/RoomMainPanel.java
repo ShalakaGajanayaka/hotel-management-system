@@ -4,17 +4,25 @@
  */
 package main.java.com.hotel.ui.room;
 
+import main.java.com.hotel.ui.dashboard.DashboardFrame;
+
 /**
  *
  * @author shalaka
  */
 public class RoomMainPanel extends javax.swing.JPanel {
 
+    private DashboardFrame parent;
     /**
      * Creates new form RoomMainPanel
      */
     public RoomMainPanel() {
         initComponents();
+    }
+    
+    public void setParent(DashboardFrame parent) {
+        this.parent = parent;
+
     }
 
     /**
@@ -38,14 +46,12 @@ public class RoomMainPanel extends javax.swing.JPanel {
         roomManagementTabLayout.setHorizontalGroup(
             roomManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, roomManagementTabLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(roomManagementPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addComponent(roomManagementPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         roomManagementTabLayout.setVerticalGroup(
             roomManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, roomManagementTabLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(roomManagementPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(roomManagementPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Room Management", roomManagementTab);
@@ -58,7 +64,7 @@ public class RoomMainPanel extends javax.swing.JPanel {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 660, Short.MAX_VALUE)
+            .addGap(0, 690, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("tab2", jPanel2);

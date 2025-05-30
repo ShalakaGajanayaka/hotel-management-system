@@ -6,6 +6,7 @@ package main.java.com.hotel.ui.common;
 
 import main.java.com.hotel.ui.booking.BookingsMainPanel;
 import main.java.com.hotel.ui.dashboard.DashboardFrame;
+import main.java.com.hotel.ui.room.RoomMainPanel;
 
 /**
  *
@@ -46,17 +47,17 @@ public class SidebarPanel extends javax.swing.JPanel {
         bookingBtnPanel = new javax.swing.JPanel();
         bookingBtnLabel = new javax.swing.JLabel();
         roomsBtnPanel = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
+        roomsBtnLabel = new javax.swing.JLabel();
         servicesBtnPanel = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        servicesBtnLabel = new javax.swing.JLabel();
         employeesBtnPanel = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
+        employeesBtnLabel = new javax.swing.JLabel();
         guestBtnPanel = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
+        guestsBtnLabel = new javax.swing.JLabel();
         reportsBtnPanel = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
+        reportsBtnLabel = new javax.swing.JLabel();
         settingsBtnPannel = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
+        settingsBtnLabel = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(220, 0));
 
@@ -118,9 +119,14 @@ public class SidebarPanel extends javax.swing.JPanel {
 
         roomsBtnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel3.setText("Rooms");
+        roomsBtnLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        roomsBtnLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        roomsBtnLabel.setText("Rooms");
+        roomsBtnLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                roomsBtnLabelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout roomsBtnPanelLayout = new javax.swing.GroupLayout(roomsBtnPanel);
         roomsBtnPanel.setLayout(roomsBtnPanelLayout);
@@ -128,22 +134,22 @@ public class SidebarPanel extends javax.swing.JPanel {
             roomsBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(roomsBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addComponent(roomsBtnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                 .addContainerGap())
         );
         roomsBtnPanelLayout.setVerticalGroup(
             roomsBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(roomsBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3)
+                .addComponent(roomsBtnLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         servicesBtnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel4.setText("Services");
+        servicesBtnLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        servicesBtnLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        servicesBtnLabel.setText("Services");
 
         javax.swing.GroupLayout servicesBtnPanelLayout = new javax.swing.GroupLayout(servicesBtnPanel);
         servicesBtnPanel.setLayout(servicesBtnPanelLayout);
@@ -151,22 +157,22 @@ public class SidebarPanel extends javax.swing.JPanel {
             servicesBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(servicesBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addComponent(servicesBtnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                 .addContainerGap())
         );
         servicesBtnPanelLayout.setVerticalGroup(
             servicesBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(servicesBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel4)
+                .addComponent(servicesBtnLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         employeesBtnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel5.setText("Employees");
+        employeesBtnLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        employeesBtnLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        employeesBtnLabel.setText("Employees");
 
         javax.swing.GroupLayout employeesBtnPanelLayout = new javax.swing.GroupLayout(employeesBtnPanel);
         employeesBtnPanel.setLayout(employeesBtnPanelLayout);
@@ -174,22 +180,22 @@ public class SidebarPanel extends javax.swing.JPanel {
             employeesBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(employeesBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addComponent(employeesBtnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                 .addContainerGap())
         );
         employeesBtnPanelLayout.setVerticalGroup(
             employeesBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(employeesBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel5)
+                .addComponent(employeesBtnLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         guestBtnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel6.setText("Guests");
+        guestsBtnLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        guestsBtnLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        guestsBtnLabel.setText("Guests");
 
         javax.swing.GroupLayout guestBtnPanelLayout = new javax.swing.GroupLayout(guestBtnPanel);
         guestBtnPanel.setLayout(guestBtnPanelLayout);
@@ -197,22 +203,22 @@ public class SidebarPanel extends javax.swing.JPanel {
             guestBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(guestBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(guestsBtnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         guestBtnPanelLayout.setVerticalGroup(
             guestBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(guestBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel6)
+                .addComponent(guestsBtnLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         reportsBtnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel7.setText("Reports");
+        reportsBtnLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        reportsBtnLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        reportsBtnLabel.setText("Reports");
 
         javax.swing.GroupLayout reportsBtnPanelLayout = new javax.swing.GroupLayout(reportsBtnPanel);
         reportsBtnPanel.setLayout(reportsBtnPanelLayout);
@@ -220,22 +226,22 @@ public class SidebarPanel extends javax.swing.JPanel {
             reportsBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(reportsBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addComponent(reportsBtnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                 .addContainerGap())
         );
         reportsBtnPanelLayout.setVerticalGroup(
             reportsBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(reportsBtnPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel7)
+                .addComponent(reportsBtnLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         settingsBtnPannel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel8.setText("Settings");
+        settingsBtnLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        settingsBtnLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        settingsBtnLabel.setText("Settings");
 
         javax.swing.GroupLayout settingsBtnPannelLayout = new javax.swing.GroupLayout(settingsBtnPannel);
         settingsBtnPannel.setLayout(settingsBtnPannelLayout);
@@ -243,14 +249,14 @@ public class SidebarPanel extends javax.swing.JPanel {
             settingsBtnPannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(settingsBtnPannelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addComponent(settingsBtnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
                 .addContainerGap())
         );
         settingsBtnPannelLayout.setVerticalGroup(
             settingsBtnPannelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(settingsBtnPannelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel8)
+                .addComponent(settingsBtnLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -295,7 +301,18 @@ public class SidebarPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void dashboardBtnLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashboardBtnLabelMouseClicked
-        // TODO add your handling code here:
+        if (parent != null) {
+            // Create the dashboard overview panel
+            DashboardOverviewPanel dashboardPanel = new DashboardOverviewPanel();
+            dashboardPanel.setParent(parent);
+
+            // Set the dashboard panel as the viewport view of the scroll pane
+            parent.jScrollPane1.setViewportView(dashboardPanel);
+
+            // Refresh the layout
+            parent.jScrollPane1.revalidate();
+            parent.jScrollPane1.repaint();
+        }
     }//GEN-LAST:event_dashboardBtnLabelMouseClicked
 
     private void bookingBtnLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bookingBtnLabelMouseClicked
@@ -313,23 +330,38 @@ public class SidebarPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_bookingBtnLabelMouseClicked
 
+    private void roomsBtnLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_roomsBtnLabelMouseClicked
+        if (parent != null) {
+            // Create the booking management panel
+            RoomMainPanel roomMainPanel
+                    = new RoomMainPanel();
+
+            // Set the booking panel as the viewport view of the scroll pane
+            parent.jScrollPane1.setViewportView(roomMainPanel);
+
+            // Refresh the layout
+            parent.jScrollPane1.revalidate();
+            parent.jScrollPane1.repaint();
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_roomsBtnLabelMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel bookingBtnLabel;
     private javax.swing.JPanel bookingBtnPanel;
     private javax.swing.JLabel dashboardBtnLabel;
     private javax.swing.JPanel dashboardBtnPanel;
+    private javax.swing.JLabel employeesBtnLabel;
     private javax.swing.JPanel employeesBtnPanel;
     private javax.swing.JPanel guestBtnPanel;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel guestsBtnLabel;
+    private javax.swing.JLabel reportsBtnLabel;
     private javax.swing.JPanel reportsBtnPanel;
+    private javax.swing.JLabel roomsBtnLabel;
     private javax.swing.JPanel roomsBtnPanel;
+    private javax.swing.JLabel servicesBtnLabel;
     private javax.swing.JPanel servicesBtnPanel;
+    private javax.swing.JLabel settingsBtnLabel;
     private javax.swing.JPanel settingsBtnPannel;
     // End of variables declaration//GEN-END:variables
 }

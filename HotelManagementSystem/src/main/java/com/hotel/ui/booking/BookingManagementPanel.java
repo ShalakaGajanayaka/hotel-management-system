@@ -5,6 +5,14 @@
 package main.java.com.hotel.ui.booking;
 
 import main.java.com.hotel.ui.dashboard.DashboardFrame;
+import main.java.com.hotel.config.DatabaseConnection;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.Font;
+import java.awt.Color;
 
 /**
  *
@@ -13,17 +21,22 @@ import main.java.com.hotel.ui.dashboard.DashboardFrame;
 public class BookingManagementPanel extends javax.swing.JPanel {
 
     private DashboardFrame parent;
+    private boolean isDatabaseConnected = false;
 
     /**
      * Creates new form BookingManagementPanel
      */
     public BookingManagementPanel() {
         initComponents();
+        setupBookingTable();
+        loadBookingData();
     }
 
     public BookingManagementPanel(DashboardFrame parent) {
         this.parent = parent;
         initComponents();
+        setupBookingTable();
+        loadBookingData();
     }
 
     /**
@@ -270,6 +283,149 @@ public class BookingManagementPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_statusComboboxActionPerformed
 
+    /**
+     * Setup the booking table with proper columns and styling
+     */
+    private void setupBookingTable() {
+        // Table model with proper columns
+        String[] columnNames = {"Booking #", "Guest", "Room", "Check-in", "Status"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make table non-editable
+            }
+        };
+
+        bookingListTable.setModel(model);
+
+        // Table appearance
+        bookingListTable.setRowHeight(25);
+        bookingListTable.setFont(new Font("Arial", Font.PLAIN, 12));
+        bookingListTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+        bookingListTable.getTableHeader().setBackground(new Color(240, 240, 240));
+        bookingListTable.setSelectionBackground(new Color(232, 242, 254));
+        bookingListTable.setGridColor(new Color(240, 240, 240));
+        bookingListTable.setShowVerticalLines(true);
+
+        // Column widths
+        if (bookingListTable.getColumnModel().getColumnCount() >= 5) {
+            bookingListTable.getColumnModel().getColumn(0).setPreferredWidth(80);  // Booking #
+            bookingListTable.getColumnModel().getColumn(1).setPreferredWidth(150); // Guest
+            bookingListTable.getColumnModel().getColumn(2).setPreferredWidth(60);  // Room
+            bookingListTable.getColumnModel().getColumn(3).setPreferredWidth(100); // Check-in
+            bookingListTable.getColumnModel().getColumn(4).setPreferredWidth(80);  // Status
+        }
+
+        // Center alignment for certain columns
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+        bookingListTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer); // Booking #
+        bookingListTable.getColumnModel().getColumn(2).setCellRenderer(centerRenderer); // Room
+        bookingListTable.getColumnModel().getColumn(3).setCellRenderer(centerRenderer); // Check-in
+        bookingListTable.getColumnModel().getColumn(4).setCellRenderer(centerRenderer); // Status
+    }
+
+    /**
+     * Load booking data from database or show sample data
+     */
+    private void loadBookingData() {
+        try {
+            // Test database connection
+            if (!testDatabaseConnection()) {
+                loadSampleBookingData();
+                return;
+            }
+
+            // Get table model
+            DefaultTableModel model = (DefaultTableModel) bookingListTable.getModel();
+
+            // Clear existing data
+            model.setRowCount(0);
+
+            // Query for all bookings
+            String query = "SELECT b.booking_number, "
+                    + "CONCAT(g.first_name, ' ', g.last_name) AS guest_name, "
+                    + "r.room_number, "
+                    + "b.check_in_date, "
+                    + "b.status "
+                    + "FROM booking b "
+                    + "JOIN guest g ON b.guest_id = g.guest_id "
+                    + "JOIN booking_room br ON b.booking_id = br.booking_id "
+                    + "JOIN room r ON br.room_id = r.room_id "
+                    + "ORDER BY b.created_at DESC";
+
+            ResultSet rs = DatabaseConnection.executeSearch(query);
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+
+            while (rs.next()) {
+                String bookingNumber = rs.getString("booking_number");
+                String guestName = rs.getString("guest_name");
+                String roomNumber = rs.getString("room_number");
+                Date checkInDate = rs.getDate("check_in_date");
+                String status = rs.getString("status");
+
+                // Format check-in date
+                String checkIn = checkInDate != null ? dateFormat.format(checkInDate) : "N/A";
+
+                // Add row to table
+                Object[] row = {bookingNumber, guestName, roomNumber, checkIn, status};
+                model.addRow(row);
+            }
+
+            rs.close();
+
+            // If no data found, show message
+            if (model.getRowCount() == 0) {
+                Object[] noDataRow = {"No bookings found", "", "", "", ""};
+                model.addRow(noDataRow);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error loading booking data: " + e.getMessage());
+            loadSampleBookingData();
+        }
+    }
+
+    /**
+     * Test database connection
+     */
+    private boolean testDatabaseConnection() {
+        try {
+            String testQuery = "SELECT 1";
+            ResultSet rs = DatabaseConnection.executeSearch(testQuery);
+            boolean connected = rs.next();
+            rs.close();
+            return connected;
+        } catch (Exception e) {
+            System.out.println("Database connection failed: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Load sample booking data when database is not available
+     */
+    private void loadSampleBookingData() {
+        DefaultTableModel model = (DefaultTableModel) bookingListTable.getModel();
+        model.setRowCount(0);
+
+        // Sample data
+        Object[][] sampleData = {
+            {"B202401", "John Smith", "101", "Dec 15, 2023", "Confirmed"},
+            {"B202402", "Mary Johnson", "203", "Dec 14, 2023", "Checked-in"},
+            {"B202403", "Robert Brown", "305", "Dec 13, 2023", "Checked-out"},
+            {"B202404", "Lisa Wilson", "102", "Dec 12, 2023", "Confirmed"},
+            {"B202405", "David Miller", "401", "Dec 11, 2023", "Cancelled"},
+            {"B202406", "Sarah Davis", "204", "Dec 10, 2023", "Checked-in"},
+            {"B202407", "Michael Garcia", "301", "Dec 09, 2023", "Checked-out"}
+        };
+
+        for (Object[] row : sampleData) {
+            model.addRow(row);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel bookingListPanel;
