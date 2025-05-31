@@ -196,6 +196,11 @@ public class SidebarPanel extends javax.swing.JPanel {
         guestsBtnLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         guestsBtnLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         guestsBtnLabel.setText("Guests");
+        guestsBtnLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                guestsBtnLabelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout guestBtnPanelLayout = new javax.swing.GroupLayout(guestBtnPanel);
         guestBtnPanel.setLayout(guestBtnPanelLayout);
@@ -344,6 +349,20 @@ public class SidebarPanel extends javax.swing.JPanel {
             parent.jScrollPane1.repaint();
         }        // TODO add your handling code here:
     }//GEN-LAST:event_roomsBtnLabelMouseClicked
+
+    private void guestsBtnLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_guestsBtnLabelMouseClicked
+        if (parent != null) {
+            // Create the guest management panel
+            main.java.com.hotel.ui.guest.GuestMainPanel guestMainPanel = new main.java.com.hotel.ui.guest.GuestMainPanel();
+
+            // Set the guest panel as the viewport view of the scroll pane
+            parent.jScrollPane1.setViewportView(guestMainPanel);
+
+            // Refresh the layout
+            parent.jScrollPane1.revalidate();
+            parent.jScrollPane1.repaint();
+        }
+    }//GEN-LAST:event_guestsBtnLabelMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
