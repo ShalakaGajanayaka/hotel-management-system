@@ -28,6 +28,7 @@ public class PaymentMainPanel extends javax.swing.JPanel {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         paymentManagementTab = new javax.swing.JPanel();
+        paymentManagementPanel1 = new main.java.com.hotel.ui.payment.PaymentManagementPanel();
         jPanel2 = new javax.swing.JPanel();
 
         setPreferredSize(new java.awt.Dimension(930, 660));
@@ -36,11 +37,15 @@ public class PaymentMainPanel extends javax.swing.JPanel {
         paymentManagementTab.setLayout(paymentManagementTabLayout);
         paymentManagementTabLayout.setHorizontalGroup(
             paymentManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 930, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, paymentManagementTabLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(paymentManagementPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         paymentManagementTabLayout.setVerticalGroup(
             paymentManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 625, Short.MAX_VALUE)
+            .addGroup(paymentManagementTabLayout.createSequentialGroup()
+                .addComponent(paymentManagementPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Payment Management", paymentManagementTab);
@@ -53,7 +58,7 @@ public class PaymentMainPanel extends javax.swing.JPanel {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 625, Short.MAX_VALUE)
+            .addGap(0, 660, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("tab2", jPanel2);
@@ -74,6 +79,7 @@ public class PaymentMainPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private main.java.com.hotel.ui.payment.PaymentManagementPanel paymentManagementPanel1;
     private javax.swing.JPanel paymentManagementTab;
     // End of variables declaration//GEN-END:variables
 }
