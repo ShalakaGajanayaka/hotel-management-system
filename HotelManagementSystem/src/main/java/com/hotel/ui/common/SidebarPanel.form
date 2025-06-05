@@ -235,6 +235,9 @@
             <Property name="horizontalAlignment" type="int" value="2"/>
             <Property name="text" type="java.lang.String" value="Services"/>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="servicesBtnLabelMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

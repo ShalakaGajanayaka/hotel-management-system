@@ -152,6 +152,11 @@ public class SidebarPanel extends javax.swing.JPanel {
         servicesBtnLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         servicesBtnLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         servicesBtnLabel.setText("Services");
+        servicesBtnLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                servicesBtnLabelMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout servicesBtnPanelLayout = new javax.swing.GroupLayout(servicesBtnPanel);
         servicesBtnPanel.setLayout(servicesBtnPanelLayout);
@@ -429,6 +434,20 @@ public class SidebarPanel extends javax.swing.JPanel {
             parent.jScrollPane1.repaint();
         }
     }//GEN-LAST:event_paymentsBtnLabelMouseClicked
+
+    private void servicesBtnLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_servicesBtnLabelMouseClicked
+          if (parent != null) {
+            // Create the employee management panel
+            main.java.com.hotel.ui.service.ServicesMainPanel serviceMainPanel = new main.java.com.hotel.ui.service.ServicesMainPanel();
+
+            // Set the employee panel as the viewport view of the scroll pane
+            parent.jScrollPane1.setViewportView(serviceMainPanel);
+
+            // Refresh the layout
+            parent.jScrollPane1.revalidate();
+            parent.jScrollPane1.repaint();
+        }
+    }//GEN-LAST:event_servicesBtnLabelMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
