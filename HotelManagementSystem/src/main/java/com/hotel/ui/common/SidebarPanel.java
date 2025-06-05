@@ -60,6 +60,8 @@ public class SidebarPanel extends javax.swing.JPanel {
         settingsBtnLabel = new javax.swing.JLabel();
         paymentsBtnPanel = new javax.swing.JPanel();
         paymentsBtnLabel = new javax.swing.JLabel();
+        inventoryBtnPanel = new javax.swing.JPanel();
+        inventoryBtnLabel = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(220, 0));
 
@@ -305,6 +307,34 @@ public class SidebarPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        inventoryBtnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        inventoryBtnLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        inventoryBtnLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        inventoryBtnLabel.setText("Inventory");
+        inventoryBtnLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                inventoryBtnLabelMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout inventoryBtnPanelLayout = new javax.swing.GroupLayout(inventoryBtnPanel);
+        inventoryBtnPanel.setLayout(inventoryBtnPanelLayout);
+        inventoryBtnPanelLayout.setHorizontalGroup(
+            inventoryBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(inventoryBtnPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(inventoryBtnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        inventoryBtnPanelLayout.setVerticalGroup(
+            inventoryBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(inventoryBtnPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(inventoryBtnLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -320,7 +350,8 @@ public class SidebarPanel extends javax.swing.JPanel {
                     .addComponent(guestBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(reportsBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(settingsBtnPannel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(paymentsBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(paymentsBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(inventoryBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -337,6 +368,8 @@ public class SidebarPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(employeesBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(inventoryBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(paymentsBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(servicesBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -344,7 +377,7 @@ public class SidebarPanel extends javax.swing.JPanel {
                 .addComponent(reportsBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(settingsBtnPannel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -449,6 +482,20 @@ public class SidebarPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_servicesBtnLabelMouseClicked
 
+    private void inventoryBtnLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_inventoryBtnLabelMouseClicked
+         if (parent != null) {
+            // Create the employee management panel
+            main.java.com.hotel.ui.inventory.InventoryMainPanel inventoryMainPanel = new main.java.com.hotel.ui.inventory.InventoryMainPanel();
+
+            // Set the employee panel as the viewport view of the scroll pane
+            parent.jScrollPane1.setViewportView(inventoryMainPanel);
+
+            // Refresh the layout
+            parent.jScrollPane1.revalidate();
+            parent.jScrollPane1.repaint();
+        }
+    }//GEN-LAST:event_inventoryBtnLabelMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel bookingBtnLabel;
@@ -459,6 +506,8 @@ public class SidebarPanel extends javax.swing.JPanel {
     private javax.swing.JPanel employeesBtnPanel;
     private javax.swing.JPanel guestBtnPanel;
     private javax.swing.JLabel guestsBtnLabel;
+    private javax.swing.JLabel inventoryBtnLabel;
+    private javax.swing.JPanel inventoryBtnPanel;
     private javax.swing.JLabel paymentsBtnLabel;
     private javax.swing.JPanel paymentsBtnPanel;
     private javax.swing.JLabel reportsBtnLabel;
