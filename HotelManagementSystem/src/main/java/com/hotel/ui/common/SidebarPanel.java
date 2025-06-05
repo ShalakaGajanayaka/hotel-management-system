@@ -62,6 +62,8 @@ public class SidebarPanel extends javax.swing.JPanel {
         paymentsBtnLabel = new javax.swing.JLabel();
         inventoryBtnPanel = new javax.swing.JPanel();
         inventoryBtnLabel = new javax.swing.JLabel();
+        maintenanceBtnPanel = new javax.swing.JPanel();
+        maintenanceBtnLabel = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(220, 0));
 
@@ -335,6 +337,34 @@ public class SidebarPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        maintenanceBtnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        maintenanceBtnLabel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        maintenanceBtnLabel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        maintenanceBtnLabel.setText("Maintenance");
+        maintenanceBtnLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                maintenanceBtnLabelMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout maintenanceBtnPanelLayout = new javax.swing.GroupLayout(maintenanceBtnPanel);
+        maintenanceBtnPanel.setLayout(maintenanceBtnPanelLayout);
+        maintenanceBtnPanelLayout.setHorizontalGroup(
+            maintenanceBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(maintenanceBtnPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(maintenanceBtnLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        maintenanceBtnPanelLayout.setVerticalGroup(
+            maintenanceBtnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(maintenanceBtnPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(maintenanceBtnLabel)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -351,7 +381,8 @@ public class SidebarPanel extends javax.swing.JPanel {
                     .addComponent(reportsBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(settingsBtnPannel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(paymentsBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(inventoryBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(inventoryBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(maintenanceBtnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -374,10 +405,12 @@ public class SidebarPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(servicesBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(maintenanceBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(reportsBtnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(settingsBtnPannel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -496,6 +529,20 @@ public class SidebarPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_inventoryBtnLabelMouseClicked
 
+    private void maintenanceBtnLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_maintenanceBtnLabelMouseClicked
+        if (parent != null) {
+            // Create the employee management panel
+            main.java.com.hotel.ui.maintenance.MaintenanceMainPanel maintenanceMainPanel = new main.java.com.hotel.ui.maintenance.MaintenanceMainPanel();
+
+            // Set the employee panel as the viewport view of the scroll pane
+            parent.jScrollPane1.setViewportView(maintenanceMainPanel);
+
+            // Refresh the layout
+            parent.jScrollPane1.revalidate();
+            parent.jScrollPane1.repaint();
+        }
+    }//GEN-LAST:event_maintenanceBtnLabelMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel bookingBtnLabel;
@@ -508,6 +555,8 @@ public class SidebarPanel extends javax.swing.JPanel {
     private javax.swing.JLabel guestsBtnLabel;
     private javax.swing.JLabel inventoryBtnLabel;
     private javax.swing.JPanel inventoryBtnPanel;
+    private javax.swing.JLabel maintenanceBtnLabel;
+    private javax.swing.JPanel maintenanceBtnPanel;
     private javax.swing.JLabel paymentsBtnLabel;
     private javax.swing.JPanel paymentsBtnPanel;
     private javax.swing.JLabel reportsBtnLabel;
