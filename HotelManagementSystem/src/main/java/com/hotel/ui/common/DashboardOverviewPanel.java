@@ -191,8 +191,6 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
         // Load recent bookings data
         loadRecentBookingsData();
 
-        // Add event listeners to buttons
-        addQuickActionEventListeners();
 
         // Revalidate layout
         jPanel1.revalidate();
@@ -356,65 +354,6 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
         }
     }
 
-    /**
-     * Add event listeners to quick action buttons
-     */
-    private void addQuickActionEventListeners() {
-        newBookingBtn.addActionListener(e -> {
-            System.out.println("New Booking clicked");
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "New Booking feature will be implemented soon!",
-                    "Coming Soon",
-                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        });
-
-        checkinBtn.addActionListener(e -> {
-            System.out.println("Check-in clicked");
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Check-in feature will be implemented soon!",
-                    "Coming Soon",
-                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        });
-
-        checkoutBtn.addActionListener(e -> {
-            System.out.println("Check-out clicked");
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Check-out feature will be implemented soon!",
-                    "Coming Soon",
-                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        });
-
-        roomStatusBtn.addActionListener(e -> {
-            System.out.println("Room Status clicked");
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Room Status feature will be implemented soon!",
-                    "Coming Soon",
-                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        });
-
-        // "See all bookings" label click listener
-        lblSeeAllBookingsButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                System.out.println("See all bookings clicked");
-                javax.swing.JOptionPane.showMessageDialog(DashboardOverviewPanel.this,
-                        "Booking Management feature will be implemented soon!",
-                        "Coming Soon",
-                        javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            }
-
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent e) {
-                lblSeeAllBookingsButton.setForeground(new Color(41, 128, 185));
-                lblSeeAllBookingsButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent e) {
-                lblSeeAllBookingsButton.setForeground(new Color(52, 73, 94));
-            }
-        });
-    }
 
     /**
      * Load chart data from database
@@ -1073,6 +1012,11 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
 
         checkinBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         checkinBtn.setText("Check-in");
+        checkinBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkinBtnActionPerformed(evt);
+            }
+        });
 
         checkoutBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         checkoutBtn.setText("Check-out");
@@ -1200,6 +1144,10 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void checkinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinBtnActionPerformed
+        
+    }//GEN-LAST:event_checkinBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
