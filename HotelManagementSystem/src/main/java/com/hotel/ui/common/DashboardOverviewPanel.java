@@ -15,7 +15,6 @@ import javax.swing.Timer;
 import main.java.com.hotel.ui.booking.CheckInDialogPanel;
 import javax.swing.SwingUtilities;
 
-
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.util.Random;
@@ -27,6 +26,7 @@ import java.util.Date;
 import java.util.Calendar;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import main.java.com.hotel.ui.booking.CheckOutDialogPanel;
 import main.java.com.hotel.ui.dashboard.DashboardFrame;
 
 /**
@@ -193,7 +193,6 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
         // Load recent bookings data
         loadRecentBookingsData();
 
-
         // Revalidate layout
         jPanel1.revalidate();
         jPanel1.repaint();
@@ -355,7 +354,6 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
             model.addRow(row);
         }
     }
-
 
     /**
      * Load chart data from database
@@ -1022,6 +1020,11 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
 
         checkoutBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         checkoutBtn.setText("Check-out");
+        checkoutBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkoutBtnActionPerformed(evt);
+            }
+        });
 
         roomStatusBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         roomStatusBtn.setText("Room Status");
@@ -1148,36 +1151,68 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void checkinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinBtnActionPerformed
-         try {
-        // Create and show the CheckInDialogPanel
-        CheckInDialogPanel checkInDialog = new CheckInDialogPanel(
-            (java.awt.Frame) SwingUtilities.getWindowAncestor(this), 
-            true
-        );
-        
-        // Center the dialog on the parent window
-        checkInDialog.setLocationRelativeTo(this);
-        
-        // Show the dialog
-        checkInDialog.setVisible(true);
-        
-        // Optional: After dialog closes, refresh the dashboard data
-        // This will update any changes made during check-in
-        if (parent != null) {
-            refreshData();
-            refreshRecentBookings();
+        try {
+            // Create and show the CheckInDialogPanel
+            CheckInDialogPanel checkInDialog = new CheckInDialogPanel(
+                    (java.awt.Frame) SwingUtilities.getWindowAncestor(this),
+                    true
+            );
+
+            // Center the dialog on the parent window
+            checkInDialog.setLocationRelativeTo(this);
+
+            // Show the dialog
+            checkInDialog.setVisible(true);
+
+            // Optional: After dialog closes, refresh the dashboard data
+            // This will update any changes made during check-in
+            if (parent != null) {
+                refreshData();
+                refreshRecentBookings();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Error opening check-in dialog: " + e.getMessage(),
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE
+            );
         }
-        
-    } catch (Exception e) {
-        e.printStackTrace();
-        javax.swing.JOptionPane.showMessageDialog(
-            this,
-            "Error opening check-in dialog: " + e.getMessage(),
-            "Error",
-            javax.swing.JOptionPane.ERROR_MESSAGE
-        );
-    }
     }//GEN-LAST:event_checkinBtnActionPerformed
+
+    private void checkoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkoutBtnActionPerformed
+        try {
+            // Create and show the CheckInDialogPanel
+            CheckOutDialogPanel checkOutDialog = new CheckOutDialogPanel(
+                    (java.awt.Frame) SwingUtilities.getWindowAncestor(this),
+                    true
+            );
+
+            // Center the dialog on the parent window
+            checkOutDialog.setLocationRelativeTo(this);
+
+            // Show the dialog
+            checkOutDialog.setVisible(true);
+
+            // Optional: After dialog closes, refresh the dashboard data
+            // This will update any changes made during check-in
+            if (parent != null) {
+                refreshData();
+                refreshRecentBookings();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Error opening check-in dialog: " + e.getMessage(),
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_checkoutBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
