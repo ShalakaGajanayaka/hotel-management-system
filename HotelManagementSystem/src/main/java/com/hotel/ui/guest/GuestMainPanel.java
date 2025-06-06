@@ -26,58 +26,62 @@ public class GuestMainPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        guestManagementTab = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
+        guestsTabs = new javax.swing.JTabbedPane();
+        guestManagementTab = new javax.swing.JPanel();
         guestManagementPanel1 = new main.java.com.hotel.ui.guest.GuestManagementPanel();
-        jPanel2 = new javax.swing.JPanel();
+        newGuestTab = new javax.swing.JPanel();
+        newGuestPanel1 = new main.java.com.hotel.ui.guest.NewGuestPanel();
 
         setPreferredSize(new java.awt.Dimension(930, 660));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout guestManagementTabLayout = new javax.swing.GroupLayout(guestManagementTab);
+        guestManagementTab.setLayout(guestManagementTabLayout);
+        guestManagementTabLayout.setHorizontalGroup(
+            guestManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, guestManagementTabLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(guestManagementPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(guestManagementPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
+        guestManagementTabLayout.setVerticalGroup(
+            guestManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(guestManagementPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        guestManagementTab.addTab("Guest Management", jPanel1);
+        guestsTabs.addTab("Guest Management", guestManagementTab);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 930, Short.MAX_VALUE)
+        javax.swing.GroupLayout newGuestTabLayout = new javax.swing.GroupLayout(newGuestTab);
+        newGuestTab.setLayout(newGuestTabLayout);
+        newGuestTabLayout.setHorizontalGroup(
+            newGuestTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, newGuestTabLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(newGuestPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 690, Short.MAX_VALUE)
+        newGuestTabLayout.setVerticalGroup(
+            newGuestTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(newGuestPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
         );
 
-        guestManagementTab.addTab("tab2", jPanel2);
+        guestsTabs.addTab("New Guest", newGuestTab);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(guestManagementTab)
+            .addComponent(guestsTabs)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(guestManagementTab)
+            .addComponent(guestsTabs)
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private main.java.com.hotel.ui.guest.GuestManagementPanel guestManagementPanel1;
-    private javax.swing.JTabbedPane guestManagementTab;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel guestManagementTab;
+    private javax.swing.JTabbedPane guestsTabs;
+    private main.java.com.hotel.ui.guest.NewGuestPanel newGuestPanel1;
+    private javax.swing.JPanel newGuestTab;
     // End of variables declaration//GEN-END:variables
 }
