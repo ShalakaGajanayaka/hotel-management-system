@@ -12,6 +12,8 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import javax.swing.Timer;
+import main.java.com.hotel.ui.booking.CheckInDialogPanel;
+import javax.swing.SwingUtilities;
 
 
 import java.awt.*;
@@ -1146,7 +1148,35 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void checkinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinBtnActionPerformed
+         try {
+        // Create and show the CheckInDialogPanel
+        CheckInDialogPanel checkInDialog = new CheckInDialogPanel(
+            (java.awt.Frame) SwingUtilities.getWindowAncestor(this), 
+            true
+        );
         
+        // Center the dialog on the parent window
+        checkInDialog.setLocationRelativeTo(this);
+        
+        // Show the dialog
+        checkInDialog.setVisible(true);
+        
+        // Optional: After dialog closes, refresh the dashboard data
+        // This will update any changes made during check-in
+        if (parent != null) {
+            refreshData();
+            refreshRecentBookings();
+        }
+        
+    } catch (Exception e) {
+        e.printStackTrace();
+        javax.swing.JOptionPane.showMessageDialog(
+            this,
+            "Error opening check-in dialog: " + e.getMessage(),
+            "Error",
+            javax.swing.JOptionPane.ERROR_MESSAGE
+        );
+    }
     }//GEN-LAST:event_checkinBtnActionPerformed
 
 
