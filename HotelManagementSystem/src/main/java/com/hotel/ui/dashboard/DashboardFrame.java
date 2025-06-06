@@ -6,6 +6,7 @@ package main.java.com.hotel.ui.dashboard;
 
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import java.awt.Dimension;
+import main.java.com.hotel.ui.booking.BookingsMainPanel;
 import main.java.com.hotel.ui.common.DashboardOverviewPanel;
 
 /**
@@ -16,6 +17,7 @@ public class DashboardFrame extends javax.swing.JFrame {
 
     public String username;
     private DashboardOverviewPanel dashboardPanel;
+    private BookingsMainPanel bookingsMainPanel;
 
     public DashboardFrame() {
 
@@ -34,6 +36,18 @@ public class DashboardFrame extends javax.swing.JFrame {
             headerPanel.setParent(this);
         }
 
+        if (sidebarPanel != null) {
+            sidebarPanel.setParent(this);
+        }
+
+        if (dashboardOverviewPanel != null) {
+            dashboardOverviewPanel.setParent(this);
+        }
+
+        if (bookingsMainPanel != null) {
+            bookingsMainPanel.setParent(this);
+        }
+
         setLocationRelativeTo(null);
     }
 
@@ -49,10 +63,12 @@ public class DashboardFrame extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         sidebarPanel = new main.java.com.hotel.ui.common.SidebarPanel();
         headerPanel = new main.java.com.hotel.ui.common.HeaderPanel();
-        dashboardOverviewPanel2 = new main.java.com.hotel.ui.common.DashboardOverviewPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        dashboardOverviewPanel = new main.java.com.hotel.ui.common.DashboardOverviewPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1200, 800));
+
+        jScrollPane1.setViewportView(dashboardOverviewPanel);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -61,11 +77,11 @@ public class DashboardFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(headerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 1176, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(sidebarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(dashboardOverviewPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 950, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane1)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -75,8 +91,8 @@ public class DashboardFrame extends javax.swing.JFrame {
                 .addComponent(headerPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(sidebarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(dashboardOverviewPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE))
+                    .addComponent(sidebarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 715, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
         );
 
@@ -116,9 +132,10 @@ public class DashboardFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private main.java.com.hotel.ui.common.DashboardOverviewPanel dashboardOverviewPanel2;
+    private main.java.com.hotel.ui.common.DashboardOverviewPanel dashboardOverviewPanel;
     private main.java.com.hotel.ui.common.HeaderPanel headerPanel;
     private javax.swing.JPanel jPanel1;
+    public javax.swing.JScrollPane jScrollPane1;
     private main.java.com.hotel.ui.common.SidebarPanel sidebarPanel;
     // End of variables declaration//GEN-END:variables
 }

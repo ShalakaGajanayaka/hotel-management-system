@@ -12,6 +12,9 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import javax.swing.Timer;
+import main.java.com.hotel.ui.booking.CheckInDialogPanel;
+import javax.swing.SwingUtilities;
+
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.util.Random;
@@ -23,13 +26,17 @@ import java.util.Date;
 import java.util.Calendar;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import main.java.com.hotel.ui.booking.CheckOutDialogPanel;
+import main.java.com.hotel.ui.dashboard.DashboardFrame;
 
 /**
  *
  * @author shalaka
  */
 public class DashboardOverviewPanel extends javax.swing.JPanel {
-    
+
+    private DashboardFrame parent;
+
     private ChartPanel jFreeChartPanel;
     private TimeSeries occupancySeries;
     private TimeSeries revenueSeries;
@@ -40,6 +47,11 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
 
     public DashboardOverviewPanel() {
         initComponents();
+
+    }
+
+    public void setParent(DashboardFrame parent) {
+        this.parent = parent;
 
         // Database connection check කරන්න
         if (testDatabaseConnection()) {
@@ -58,9 +70,8 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
         setupAnimatedChart();
         startAnimation();
         startDateTimeDisplay();
+
     }
-    
- 
 
     /**
      * Test database connection
@@ -181,9 +192,6 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
 
         // Load recent bookings data
         loadRecentBookingsData();
-
-        // Add event listeners to buttons
-        addQuickActionEventListeners();
 
         // Revalidate layout
         jPanel1.revalidate();
@@ -345,66 +353,6 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
         for (Object[] row : sampleData) {
             model.addRow(row);
         }
-    }
-
-    /**
-     * Add event listeners to quick action buttons
-     */
-    private void addQuickActionEventListeners() {
-        newBookingBtn.addActionListener(e -> {
-            System.out.println("New Booking clicked");
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "New Booking feature will be implemented soon!",
-                    "Coming Soon",
-                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        });
-
-        checkinBtn.addActionListener(e -> {
-            System.out.println("Check-in clicked");
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Check-in feature will be implemented soon!",
-                    "Coming Soon",
-                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        });
-
-        checkoutBtn.addActionListener(e -> {
-            System.out.println("Check-out clicked");
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Check-out feature will be implemented soon!",
-                    "Coming Soon",
-                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        });
-
-        roomStatusBtn.addActionListener(e -> {
-            System.out.println("Room Status clicked");
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Room Status feature will be implemented soon!",
-                    "Coming Soon",
-                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        });
-
-        // "See all bookings" label click listener
-        lblSeeAllBookingsButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                System.out.println("See all bookings clicked");
-                javax.swing.JOptionPane.showMessageDialog(DashboardOverviewPanel.this,
-                        "Booking Management feature will be implemented soon!",
-                        "Coming Soon",
-                        javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            }
-
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent e) {
-                lblSeeAllBookingsButton.setForeground(new Color(41, 128, 185));
-                lblSeeAllBookingsButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent e) {
-                lblSeeAllBookingsButton.setForeground(new Color(52, 73, 94));
-            }
-        });
     }
 
     /**
@@ -868,9 +816,11 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel9))
-                .addContainerGap(228, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(0, 275, Short.MAX_VALUE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -897,9 +847,11 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel10))
-                .addContainerGap(203, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(0, 275, Short.MAX_VALUE))
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -926,9 +878,11 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel11))
-                .addContainerGap(206, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addGap(0, 275, Short.MAX_VALUE))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -955,9 +909,11 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel12))
-                .addContainerGap(198, Short.MAX_VALUE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jLabel12)
+                        .addGap(0, 275, Short.MAX_VALUE))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -984,9 +940,11 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel13))
-                .addContainerGap(190, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addGap(0, 275, Short.MAX_VALUE))
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1013,9 +971,11 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel14))
-                .addContainerGap(206, Short.MAX_VALUE))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addGap(0, 238, Short.MAX_VALUE))
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1052,9 +1012,19 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
 
         checkinBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         checkinBtn.setText("Check-in");
+        checkinBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkinBtnActionPerformed(evt);
+            }
+        });
 
         checkoutBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         checkoutBtn.setText("Check-out");
+        checkoutBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkoutBtnActionPerformed(evt);
+            }
+        });
 
         roomStatusBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         roomStatusBtn.setText("Room Status");
@@ -1179,6 +1149,70 @@ public class DashboardOverviewPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void checkinBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkinBtnActionPerformed
+        try {
+            // Create and show the CheckInDialogPanel
+            CheckInDialogPanel checkInDialog = new CheckInDialogPanel(
+                    (java.awt.Frame) SwingUtilities.getWindowAncestor(this),
+                    true
+            );
+
+            // Center the dialog on the parent window
+            checkInDialog.setLocationRelativeTo(this);
+
+            // Show the dialog
+            checkInDialog.setVisible(true);
+
+            // Optional: After dialog closes, refresh the dashboard data
+            // This will update any changes made during check-in
+            if (parent != null) {
+                refreshData();
+                refreshRecentBookings();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Error opening check-in dialog: " + e.getMessage(),
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_checkinBtnActionPerformed
+
+    private void checkoutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkoutBtnActionPerformed
+        try {
+            // Create and show the CheckInDialogPanel
+            CheckOutDialogPanel checkOutDialog = new CheckOutDialogPanel(
+                    (java.awt.Frame) SwingUtilities.getWindowAncestor(this),
+                    true
+            );
+
+            // Center the dialog on the parent window
+            checkOutDialog.setLocationRelativeTo(this);
+
+            // Show the dialog
+            checkOutDialog.setVisible(true);
+
+            // Optional: After dialog closes, refresh the dashboard data
+            // This will update any changes made during check-in
+            if (parent != null) {
+                refreshData();
+                refreshRecentBookings();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "Error opening check-in dialog: " + e.getMessage(),
+                    "Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_checkoutBtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
