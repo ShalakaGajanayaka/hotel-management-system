@@ -92,7 +92,7 @@ public class NewMaintenanceRequestPanel extends javax.swing.JPanel {
 
         setPreferredSize(new java.awt.Dimension(930, 660));
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(920, 1057));
+        jPanel1.setPreferredSize(new java.awt.Dimension(920, 950));
 
         jLabel1.setText("New Maintenance Request");
 
@@ -151,7 +151,7 @@ public class NewMaintenanceRequestPanel extends javax.swing.JPanel {
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGap(21, 21, 21)
                                 .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(201, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,7 +279,7 @@ public class NewMaintenanceRequestPanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
                 .addContainerGap())
@@ -349,7 +349,7 @@ public class NewMaintenanceRequestPanel extends javax.swing.JPanel {
                             .addComponent(jCheckBox4)
                             .addComponent(jCheckBox5)
                             .addComponent(jCheckBox6))))
-                .addContainerGap(319, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -386,6 +386,7 @@ public class NewMaintenanceRequestPanel extends javax.swing.JPanel {
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel7.setPreferredSize(new java.awt.Dimension(441, 280));
 
         jLabel14.setText("Attachements");
 
@@ -421,7 +422,7 @@ public class NewMaintenanceRequestPanel extends javax.swing.JPanel {
                                 .addGap(6, 6, 6)
                                 .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
@@ -450,9 +451,9 @@ public class NewMaintenanceRequestPanel extends javax.swing.JPanel {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -461,7 +462,7 @@ public class NewMaintenanceRequestPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -493,7 +494,7 @@ public class NewMaintenanceRequestPanel extends javax.swing.JPanel {
                                 .addComponent(jButton6)
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton5)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 513, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
