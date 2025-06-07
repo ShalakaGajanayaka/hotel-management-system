@@ -77,8 +77,25 @@ public class NewGuestPanel extends javax.swing.JPanel {
                     break;
                 }
             }
+            identification_idNumber.setText(guest.idNumber);
+            identification_issuingCountry.setText(guest.idIssueCountry);
+            try {
+                if (guest.idExpireDate != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date expireDate = sdf.parse(guest.idExpireDate);
+                    identification_expirationDate.setDate(expireDate);
+                } else {
+                    identification_expirationDate.setDate(null);
+                }
+            } catch (Exception e) {
+                identification_expirationDate.setDate(null);
+            }
+        } else {
+            identification_idType.setSelectedIndex(0);
+            identification_idNumber.setText("");
+            identification_issuingCountry.setText("");
+            identification_expirationDate.setDate(null);
         }
-        identification_idNumber.setText(guest.idNumber);
 
         // Preferences
         preference_vipStatus.setSelectedItem(guest.vipStatus ? "Yes" : "No");

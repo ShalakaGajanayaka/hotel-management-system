@@ -53,6 +53,8 @@ public static class GuestData {
     public String dateOfBirth;
     public String idType;
     public String idNumber;
+    public String idIssueCountry;
+    public String idExpireDate;
     public boolean vipStatus;
     public int loyaltyPoints;
     public String specialRequests;
@@ -167,6 +169,8 @@ private void loadGuestsData() {
             guest.dateOfBirth = rs.getString("date_of_birth");
             guest.idType = rs.getString("id_type");
             guest.idNumber = rs.getString("id_number");
+            guest.idIssueCountry = rs.getString("id_issue_country");
+            guest.idExpireDate = rs.getString("id_expiredate");
             guest.vipStatus = rs.getBoolean("vip_status");
             guest.loyaltyPoints = rs.getInt("loyalty_points");
             guest.specialRequests = rs.getString("special_requests");
