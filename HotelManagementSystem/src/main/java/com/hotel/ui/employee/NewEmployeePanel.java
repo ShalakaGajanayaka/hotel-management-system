@@ -73,6 +73,9 @@ public class NewEmployeePanel extends javax.swing.JPanel {
                 }
             }
 
+            // Set position
+            employmentDetails_position.setText(employee.position);
+
             // Set employment status
             if (employee.employmentStatus != null) {
                 for (int i = 0; i < employmentDetails_employeeStatus.getItemCount(); i++) {
@@ -796,15 +799,15 @@ public class NewEmployeePanel extends javax.swing.JPanel {
             return false;
         }
 
-        // Check if employee code already exists
-        if (isEmployeeCodeExists(employmentDetails_employeeCode.getText().trim())) {
+        // Check if employee code already exists (only for new employees)
+        if (currentEmployeeId == -1 && isEmployeeCodeExists(employmentDetails_employeeCode.getText().trim())) {
             JOptionPane.showMessageDialog(this, "Employee Code already exists! Please use a different code.", "Validation Error", JOptionPane.WARNING_MESSAGE);
             employmentDetails_employeeCode.requestFocus();
             return false;
         }
 
-        // Check if email already exists
-        if (isEmailExists(contactInformation_email.getText().trim())) {
+        // Check if email already exists (only for new employees)
+        if (currentEmployeeId == -1 && isEmailExists(contactInformation_email.getText().trim())) {
             JOptionPane.showMessageDialog(this, "Email already exists! Please use a different email.", "Validation Error", JOptionPane.WARNING_MESSAGE);
             contactInformation_email.requestFocus();
             return false;
@@ -841,8 +844,8 @@ public class NewEmployeePanel extends javax.swing.JPanel {
                 return false;
             }
 
-            // Check if username already exists
-            if (isUsernameExists(systemAccess_username.getText().trim())) {
+            // Check if username already exists (only for new employees)
+            if (currentEmployeeId == -1 && isUsernameExists(systemAccess_username.getText().trim())) {
                 JOptionPane.showMessageDialog(this, "Username already exists! Please choose a different username.", "Validation Error", JOptionPane.WARNING_MESSAGE);
                 systemAccess_username.requestFocus();
                 return false;

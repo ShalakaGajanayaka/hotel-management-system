@@ -61,6 +61,7 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
         public String salary;
         public String departmentName;
         public int departmentId;
+        public String position;
 
         public String getFullName() {
             return firstName + " " + lastName;
@@ -105,7 +106,7 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
                     + "e.first_name, e.last_name, e.gender, e.date_of_birth, "
                     + "e.contact_number, e.email, e.address, e.city, e.state, "
                     + "e.country, e.postal_code, e.hire_date, e.employment_status, "
-                    + "e.salary, d.department_name, d.department_id "
+                    + "e.salary, d.department_name, d.department_id, e.position "
                     + "FROM employee e "
                     + "LEFT JOIN department d ON e.department_id = d.department_id "
                     + "WHERE e.employee_id = ?";
@@ -138,12 +139,13 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
                 selectedEmployeeData.salary = rs.getString("salary");
                 selectedEmployeeData.departmentName = rs.getString("department_name");
                 selectedEmployeeData.departmentId = rs.getInt("department_id");
+                selectedEmployeeData.position = rs.getString("position");
 
                 // Update employee details labels (existing code)
                 employeeDetails_id.setText(selectedEmployeeData.employeeCode);
                 employeeDetails_name.setText(selectedEmployeeData.getFullName());
                 employeeDetails_department.setText(selectedEmployeeData.departmentName);
-                employeeDetails_position.setText(selectedEmployeeData.employmentStatus);
+                employeeDetails_position.setText(selectedEmployeeData.position);
                 employeeDetails_contact.setText(selectedEmployeeData.contactNumber);
                 employeeDetails_email.setText(selectedEmployeeData.email);
 
