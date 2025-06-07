@@ -4,6 +4,17 @@
  */
 package main.java.com.hotel.ui.employee;
 
+import main.java.com.hotel.config.DatabaseConnection;
+import javax.swing.JOptionPane;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.security.MessageDigest;
+import java.nio.charset.StandardCharsets;
+
 /**
  *
  * @author shalaka
@@ -16,6 +27,7 @@ public class NewEmployeePanel extends javax.swing.JPanel {
     public NewEmployeePanel() {
         initComponents();
         update_button.setEnabled(false);
+        initializeComboBoxes();
     }
 
     /**
@@ -504,10 +516,25 @@ public class NewEmployeePanel extends javax.swing.JPanel {
         );
 
         cancel_button.setText("Cancel");
+        cancel_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancel_buttonActionPerformed(evt);
+            }
+        });
 
         save_button.setText("Save");
+        save_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                save_buttonActionPerformed(evt);
+            }
+        });
 
         update_button.setText("Update");
+        update_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                update_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -559,6 +586,495 @@ public class NewEmployeePanel extends javax.swing.JPanel {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void save_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_buttonActionPerformed
+        if (validateFields()) {
+            try {
+                saveEmployee();
+                JOptionPane.showMessageDialog(this, "Employee saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                clearFields();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error saving employee: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_save_buttonActionPerformed
+
+    private boolean validateFields() {
+        // Personal Information validation
+        if (personalInformation_firstName.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "First Name is required!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            personalInformation_firstName.requestFocus();
+            return false;
+        }
+
+        if (personalInformation_lastName.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Last Name is required!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            personalInformation_lastName.requestFocus();
+            return false;
+        }
+
+        if (!personalInformation_genderMale.isSelected()
+                && !personalInformation_genderFemale.isSelected()
+                && !personalInformation_genderOther.isSelected()) {
+            JOptionPane.showMessageDialog(this, "Please select a gender!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if (personalInformation_dateOfBirth.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Date of Birth is required!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        // Employment Details validation
+        if (employmentDetails_employeeCode.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Employee Code is required!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            employmentDetails_employeeCode.requestFocus();
+            return false;
+        }
+
+        if (employmentDetails_department.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a department!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if (employmentDetails_position.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Position is required!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            employmentDetails_position.requestFocus();
+            return false;
+        }
+
+        if (employmentDetails_hireDate.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Hire Date is required!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        if (employmentDetails_employeeStatus.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "Please select employment status!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        // Contact Information validation
+        if (contactInformation_phoneNumber.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Phone Number is required!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            contactInformation_phoneNumber.requestFocus();
+            return false;
+        }
+
+        if (contactInformation_email.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Email is required!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            contactInformation_email.requestFocus();
+            return false;
+        }
+
+        if (!isValidEmail(contactInformation_email.getText().trim())) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid email address!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            contactInformation_email.requestFocus();
+            return false;
+        }
+
+        if (contactInformation_addressLine1.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Address Line 1 is required!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            contactInformation_addressLine1.requestFocus();
+            return false;
+        }
+
+        if (contactInformation_city.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "City is required!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            contactInformation_city.requestFocus();
+            return false;
+        }
+
+        if (contactInformation_country.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Country is required!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            contactInformation_country.requestFocus();
+            return false;
+        }
+
+        // Check if employee code already exists
+        if (isEmployeeCodeExists(employmentDetails_employeeCode.getText().trim())) {
+            JOptionPane.showMessageDialog(this, "Employee Code already exists! Please use a different code.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            employmentDetails_employeeCode.requestFocus();
+            return false;
+        }
+
+        // Check if email already exists
+        if (isEmailExists(contactInformation_email.getText().trim())) {
+            JOptionPane.showMessageDialog(this, "Email already exists! Please use a different email.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            contactInformation_email.requestFocus();
+            return false;
+        }
+
+        // System Access validation (if creating user account)
+        if (systemAccess_createUserAccount.isSelected()) {
+            if (systemAccess_username.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Username is required when creating user account!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                systemAccess_username.requestFocus();
+                return false;
+            }
+
+            if (systemAccess_password.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Password is required when creating user account!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                systemAccess_password.requestFocus();
+                return false;
+            }
+
+            if (!systemAccess_password.getText().equals(systemAccess_confirmPassword.getText())) {
+                JOptionPane.showMessageDialog(this, "Password and Confirm Password do not match!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                systemAccess_confirmPassword.requestFocus();
+                return false;
+            }
+
+            if (systemAccess_password.getText().length() < 6) {
+                JOptionPane.showMessageDialog(this, "Password must be at least 6 characters long!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                systemAccess_password.requestFocus();
+                return false;
+            }
+
+            if (systemAccess_role.getSelectedIndex() == -1) {
+                JOptionPane.showMessageDialog(this, "Please select a role when creating user account!", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+
+            // Check if username already exists
+            if (isUsernameExists(systemAccess_username.getText().trim())) {
+                JOptionPane.showMessageDialog(this, "Username already exists! Please choose a different username.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                systemAccess_username.requestFocus();
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isValidEmail(String email) {
+        return email.matches("^[A-Za-z0-9+_.-]+@(.+)$");
+    }
+
+    private boolean isEmployeeCodeExists(String employeeCode) {
+        try {
+            String query = "SELECT COUNT(*) FROM employee WHERE employee_code = ?";
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, employeeCode);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean isEmailExists(String email) {
+        try {
+            String query = "SELECT COUNT(*) FROM employee WHERE email = ?";
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private boolean isUsernameExists(String username) {
+        try {
+            String query = "SELECT COUNT(*) FROM user WHERE username = ?";
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private void saveEmployee() throws Exception {
+        Connection conn = DatabaseConnection.getConnection();
+        conn.setAutoCommit(false); // Start transaction
+
+        try {
+            Integer userId = null;
+
+            // Step 1: Create user account if requested
+            if (systemAccess_createUserAccount.isSelected()) {
+                userId = createUserAccount(conn);
+            }
+
+            // Step 2: Create employee record
+            int employeeId = createEmployeeRecord(conn, userId);
+
+            // Step 3: Add user role if user account was created
+            if (userId != null) {
+                createUserRole(conn, userId);
+            }
+
+            conn.commit(); // Commit transaction
+
+        } catch (Exception e) {
+            conn.rollback(); // Rollback on error
+            throw e;
+        } finally {
+            conn.setAutoCommit(true);
+        }
+    }
+
+    private Integer createUserAccount(Connection conn) throws Exception {
+        String query = "INSERT INTO user (username, password, email, first_name, last_name, is_active) VALUES (?, ?, ?, ?, ?, ?)";
+        PreparedStatement pstmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+
+        pstmt.setString(1, systemAccess_username.getText().trim());
+        pstmt.setString(2, hashPassword(systemAccess_password.getText())); // Hash the password
+        pstmt.setString(3, contactInformation_email.getText().trim());
+        pstmt.setString(4, personalInformation_firstName.getText().trim());
+        pstmt.setString(5, personalInformation_lastName.getText().trim());
+        pstmt.setBoolean(6, true);
+
+        int rowsAffected = pstmt.executeUpdate();
+
+        if (rowsAffected > 0) {
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+
+        throw new Exception("Failed to create user account");
+    }
+
+    private int createEmployeeRecord(Connection conn, Integer userId) throws Exception {
+        String query = "INSERT INTO employee (user_id, department_id, employee_code, first_name, last_name, gender, "
+                + "date_of_birth, contact_number, email, address, city, state, country, postal_code, "
+                + "hire_date, employment_status, salary, emergency_contact_name, emergency_contact_number) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        PreparedStatement pstmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+
+        pstmt.setObject(1, userId); // Can be null
+        pstmt.setInt(2, getDepartmentId()); // Get department ID from combo box
+        pstmt.setString(3, employmentDetails_employeeCode.getText().trim());
+        pstmt.setString(4, personalInformation_firstName.getText().trim());
+        pstmt.setString(5, personalInformation_lastName.getText().trim());
+        pstmt.setString(6, getSelectedGender());
+        pstmt.setDate(7, new java.sql.Date(personalInformation_dateOfBirth.getDate().getTime()));
+        pstmt.setString(8, contactInformation_phoneNumber.getText().trim());
+        pstmt.setString(9, contactInformation_email.getText().trim());
+
+        // Combine address lines
+        String fullAddress = contactInformation_addressLine1.getText().trim();
+        if (!contactInformation_addressLine2.getText().trim().isEmpty()) {
+            fullAddress += "\n" + contactInformation_addressLine2.getText().trim();
+        }
+        pstmt.setString(10, fullAddress);
+
+        pstmt.setString(11, contactInformation_city.getText().trim());
+        pstmt.setString(12, contactInformation_state.getText().trim().isEmpty() ? null : contactInformation_state.getText().trim());
+        pstmt.setString(13, contactInformation_country.getText().trim());
+        pstmt.setString(14, contactInformation_postalcode.getText().trim().isEmpty() ? null : contactInformation_postalcode.getText().trim());
+        pstmt.setDate(15, new java.sql.Date(employmentDetails_hireDate.getDate().getTime()));
+        pstmt.setString(16, getSelectedEmploymentStatus());
+
+        // Handle salary
+        if (!employmentDetails_salary.getText().trim().isEmpty()) {
+            try {
+                pstmt.setDouble(17, Double.parseDouble(employmentDetails_salary.getText().trim()));
+            } catch (NumberFormatException e) {
+                pstmt.setNull(17, java.sql.Types.DECIMAL);
+            }
+        } else {
+            pstmt.setNull(17, java.sql.Types.DECIMAL);
+        }
+
+        pstmt.setNull(18, java.sql.Types.VARCHAR); // emergency_contact_name - not in form
+        pstmt.setNull(19, java.sql.Types.VARCHAR); // emergency_contact_number - not in form
+
+        int rowsAffected = pstmt.executeUpdate();
+
+        if (rowsAffected > 0) {
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        }
+
+        throw new Exception("Failed to create employee record");
+    }
+
+    private void createUserRole(Connection conn, int userId) throws Exception {
+        String query = "INSERT INTO user_role (user_id, role_name) VALUES (?, ?)";
+        PreparedStatement pstmt = conn.prepareStatement(query);
+
+        pstmt.setInt(1, userId);
+        pstmt.setString(2, getSelectedRole());
+
+        pstmt.executeUpdate();
+    }
+
+    private String getSelectedGender() {
+        if (personalInformation_genderMale.isSelected()) {
+            return "Male";
+        }
+        if (personalInformation_genderFemale.isSelected()) {
+            return "Female";
+        }
+        if (personalInformation_genderOther.isSelected()) {
+            return "Other";
+        }
+        return "Other";
+    }
+
+    private int getDepartmentId() {
+        // You need to map the combo box selection to department ID
+        // This assumes you've loaded departments into the combo box with their IDs
+        // For now, returning a default value - you should implement proper mapping
+        return employmentDetails_department.getSelectedIndex() + 1;
+    }
+
+    private String getSelectedEmploymentStatus() {
+        // Map combo box selection to employment status
+        String[] statuses = {"Full-time", "Part-time", "Contract", "Intern"};
+        int index = employmentDetails_employeeStatus.getSelectedIndex();
+        return (index >= 0 && index < statuses.length) ? statuses[index] : "Full-time";
+    }
+
+    private String getSelectedRole() {
+        // Map combo box selection to role
+        String[] roles = {"STAFF", "MANAGER", "ADMIN"};
+        int index = systemAccess_role.getSelectedIndex();
+        return (index >= 0 && index < roles.length) ? roles[index] : "STAFF";
+    }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return password; // Fallback to plain text (not recommended)
+        }
+    }
+
+    private void clearFields() {
+        // Personal Information
+        personalInformation_firstName.setText("");
+        personalInformation_lastName.setText("");
+        buttonGroup1.clearSelection();
+        personalInformation_dateOfBirth.setDate(null);
+
+        // Employment Details
+        employmentDetails_employeeCode.setText("");
+        employmentDetails_department.setSelectedIndex(-1);
+        employmentDetails_position.setText("");
+        employmentDetails_hireDate.setDate(null);
+        employmentDetails_employeeStatus.setSelectedIndex(-1);
+        employmentDetails_salary.setText("");
+
+        // Contact Information
+        contactInformation_phoneNumber.setText("");
+        contactInformation_email.setText("");
+        contactInformation_addressLine1.setText("");
+        contactInformation_addressLine2.setText("");
+        contactInformation_city.setText("");
+        contactInformation_state.setText("");
+        contactInformation_country.setText("");
+        contactInformation_postalcode.setText("");
+
+        // System Access
+        systemAccess_createUserAccount.setSelected(false);
+        systemAccess_username.setText("");
+        systemAccess_password.setText("");
+        systemAccess_confirmPassword.setText("");
+        systemAccess_role.setSelectedIndex(-1);
+
+        // Clear all checkboxes
+        systemAccess_accessRights_bookings.setSelected(false);
+        systemAccess_accessRights_guests.setSelected(false);
+        systemAccess_accessRights_payments.setSelected(false);
+        systemAccess_accessRights_rooms.setSelected(false);
+        systemAccess_accessRights_reports.setSelected(false);
+
+        // Set focus to first field
+        personalInformation_firstName.requestFocus();
+    }
+
+// Method to load departments into combo box - call this in constructor or when form loads
+    private void loadDepartments() {
+        try {
+            employmentDetails_department.removeAllItems();
+            String query = "SELECT department_name FROM department ORDER BY department_name";
+            ResultSet rs = DatabaseConnection.executeSearch(query);
+
+            while (rs.next()) {
+                employmentDetails_department.addItem(rs.getString("department_name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading departments: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+// Method to load employment statuses into combo box
+    private void loadEmploymentStatuses() {
+        employmentDetails_employeeStatus.removeAllItems();
+        employmentDetails_employeeStatus.addItem("Full-time");
+        employmentDetails_employeeStatus.addItem("Part-time");
+        employmentDetails_employeeStatus.addItem("Contract");
+        employmentDetails_employeeStatus.addItem("Intern");
+    }
+
+// Method to load roles into combo box
+    private void loadRoles() {
+        systemAccess_role.removeAllItems();
+        systemAccess_role.addItem("STAFF");
+        systemAccess_role.addItem("MANAGER");
+        systemAccess_role.addItem("ADMIN");
+    }
+
+// Call these methods in your constructor after initComponents()
+    public void initializeComboBoxes() {
+        loadDepartments();
+        loadEmploymentStatuses();
+        loadRoles();
+    }
+
+    private void update_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_update_buttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_update_buttonActionPerformed
+
+    private void cancel_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_buttonActionPerformed
+        int result = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to cancel? All unsaved data will be lost.",
+                "Confirm Cancel",
+                JOptionPane.YES_NO_OPTION);
+
+        if (result == JOptionPane.YES_OPTION) {
+            clearFields();
+        }
+    }//GEN-LAST:event_cancel_buttonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
