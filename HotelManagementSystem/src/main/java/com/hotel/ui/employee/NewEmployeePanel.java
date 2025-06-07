@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.security.MessageDigest;
 import java.nio.charset.StandardCharsets;
+import java.sql.Statement;
 
 /**
  *
@@ -247,7 +248,7 @@ public class NewEmployeePanel extends javax.swing.JPanel {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
@@ -911,22 +912,29 @@ public class NewEmployeePanel extends javax.swing.JPanel {
         conn.setAutoCommit(false); // Start transaction
 
         try {
+            // Create user account if requested
             Integer userId = null;
-
-            // Step 1: Create user account if requested
             if (systemAccess_createUserAccount.isSelected()) {
                 userId = createUserAccount(conn);
             }
 
-            // Step 2: Create employee record
+            // Create employee record
             int employeeId = createEmployeeRecord(conn, userId);
 
-            // Step 3: Add user role if user account was created
+            // Create user role if user account was created
             if (userId != null) {
                 createUserRole(conn, userId);
             }
 
             conn.commit(); // Commit transaction
+
+            JOptionPane.showMessageDialog(this,
+                    "Employee added successfully!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            // Clear form
+            clearFields();
 
         } catch (Exception e) {
             conn.rollback(); // Rollback on error
@@ -960,61 +968,67 @@ public class NewEmployeePanel extends javax.swing.JPanel {
     }
 
     private int createEmployeeRecord(Connection conn, Integer userId) throws Exception {
-        String query = "INSERT INTO employee (user_id, department_id, employee_code, first_name, last_name, gender, "
-                + "date_of_birth, contact_number, email, address, city, state, country, postal_code, "
-                + "hire_date, employment_status, salary, emergency_contact_name, emergency_contact_number) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO employee (department_id, employee_code, first_name, last_name, "
+                + "gender, date_of_birth, contact_number, email, address, city, state, "
+                + "country, postal_code, employment_status, salary, position, hire_date, user_id) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        PreparedStatement pstmt = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+        PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-        pstmt.setObject(1, userId); // Can be null
-        pstmt.setInt(2, getDepartmentId()); // Get department ID from combo box
-        pstmt.setString(3, employmentDetails_employeeCode.getText().trim());
-        pstmt.setString(4, personalInformation_firstName.getText().trim());
-        pstmt.setString(5, personalInformation_lastName.getText().trim());
-        pstmt.setString(6, getSelectedGender());
-        pstmt.setDate(7, new java.sql.Date(personalInformation_dateOfBirth.getDate().getTime()));
-        pstmt.setString(8, contactInformation_phoneNumber.getText().trim());
-        pstmt.setString(9, contactInformation_email.getText().trim());
+        pstmt.setInt(1, getDepartmentIdByName((String) employmentDetails_department.getSelectedItem()));
+        pstmt.setString(2, employmentDetails_employeeCode.getText().trim());
+        pstmt.setString(3, personalInformation_firstName.getText().trim());
+        pstmt.setString(4, personalInformation_lastName.getText().trim());
+        pstmt.setString(5, getSelectedGender());
+        pstmt.setDate(6, new java.sql.Date(personalInformation_dateOfBirth.getDate().getTime()));
+        pstmt.setString(7, contactInformation_phoneNumber.getText().trim());
+        pstmt.setString(8, contactInformation_email.getText().trim());
 
         // Combine address lines
         String fullAddress = contactInformation_addressLine1.getText().trim();
         if (!contactInformation_addressLine2.getText().trim().isEmpty()) {
             fullAddress += "\n" + contactInformation_addressLine2.getText().trim();
         }
-        pstmt.setString(10, fullAddress);
+        pstmt.setString(9, fullAddress);
 
-        pstmt.setString(11, contactInformation_city.getText().trim());
-        pstmt.setString(12, contactInformation_state.getText().trim().isEmpty() ? null : contactInformation_state.getText().trim());
-        pstmt.setString(13, contactInformation_country.getText().trim());
-        pstmt.setString(14, contactInformation_postalcode.getText().trim().isEmpty() ? null : contactInformation_postalcode.getText().trim());
-        pstmt.setDate(15, new java.sql.Date(employmentDetails_hireDate.getDate().getTime()));
-        pstmt.setString(16, getSelectedEmploymentStatus());
+        pstmt.setString(10, contactInformation_city.getText().trim());
+        pstmt.setString(11, contactInformation_state.getText().trim().isEmpty() ? null : contactInformation_state.getText().trim());
+        pstmt.setString(12, contactInformation_country.getText().trim());
+        pstmt.setString(13, contactInformation_postalcode.getText().trim().isEmpty() ? null : contactInformation_postalcode.getText().trim());
+        pstmt.setString(14, getSelectedEmploymentStatus());
 
         // Handle salary
         if (!employmentDetails_salary.getText().trim().isEmpty()) {
             try {
-                pstmt.setDouble(17, Double.parseDouble(employmentDetails_salary.getText().trim()));
+                pstmt.setDouble(15, Double.parseDouble(employmentDetails_salary.getText().trim()));
             } catch (NumberFormatException e) {
-                pstmt.setNull(17, java.sql.Types.DECIMAL);
+                pstmt.setNull(15, java.sql.Types.DECIMAL);
             }
         } else {
-            pstmt.setNull(17, java.sql.Types.DECIMAL);
+            pstmt.setNull(15, java.sql.Types.DECIMAL);
         }
 
-        pstmt.setNull(18, java.sql.Types.VARCHAR); // emergency_contact_name - not in form
-        pstmt.setNull(19, java.sql.Types.VARCHAR); // emergency_contact_number - not in form
+        // Add position
+        pstmt.setString(16, employmentDetails_position.getText().trim());
 
-        int rowsAffected = pstmt.executeUpdate();
+        // Add hire date
+        pstmt.setDate(17, new java.sql.Date(employmentDetails_hireDate.getDate().getTime()));
 
-        if (rowsAffected > 0) {
-            ResultSet rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
+        // Set user_id
+        if (userId != null) {
+            pstmt.setInt(18, userId);
+        } else {
+            pstmt.setNull(18, java.sql.Types.INTEGER);
         }
 
-        throw new Exception("Failed to create employee record");
+        pstmt.executeUpdate();
+
+        ResultSet rs = pstmt.getGeneratedKeys();
+        if (rs.next()) {
+            return rs.getInt(1);
+        } else {
+            throw new SQLException("Creating employee failed, no ID obtained.");
+        }
     }
 
     private void createUserRole(Connection conn, int userId) throws Exception {
@@ -1232,7 +1246,7 @@ public class NewEmployeePanel extends javax.swing.JPanel {
 private void updateEmployeeRecord(Connection conn) throws Exception {
     String query = "UPDATE employee SET department_id=?, employee_code=?, first_name=?, last_name=?, "
             + "gender=?, date_of_birth=?, contact_number=?, email=?, address=?, city=?, state=?, "
-            + "country=?, postal_code=?, employment_status=?, salary=? "
+            + "country=?, postal_code=?, employment_status=?, salary=?, position=?, hire_date=? "
             + "WHERE employee_id=?";
 
     PreparedStatement pstmt = conn.prepareStatement(query);
@@ -1270,7 +1284,13 @@ private void updateEmployeeRecord(Connection conn) throws Exception {
         pstmt.setNull(15, java.sql.Types.DECIMAL);
     }
 
-    pstmt.setInt(16, currentEmployeeId);
+    // Add position
+    pstmt.setString(16, employmentDetails_position.getText().trim());
+
+    // Add hire date
+    pstmt.setDate(17, new java.sql.Date(employmentDetails_hireDate.getDate().getTime()));
+
+    pstmt.setInt(18, currentEmployeeId);
 
     int rowsAffected = pstmt.executeUpdate();
 
