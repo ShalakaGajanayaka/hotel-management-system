@@ -4,6 +4,8 @@
  */
 package main.java.com.hotel.ui.guest;
 
+import java.awt.Container;
+
 /**
  *
  * @author shalaka
@@ -74,6 +76,11 @@ public class GuestManagementPanel extends javax.swing.JPanel {
         jLabel1.setText("Guest Management");
 
         addGuest_button.setText("+ Add Guest");
+        addGuest_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addGuest_buttonActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Search :");
 
@@ -388,6 +395,20 @@ public class GuestManagementPanel extends javax.swing.JPanel {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void addGuest_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGuest_buttonActionPerformed
+        // Get the parent GuestMainPanel
+        Container parent = this.getParent();
+        while (parent != null && !(parent instanceof GuestMainPanel)) {
+            parent = parent.getParent();
+        }
+        
+        if (parent instanceof GuestMainPanel) {
+            GuestMainPanel guestMainPanel = (GuestMainPanel) parent;
+            // Switch to the New Guest tab (index 1)
+            guestMainPanel.getGuestsTabs().setSelectedIndex(1);
+        }
+    }//GEN-LAST:event_addGuest_buttonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
