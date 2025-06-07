@@ -80,7 +80,7 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
 
         setPreferredSize(new java.awt.Dimension(930, 660));
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(930, 625));
+        jPanel1.setPreferredSize(new java.awt.Dimension(930, 950));
 
         jLabel1.setText("Employee Management");
 
@@ -200,7 +200,7 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
