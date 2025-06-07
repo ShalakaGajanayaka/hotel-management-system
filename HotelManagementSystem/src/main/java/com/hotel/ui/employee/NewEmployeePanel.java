@@ -118,6 +118,11 @@ public class NewEmployeePanel extends javax.swing.JPanel {
             contactInformation_country.setText(employee.country);
             contactInformation_postalcode.setText(employee.postalCode);
 
+            // Load user account data if it exists
+            if (employee.userId > 0) {
+                loadUserAccountData(employee.userId);
+            }
+
             // Store the employee ID for update
             this.currentEmployeeId = employee.employeeId;
 
@@ -125,6 +130,77 @@ public class NewEmployeePanel extends javax.swing.JPanel {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error loading employee data: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void loadUserAccountData(int userId) {
+        try {
+            String query = "SELECT u.username, ur.role_name FROM user u " +
+                          "LEFT JOIN user_role ur ON u.user_id = ur.user_id " +
+                          "WHERE u.user_id = ?";
+            
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                // Enable user account creation checkbox
+                systemAccess_createUserAccount.setSelected(true);
+                
+                // Set username
+                systemAccess_username.setText(rs.getString("username"));
+                
+                // Set role
+                String role = rs.getString("role_name");
+                for (int i = 0; i < systemAccess_role.getItemCount(); i++) {
+                    if (systemAccess_role.getItemAt(i).equals(role)) {
+                        systemAccess_role.setSelectedIndex(i);
+                        break;
+                    }
+                }
+
+                // Set default access rights based on role
+                setDefaultAccessRights(role);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading user account data: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void setDefaultAccessRights(String role) {
+        // Reset all checkboxes
+        systemAccess_accessRights_bookings.setSelected(false);
+        systemAccess_accessRights_guests.setSelected(false);
+        systemAccess_accessRights_payments.setSelected(false);
+        systemAccess_accessRights_rooms.setSelected(false);
+        systemAccess_accessRights_reports.setSelected(false);
+
+        // Set default access rights based on role
+        switch (role) {
+            case "ADMIN":
+                // Admin has all access rights
+                systemAccess_accessRights_bookings.setSelected(true);
+                systemAccess_accessRights_guests.setSelected(true);
+                systemAccess_accessRights_payments.setSelected(true);
+                systemAccess_accessRights_rooms.setSelected(true);
+                systemAccess_accessRights_reports.setSelected(true);
+                break;
+            case "MANAGER":
+                // Manager has most access rights except reports
+                systemAccess_accessRights_bookings.setSelected(true);
+                systemAccess_accessRights_guests.setSelected(true);
+                systemAccess_accessRights_payments.setSelected(true);
+                systemAccess_accessRights_rooms.setSelected(true);
+                break;
+            case "STAFF":
+                // Staff has basic access rights
+                systemAccess_accessRights_bookings.setSelected(true);
+                systemAccess_accessRights_guests.setSelected(true);
+                systemAccess_accessRights_rooms.setSelected(true);
+                break;
         }
     }
 
@@ -699,7 +775,6 @@ public class NewEmployeePanel extends javax.swing.JPanel {
         if (validateFields()) {
             try {
                 saveEmployee();
-                JOptionPane.showMessageDialog(this, "Employee saved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                 clearFields();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error saving employee: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
