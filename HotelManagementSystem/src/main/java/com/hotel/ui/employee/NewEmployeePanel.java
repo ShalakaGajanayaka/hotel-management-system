@@ -15,6 +15,7 @@ public class NewEmployeePanel extends javax.swing.JPanel {
      */
     public NewEmployeePanel() {
         initComponents();
+        update_button.setEnabled(false);
     }
 
     /**
