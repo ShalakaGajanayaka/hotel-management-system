@@ -24,6 +24,7 @@ public class NewGuestPanel extends javax.swing.JPanel {
      */
     public NewGuestPanel() {
         initComponents();
+        update_buton.setEnabled(false);
     }
 
     public void loadGuestData(GuestManagementPanel.GuestData guest) {
