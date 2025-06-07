@@ -4,6 +4,9 @@
  */
 package main.java.com.hotel.ui.employee;
 
+import java.awt.Container;
+import main.java.com.hotel.ui.guest.GuestMainPanel;
+
 /**
  *
  * @author shalaka
@@ -490,7 +493,17 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addEmployee_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployee_buttonActionPerformed
-        // TODO add your handling code here:
+         // Get the parent EmployeeMainPanel
+        Container parent = this.getParent();
+        while (parent != null && !(parent instanceof EmployeeMainPanel)) {
+            parent = parent.getParent();
+        }
+
+        if (parent instanceof EmployeeMainPanel) {
+            EmployeeMainPanel employeeMainPanel = (EmployeeMainPanel) parent;
+            // Switch to the New Employee tab (index 1)
+            employeeMainPanel.getEmployeesTabs().setSelectedIndex(1);
+        }
     }//GEN-LAST:event_addEmployee_buttonActionPerformed
 
     private void search_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_buttonActionPerformed

@@ -86,4 +86,8 @@ public class EmployeeMainPanel extends javax.swing.JPanel {
     private main.java.com.hotel.ui.employee.NewEmployeePanel newEmployeePanel1;
     private javax.swing.JPanel newEmployeeTab;
     // End of variables declaration//GEN-END:variables
+public javax.swing.JTabbedPane getEmployeesTabs() {
+        return jTabbedPane1;
+    }
+
 }
