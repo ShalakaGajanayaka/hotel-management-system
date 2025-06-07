@@ -568,11 +568,12 @@
                     <Component class="javax.swing.JComboBox" name="identification_idType">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="4">
-                            <StringItem index="0" value="Item 1"/>
-                            <StringItem index="1" value="Item 2"/>
-                            <StringItem index="2" value="Item 3"/>
-                            <StringItem index="3" value="Item 4"/>
+                          <StringArray count="5">
+                            <StringItem index="0" value="Select ID Type"/>
+                            <StringItem index="1" value="Passport"/>
+                            <StringItem index="2" value="National ID"/>
+                            <StringItem index="3" value="Driver License"/>
+                            <StringItem index="4" value="Other"/>
                           </StringArray>
                         </Property>
                       </Properties>
@@ -680,11 +681,8 @@
                     <Component class="javax.swing.JComboBox" name="preference_roomPreference">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="4">
-                            <StringItem index="0" value="Item 1"/>
-                            <StringItem index="1" value="Item 2"/>
-                            <StringItem index="2" value="Item 3"/>
-                            <StringItem index="3" value="Item 4"/>
+                          <StringArray count="1">
+                            <StringItem index="0" value="Select Room"/>
                           </StringArray>
                         </Property>
                       </Properties>
@@ -720,11 +718,9 @@
                     <Component class="javax.swing.JComboBox" name="preference_vipStatus">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="4">
-                            <StringItem index="0" value="Item 1"/>
-                            <StringItem index="1" value="Item 2"/>
-                            <StringItem index="2" value="Item 3"/>
-                            <StringItem index="3" value="Item 4"/>
+                          <StringArray count="2">
+                            <StringItem index="0" value="No"/>
+                            <StringItem index="1" value="Yes"/>
                           </StringArray>
                         </Property>
                       </Properties>
@@ -755,6 +751,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Save"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="save_buttonActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

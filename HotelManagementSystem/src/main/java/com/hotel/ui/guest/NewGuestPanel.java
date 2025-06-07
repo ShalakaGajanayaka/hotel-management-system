@@ -4,6 +4,13 @@
  */
 package main.java.com.hotel.ui.guest;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.sql.*;
+import java.util.Date;
+import java.util.regex.Pattern;
+import main.java.com.hotel.config.DatabaseConnection;
+
 /**
  *
  * @author shalaka
@@ -323,7 +330,7 @@ public class NewGuestPanel extends javax.swing.JPanel {
 
         jLabel19.setText("ID Type :");
 
-        identification_idType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        identification_idType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select ID Type", "Passport", "National ID", "Driver License", "Other" }));
 
         jLabel20.setText("ID Number :");
 
@@ -383,7 +390,7 @@ public class NewGuestPanel extends javax.swing.JPanel {
 
         jLabel24.setText("Room Preference :");
 
-        preference_roomPreference.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        preference_roomPreference.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Room" }));
 
         jLabel25.setText("Special Requirements :");
 
@@ -393,7 +400,7 @@ public class NewGuestPanel extends javax.swing.JPanel {
 
         jLabel26.setText("VIP Status :");
 
-        preference_vipStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        preference_vipStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No", "Yes" }));
 
         jLabel27.setText("Loyalty Program :");
 
@@ -471,6 +478,11 @@ public class NewGuestPanel extends javax.swing.JPanel {
         cancel_button.setText("Cancel");
 
         save_button.setText("Save");
+        save_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                save_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -519,6 +531,268 @@ public class NewGuestPanel extends javax.swing.JPanel {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void save_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_buttonActionPerformed
+        try {
+            // Validate all form data
+            if (validateFormData()) {
+                // Save guest data to database using prepared statement method
+                saveGuestData();
+                // Alternative: Use saveGuestDataAlternative() if you prefer using your executeIUD method
+
+                JOptionPane.showMessageDialog(this,
+                        "Guest registered successfully!",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+                clearForm();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error saving guest data: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_save_buttonActionPerformed
+
+    private boolean validateFormData() {
+        StringBuilder errorMessages = new StringBuilder();
+
+        // Validate Personal Information
+        if (isEmptyOrNull(personalInformation_fistName.getText())) {
+            errorMessages.append("• First Name is required\n");
+        }
+
+        if (isEmptyOrNull(personalInformation_lastName.getText())) {
+            errorMessages.append("• Last Name is required\n");
+        }
+
+        if (!personalInformation_genderMale.isSelected()
+                && !personalInformation_genderFemale.isSelected()
+                && !personalInformation_genderOther.isSelected()) {
+            errorMessages.append("• Gender selection is required\n");
+        }
+
+        if (personalInformation_dateOfBirth.getDate() == null) {
+            errorMessages.append("• Date of Birth is required\n");
+        } else {
+            // Check if age is reasonable (between 0 and 120 years)
+            Date birthDate = personalInformation_dateOfBirth.getDate();
+            Date currentDate = new Date();
+            long ageInMillis = currentDate.getTime() - birthDate.getTime();
+            int age = (int) (ageInMillis / (365.25 * 24 * 60 * 60 * 1000));
+
+            if (age < 0) {
+                errorMessages.append("• Date of Birth cannot be in the future\n");
+            } else if (age > 120) {
+                errorMessages.append("• Date of Birth seems unrealistic\n");
+            }
+        }
+
+        if (isEmptyOrNull(personalInformation_nationality.getText())) {
+            errorMessages.append("• Nationality is required\n");
+        }
+
+        // Validate Contact Information
+        if (isEmptyOrNull(contactInfomamtion_phoneNumber.getText())) {
+            errorMessages.append("• Phone Number is required\n");
+        } else if (!isValidPhoneNumber(contactInfomamtion_phoneNumber.getText())) {
+            errorMessages.append("• Phone Number format is invalid\n");
+        }
+
+        if (!isEmptyOrNull(contactInfomamtion_email.getText())
+                && !isValidEmail(contactInfomamtion_email.getText())) {
+            errorMessages.append("• Email format is invalid\n");
+        }
+
+        if (isEmptyOrNull(contactInfomamtion_country.getText())) {
+            errorMessages.append("• Country is required\n");
+        }
+
+        // Validate Identification (Optional but if provided, must be complete)
+        if (identification_idType.getSelectedIndex() > 0
+                || !isEmptyOrNull(identification_idNumber.getText())
+                || !isEmptyOrNull(identification_issuingCountry.getText())
+                || identification_expirationDate.getDate() != null) {
+
+            if (identification_idType.getSelectedIndex() == 0) {
+                errorMessages.append("• ID Type must be selected when providing identification\n");
+            }
+
+            if (isEmptyOrNull(identification_idNumber.getText())) {
+                errorMessages.append("• ID Number is required when providing identification\n");
+            }
+
+            if (isEmptyOrNull(identification_issuingCountry.getText())) {
+                errorMessages.append("• Issuing Country is required when providing identification\n");
+            }
+
+            if (identification_expirationDate.getDate() != null) {
+                Date expiryDate = identification_expirationDate.getDate();
+                Date currentDate = new Date();
+                if (expiryDate.before(currentDate)) {
+                    errorMessages.append("• ID has expired\n");
+                }
+            }
+        }
+
+        // Show validation errors if any
+        if (errorMessages.length() > 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Please correct the following errors:\n\n" + errorMessages.toString(),
+                    "Validation Error",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void saveGuestData() throws Exception {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Get database connection using your existing DatabaseConnection class
+            conn = DatabaseConnection.getConnection();
+
+            String sql = "INSERT INTO guest (first_name, last_name, gender, date_of_birth, "
+                    + "contact_number, email, address, city, state, country, postal_code, "
+                    + "nationality, id_type, id_number, preference_room, special_requests, "
+                    + "vip_status, loyalty_points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            pstmt = conn.prepareStatement(sql);
+
+            // Personal Information
+            pstmt.setString(1, personalInformation_fistName.getText().trim());
+            pstmt.setString(2, personalInformation_lastName.getText().trim());
+
+            // Gender
+            String gender = null;
+            if (personalInformation_genderMale.isSelected()) {
+                gender = "Male";
+            } else if (personalInformation_genderFemale.isSelected()) {
+                gender = "Female";
+            } else if (personalInformation_genderOther.isSelected()) {
+                gender = "Other";
+            }
+            pstmt.setString(3, gender);
+
+            // Date of Birth
+            pstmt.setDate(4, new java.sql.Date(personalInformation_dateOfBirth.getDate().getTime()));
+
+            // Contact Information
+            pstmt.setString(5, contactInfomamtion_phoneNumber.getText().trim());
+            pstmt.setString(6, isEmptyOrNull(contactInfomamtion_email.getText()) ? null : contactInfomamtion_email.getText().trim());
+
+            // Address (combine address lines)
+            String fullAddress = contactInfomamtion_addressLine1.getText().trim();
+            if (!isEmptyOrNull(contactInfomamtion_addressLine2.getText())) {
+                fullAddress += ", " + contactInfomamtion_addressLine2.getText().trim();
+            }
+            pstmt.setString(7, isEmptyOrNull(fullAddress) ? null : fullAddress);
+
+            pstmt.setString(8, isEmptyOrNull(contactInfomamtion_city.getText()) ? null : contactInfomamtion_city.getText().trim());
+            pstmt.setString(9, isEmptyOrNull(contactInfomamtion_state.getText()) ? null : contactInfomamtion_state.getText().trim());
+            pstmt.setString(10, contactInfomamtion_country.getText().trim());
+            pstmt.setString(11, isEmptyOrNull(contactInfomamtion_postalCode.getText()) ? null : contactInfomamtion_postalCode.getText().trim());
+            pstmt.setString(12, personalInformation_nationality.getText().trim());
+
+            // Identification
+            if (identification_idType.getSelectedIndex() > 0) {
+                pstmt.setString(13, identification_idType.getSelectedItem().toString());
+                pstmt.setString(14, identification_idNumber.getText().trim());
+            } else {
+                pstmt.setNull(13, Types.VARCHAR);
+                pstmt.setNull(14, Types.VARCHAR);
+            }
+
+            // Preferences
+            if (preference_roomPreference.getSelectedIndex() > 0) {
+                // You'll need to map room preference to room_id
+                pstmt.setNull(15, Types.INTEGER); // For now, set as null
+            } else {
+                pstmt.setNull(15, Types.INTEGER);
+            }
+
+            pstmt.setString(16, isEmptyOrNull(preference_specialRequests.getText()) ? null : preference_specialRequests.getText().trim());
+
+            // VIP Status
+            boolean isVip = preference_vipStatus.getSelectedIndex() > 0
+                    && !preference_vipStatus.getSelectedItem().toString().equals("None");
+            pstmt.setBoolean(17, isVip);
+
+            // Loyalty Points (initial value)
+            int initialPoints = preference_loyaltyProgramEnroll.isSelected() ? 100 : 0;
+            pstmt.setInt(18, initialPoints);
+
+            // Execute the insert
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new SQLException("Creating guest failed, no rows affected.");
+            }
+
+        } finally {
+            // Close resources
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+    }
+
+// Helper validation methods
+    private boolean isEmptyOrNull(String text) {
+        return text == null || text.trim().isEmpty();
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        return pattern.matcher(email).matches();
+    }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        // Remove all non-digit characters
+        String digitsOnly = phoneNumber.replaceAll("[^0-9]", "");
+
+        // Check if it has at least 7 digits and at most 15 digits
+        return digitsOnly.length() >= 7 && digitsOnly.length() <= 15;
+    }
+
+    private void clearForm() {
+        // Clear Personal Information
+        personalInformation_fistName.setText("");
+        personalInformation_lastName.setText("");
+        buttonGroup1.clearSelection();
+        personalInformation_dateOfBirth.setDate(null);
+        personalInformation_nationality.setText("");
+
+        // Clear Contact Information
+        contactInfomamtion_phoneNumber.setText("");
+        contactInfomamtion_email.setText("");
+        contactInfomamtion_addressLine1.setText("");
+        contactInfomamtion_addressLine2.setText("");
+        contactInfomamtion_city.setText("");
+        contactInfomamtion_state.setText("");
+        contactInfomamtion_country.setText("");
+        contactInfomamtion_postalCode.setText("");
+
+        // Clear Identification
+        identification_idType.setSelectedIndex(0);
+        identification_idNumber.setText("");
+        identification_issuingCountry.setText("");
+        identification_expirationDate.setDate(null);
+
+        // Clear Preferences
+        preference_roomPreference.setSelectedIndex(0);
+        preference_specialRequests.setText("");
+        preference_vipStatus.setSelectedIndex(0);
+        preference_loyaltyProgramEnroll.setSelected(false);
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
