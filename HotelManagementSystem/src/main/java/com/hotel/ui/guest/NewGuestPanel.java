@@ -680,7 +680,7 @@ public class NewGuestPanel extends javax.swing.JPanel {
 
             String sql = "UPDATE guest SET first_name=?, last_name=?, gender=?, date_of_birth=?, " +
                     "contact_number=?, email=?, address=?, city=?, state=?, country=?, postal_code=?, " +
-                    "nationality=?, id_type=?, id_number=?, preference_room=?, special_requests=?, " +
+                    "nationality=?, id_type=?, id_number=?, id_issue_country=?, id_expiredate=?, preference_room=?, special_requests=?, " +
                     "vip_status=?, loyalty_points=? WHERE guest_id=?";
 
             pstmt = conn.prepareStatement(sql);
@@ -724,31 +724,39 @@ public class NewGuestPanel extends javax.swing.JPanel {
             if (identification_idType.getSelectedIndex() > 0) {
                 pstmt.setString(13, identification_idType.getSelectedItem().toString());
                 pstmt.setString(14, identification_idNumber.getText().trim());
+                pstmt.setString(15, identification_issuingCountry.getText().trim());
+                if (identification_expirationDate.getDate() != null) {
+                    pstmt.setDate(16, new java.sql.Date(identification_expirationDate.getDate().getTime()));
+                } else {
+                    pstmt.setNull(16, Types.DATE);
+                }
             } else {
                 pstmt.setNull(13, Types.VARCHAR);
                 pstmt.setNull(14, Types.VARCHAR);
+                pstmt.setNull(15, Types.VARCHAR);
+                pstmt.setNull(16, Types.DATE);
             }
 
             // Preferences
             if (preference_roomPreference.getSelectedIndex() > 0) {
-                pstmt.setNull(15, Types.INTEGER); // For now, set as null
+                pstmt.setNull(17, Types.INTEGER); // For now, set as null
             } else {
-                pstmt.setNull(15, Types.INTEGER);
+                pstmt.setNull(17, Types.INTEGER);
             }
 
-            pstmt.setString(16, isEmptyOrNull(preference_specialRequests.getText()) ? null : preference_specialRequests.getText().trim());
+            pstmt.setString(18, isEmptyOrNull(preference_specialRequests.getText()) ? null : preference_specialRequests.getText().trim());
 
             // VIP Status
             boolean isVip = preference_vipStatus.getSelectedIndex() > 0
                     && !preference_vipStatus.getSelectedItem().toString().equals("None");
-            pstmt.setBoolean(17, isVip);
+            pstmt.setBoolean(19, isVip);
 
             // Loyalty Points
             int loyaltyPoints = preference_loyaltyProgramEnroll.isSelected() ? 100 : 0;
-            pstmt.setInt(18, loyaltyPoints);
+            pstmt.setInt(20, loyaltyPoints);
 
             // Guest ID for WHERE clause
-            pstmt.setInt(19, currentGuestId);
+            pstmt.setInt(21, currentGuestId);
 
             // Execute the update
             int rowsAffected = pstmt.executeUpdate();
@@ -883,8 +891,8 @@ public class NewGuestPanel extends javax.swing.JPanel {
 
             String sql = "INSERT INTO guest (first_name, last_name, gender, date_of_birth, "
                     + "contact_number, email, address, city, state, country, postal_code, "
-                    + "nationality, id_type, id_number, preference_room, special_requests, "
-                    + "vip_status, loyalty_points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + "nationality, id_type, id_number, id_issue_country, id_expiredate, preference_room, special_requests, "
+                    + "vip_status, loyalty_points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
             pstmt = conn.prepareStatement(sql);
 
@@ -927,29 +935,36 @@ public class NewGuestPanel extends javax.swing.JPanel {
             if (identification_idType.getSelectedIndex() > 0) {
                 pstmt.setString(13, identification_idType.getSelectedItem().toString());
                 pstmt.setString(14, identification_idNumber.getText().trim());
+                pstmt.setString(15, identification_issuingCountry.getText().trim());
+                if (identification_expirationDate.getDate() != null) {
+                    pstmt.setDate(16, new java.sql.Date(identification_expirationDate.getDate().getTime()));
+                } else {
+                    pstmt.setNull(16, Types.DATE);
+                }
             } else {
                 pstmt.setNull(13, Types.VARCHAR);
                 pstmt.setNull(14, Types.VARCHAR);
+                pstmt.setNull(15, Types.VARCHAR);
+                pstmt.setNull(16, Types.DATE);
             }
 
             // Preferences
             if (preference_roomPreference.getSelectedIndex() > 0) {
-                // You'll need to map room preference to room_id
-                pstmt.setNull(15, Types.INTEGER); // For now, set as null
+                pstmt.setNull(17, Types.INTEGER); // For now, set as null
             } else {
-                pstmt.setNull(15, Types.INTEGER);
+                pstmt.setNull(17, Types.INTEGER);
             }
 
-            pstmt.setString(16, isEmptyOrNull(preference_specialRequests.getText()) ? null : preference_specialRequests.getText().trim());
+            pstmt.setString(18, isEmptyOrNull(preference_specialRequests.getText()) ? null : preference_specialRequests.getText().trim());
 
             // VIP Status
             boolean isVip = preference_vipStatus.getSelectedIndex() > 0
                     && !preference_vipStatus.getSelectedItem().toString().equals("None");
-            pstmt.setBoolean(17, isVip);
+            pstmt.setBoolean(19, isVip);
 
             // Loyalty Points (initial value)
             int initialPoints = preference_loyaltyProgramEnroll.isSelected() ? 100 : 0;
-            pstmt.setInt(18, initialPoints);
+            pstmt.setInt(20, initialPoints);
 
             // Execute the insert
             int rowsAffected = pstmt.executeUpdate();
