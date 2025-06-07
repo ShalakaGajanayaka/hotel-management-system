@@ -88,4 +88,12 @@ public class GuestMainPanel extends javax.swing.JPanel {
     public javax.swing.JTabbedPane getGuestsTabs() {
         return guestsTabs;
     }
+    
+    public NewGuestPanel getNewGuestPanel() {
+        return newGuestPanel1;
+    }
+
+    public GuestManagementPanel getGuestManagementPanel() {
+        return guestManagementPanel1;
+    }
 }

@@ -633,6 +633,11 @@ public GuestData getSelectedGuest() {
         selectedGuestDetails_viewDetailsButton.setText("View Details");
 
         selectedGuestDetails_edit_Button.setText("Edit");
+        selectedGuestDetails_edit_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectedGuestDetails_edit_ButtonActionPerformed(evt);
+            }
+        });
 
         selectedGuestDetails_viewHistory_button.setText("View History");
 
@@ -797,6 +802,39 @@ public GuestData getSelectedGuest() {
             guestMainPanel.getGuestsTabs().setSelectedIndex(1);
         }
     }//GEN-LAST:event_addGuest_buttonActionPerformed
+
+    private void selectedGuestDetails_edit_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectedGuestDetails_edit_ButtonActionPerformed
+           if (selectedGuest == null) {
+            JOptionPane.showMessageDialog(this,
+                "Please select a guest to edit",
+                "No Guest Selected",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Get the parent GuestMainPanel
+        Container parent = this.getParent();
+        while (parent != null && !(parent instanceof GuestMainPanel)) {
+            parent = parent.getParent();
+        }
+
+        if (parent instanceof GuestMainPanel) {
+            GuestMainPanel guestMainPanel = (GuestMainPanel) parent;
+            
+            // Switch to the New Guest tab
+            guestMainPanel.getGuestsTabs().setSelectedIndex(1);
+            
+            // Get the NewGuestPanel
+            NewGuestPanel newGuestPanel = guestMainPanel.getNewGuestPanel();
+            
+            // Load guest data into the form
+            newGuestPanel.loadGuestData(selectedGuest);
+            
+            // Disable save button and enable update button
+            newGuestPanel.setSaveButtonEnabled(false);
+            newGuestPanel.setUpdateButtonEnabled(true);
+        }
+    }//GEN-LAST:event_selectedGuestDetails_edit_ButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -10,6 +10,8 @@ import java.sql.*;
 import java.util.Date;
 import java.util.regex.Pattern;
 import main.java.com.hotel.config.DatabaseConnection;
+import java.text.SimpleDateFormat;
+import java.awt.Container;
 
 /**
  *
@@ -23,6 +25,79 @@ public class NewGuestPanel extends javax.swing.JPanel {
     public NewGuestPanel() {
         initComponents();
     }
+
+    public void loadGuestData(GuestManagementPanel.GuestData guest) {
+        // Personal Information
+        personalInformation_fistName.setText(guest.firstName);
+        personalInformation_lastName.setText(guest.lastName);
+
+        // Gender
+        if ("Male".equals(guest.gender)) {
+            personalInformation_genderMale.setSelected(true);
+        } else if ("Female".equals(guest.gender)) {
+            personalInformation_genderFemale.setSelected(true);
+        } else if ("Other".equals(guest.gender)) {
+            personalInformation_genderOther.setSelected(true);
+        }
+
+        // Date of Birth
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date dob = sdf.parse(guest.dateOfBirth);
+            personalInformation_dateOfBirth.setDate(dob);
+        } catch (Exception e) {
+            personalInformation_dateOfBirth.setDate(null);
+        }
+
+        personalInformation_nationality.setText(guest.nationality);
+
+        // Contact Information
+        contactInfomamtion_phoneNumber.setText(guest.phone);
+        contactInfomamtion_email.setText(guest.email);
+
+        // Address
+        if (guest.address != null) {
+            String[] addressParts = guest.address.split(",", 2);
+            contactInfomamtion_addressLine1.setText(addressParts[0].trim());
+            if (addressParts.length > 1) {
+                contactInfomamtion_addressLine2.setText(addressParts[1].trim());
+            }
+        }
+
+        contactInfomamtion_city.setText(guest.city);
+        contactInfomamtion_state.setText(guest.state);
+        contactInfomamtion_country.setText(guest.country);
+        contactInfomamtion_postalCode.setText(guest.postalCode);
+
+        // Identification
+        if (guest.idType != null) {
+            for (int i = 0; i < identification_idType.getItemCount(); i++) {
+                if (identification_idType.getItemAt(i).equals(guest.idType)) {
+                    identification_idType.setSelectedIndex(i);
+                    break;
+                }
+            }
+        }
+        identification_idNumber.setText(guest.idNumber);
+
+        // Preferences
+        preference_vipStatus.setSelectedItem(guest.vipStatus ? "Yes" : "No");
+        preference_loyaltyProgramEnroll.setSelected(guest.loyaltyPoints > 0);
+        preference_specialRequests.setText(guest.specialRequests);
+
+        // Store the guest ID for update
+        this.currentGuestId = guest.guestId;
+    }
+
+    public void setSaveButtonEnabled(boolean enabled) {
+        save_button.setEnabled(enabled);
+    }
+
+    public void setUpdateButtonEnabled(boolean enabled) {
+        update_buton.setEnabled(enabled);
+    }
+
+    private int currentGuestId = -1;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -486,6 +561,11 @@ public class NewGuestPanel extends javax.swing.JPanel {
         });
 
         update_buton.setText("Update");
+        update_buton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                update_butonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -561,6 +641,145 @@ public class NewGuestPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_save_buttonActionPerformed
 
+    private void update_butonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_update_butonActionPerformed
+        try {
+            // Validate all form data
+            if (validateFormData()) {
+                // Update guest data in database
+                updateGuestData();
+                
+                JOptionPane.showMessageDialog(this,
+                    "Guest information updated successfully!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+                // Refresh the guest management panel
+                refreshGuestManagementPanel();
+                
+                // Clear form and reset buttons
+                clearForm();
+                setSaveButtonEnabled(true);
+                setUpdateButtonEnabled(false);
+                currentGuestId = -1;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "Error updating guest data: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_update_butonActionPerformed
+
+    private void updateGuestData() throws Exception {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = DatabaseConnection.getConnection();
+
+            String sql = "UPDATE guest SET first_name=?, last_name=?, gender=?, date_of_birth=?, " +
+                    "contact_number=?, email=?, address=?, city=?, state=?, country=?, postal_code=?, " +
+                    "nationality=?, id_type=?, id_number=?, preference_room=?, special_requests=?, " +
+                    "vip_status=?, loyalty_points=? WHERE guest_id=?";
+
+            pstmt = conn.prepareStatement(sql);
+
+            // Personal Information
+            pstmt.setString(1, personalInformation_fistName.getText().trim());
+            pstmt.setString(2, personalInformation_lastName.getText().trim());
+
+            // Gender
+            String gender = null;
+            if (personalInformation_genderMale.isSelected()) {
+                gender = "Male";
+            } else if (personalInformation_genderFemale.isSelected()) {
+                gender = "Female";
+            } else if (personalInformation_genderOther.isSelected()) {
+                gender = "Other";
+            }
+            pstmt.setString(3, gender);
+
+            // Date of Birth
+            pstmt.setDate(4, new java.sql.Date(personalInformation_dateOfBirth.getDate().getTime()));
+
+            // Contact Information
+            pstmt.setString(5, contactInfomamtion_phoneNumber.getText().trim());
+            pstmt.setString(6, isEmptyOrNull(contactInfomamtion_email.getText()) ? null : contactInfomamtion_email.getText().trim());
+
+            // Address (combine address lines)
+            String fullAddress = contactInfomamtion_addressLine1.getText().trim();
+            if (!isEmptyOrNull(contactInfomamtion_addressLine2.getText())) {
+                fullAddress += ", " + contactInfomamtion_addressLine2.getText().trim();
+            }
+            pstmt.setString(7, isEmptyOrNull(fullAddress) ? null : fullAddress);
+
+            pstmt.setString(8, isEmptyOrNull(contactInfomamtion_city.getText()) ? null : contactInfomamtion_city.getText().trim());
+            pstmt.setString(9, isEmptyOrNull(contactInfomamtion_state.getText()) ? null : contactInfomamtion_state.getText().trim());
+            pstmt.setString(10, contactInfomamtion_country.getText().trim());
+            pstmt.setString(11, isEmptyOrNull(contactInfomamtion_postalCode.getText()) ? null : contactInfomamtion_postalCode.getText().trim());
+            pstmt.setString(12, personalInformation_nationality.getText().trim());
+
+            // Identification
+            if (identification_idType.getSelectedIndex() > 0) {
+                pstmt.setString(13, identification_idType.getSelectedItem().toString());
+                pstmt.setString(14, identification_idNumber.getText().trim());
+            } else {
+                pstmt.setNull(13, Types.VARCHAR);
+                pstmt.setNull(14, Types.VARCHAR);
+            }
+
+            // Preferences
+            if (preference_roomPreference.getSelectedIndex() > 0) {
+                pstmt.setNull(15, Types.INTEGER); // For now, set as null
+            } else {
+                pstmt.setNull(15, Types.INTEGER);
+            }
+
+            pstmt.setString(16, isEmptyOrNull(preference_specialRequests.getText()) ? null : preference_specialRequests.getText().trim());
+
+            // VIP Status
+            boolean isVip = preference_vipStatus.getSelectedIndex() > 0
+                    && !preference_vipStatus.getSelectedItem().toString().equals("None");
+            pstmt.setBoolean(17, isVip);
+
+            // Loyalty Points
+            int loyaltyPoints = preference_loyaltyProgramEnroll.isSelected() ? 100 : 0;
+            pstmt.setInt(18, loyaltyPoints);
+
+            // Guest ID for WHERE clause
+            pstmt.setInt(19, currentGuestId);
+
+            // Execute the update
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new SQLException("Updating guest failed, no rows affected.");
+            }
+
+        } finally {
+            if (pstmt != null) {
+                pstmt.close();
+            }
+        }
+    }
+
+    private void refreshGuestManagementPanel() {
+        // Get the parent GuestMainPanel
+        Container parent = this.getParent();
+        while (parent != null && !(parent instanceof GuestMainPanel)) {
+            parent = parent.getParent();
+        }
+
+        if (parent instanceof GuestMainPanel) {
+            GuestMainPanel guestMainPanel = (GuestMainPanel) parent;
+            // Switch back to the Guest Management tab
+            guestMainPanel.getGuestsTabs().setSelectedIndex(0);
+            // Refresh the guest list
+            guestMainPanel.getGuestManagementPanel().refreshGuestsData();
+        }
+    }
+    
     private boolean validateFormData() {
         StringBuilder errorMessages = new StringBuilder();
 
