@@ -6,6 +6,17 @@ package main.java.com.hotel.ui.employee;
 
 import java.awt.Container;
 import main.java.com.hotel.ui.guest.GuestMainPanel;
+import main.java.com.hotel.config.DatabaseConnection;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.sql.Connection;
+import java.text.SimpleDateFormat;
+import java.util.Vector;
 
 /**
  *
@@ -13,11 +24,245 @@ import main.java.com.hotel.ui.guest.GuestMainPanel;
  */
 public class EmployeeManagementPanel extends javax.swing.JPanel {
 
+    private DefaultTableModel tableModel;
+    private int selectedEmployeeId = -1;
+
     /**
      * Creates new form EmployeeManagementPanel
      */
     public EmployeeManagementPanel() {
         initComponents();
+        initializeComponents();
+        loadEmployeeData();
+        setupTableSelectionListener();
+    }
+
+    private void initializeComponents() {
+        // Initialize table model with proper column names
+        String[] columnNames = {"ID", "Employee Code", "Name", "Department", "Position", "Status"};
+        tableModel = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Make table non-editable
+            }
+        };
+        employeeListTable.setModel(tableModel);
+
+        // Set table selection mode
+        employeeListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Load departments and statuses
+        loadDepartments();
+        loadEmploymentStatuses();
+
+        // Clear employee details initially
+        clearEmployeeDetails();
+    }
+
+    private void loadDepartments() {
+        try {
+            department_combobox.removeAllItems();
+            department_combobox.addItem("All");
+
+            String query = "SELECT department_name FROM department ORDER BY department_name";
+            ResultSet rs = DatabaseConnection.executeSearch(query);
+
+            while (rs.next()) {
+                department_combobox.addItem(rs.getString("department_name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading departments: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void loadEmploymentStatuses() {
+        status_combobox.removeAllItems();
+        status_combobox.addItem("All");
+        status_combobox.addItem("Full-time");
+        status_combobox.addItem("Part-time");
+        status_combobox.addItem("Contract");
+        status_combobox.addItem("Intern");
+        status_combobox.addItem("Terminated");
+    }
+
+    private void loadEmployeeData() {
+        try {
+            // Clear existing data
+            tableModel.setRowCount(0);
+
+            // Build query based on filters
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT e.employee_id, e.employee_code, ");
+            query.append("CONCAT(e.first_name, ' ', e.last_name) AS full_name, ");
+            query.append("d.department_name, e.employment_status, e.contact_number, ");
+            query.append("e.email, e.hire_date ");
+            query.append("FROM employee e ");
+            query.append("LEFT JOIN department d ON e.department_id = d.department_id ");
+            query.append("WHERE 1=1 ");
+
+            Vector<Object> parameters = new Vector<>();
+
+            // Add search filter
+            String searchText = search_field.getText().trim();
+            if (!searchText.isEmpty()) {
+                query.append("AND (e.first_name LIKE ? OR e.last_name LIKE ? OR e.employee_code LIKE ? OR e.email LIKE ?) ");
+                String searchPattern = "%" + searchText + "%";
+                parameters.add(searchPattern);
+                parameters.add(searchPattern);
+                parameters.add(searchPattern);
+                parameters.add(searchPattern);
+            }
+
+            // Add department filter
+            String selectedDept = (String) department_combobox.getSelectedItem();
+            if (selectedDept != null && !selectedDept.equals("All")) {
+                query.append("AND d.department_name = ? ");
+                parameters.add(selectedDept);
+            }
+
+            // Add status filter
+            String selectedStatus = (String) status_combobox.getSelectedItem();
+            if (selectedStatus != null && !selectedStatus.equals("All")) {
+                query.append("AND e.employment_status = ? ");
+                parameters.add(selectedStatus);
+            }
+
+            query.append("ORDER BY e.employee_code");
+
+            // Execute query
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query.toString());
+
+            // Set parameters
+            for (int i = 0; i < parameters.size(); i++) {
+                pstmt.setObject(i + 1, parameters.get(i));
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+
+            // Populate table
+            while (rs.next()) {
+                Object[] row = {
+                    rs.getInt("employee_id"),
+                    rs.getString("employee_code"),
+                    rs.getString("full_name"),
+                    rs.getString("department_name"),
+                    rs.getString("employment_status"),
+                    getStatusDisplayText(rs.getString("employment_status"))
+                };
+                tableModel.addRow(row);
+            }
+
+            // Update table display
+            employeeListTable.revalidate();
+            employeeListTable.repaint();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading employee data: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private String getStatusDisplayText(String status) {
+        if ("Terminated".equals(status)) {
+            return "Inactive";
+        }
+        return "Active";
+    }
+
+    private void setupTableSelectionListener() {
+        employeeListTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                if (!e.getValueIsAdjusting()) {
+                    int selectedRow = employeeListTable.getSelectedRow();
+                    if (selectedRow >= 0) {
+                        selectedEmployeeId = (Integer) tableModel.getValueAt(selectedRow, 0);
+                        loadEmployeeDetails(selectedEmployeeId);
+                    } else {
+                        clearEmployeeDetails();
+                    }
+                }
+            }
+        });
+    }
+
+    private void loadEmployeeDetails(int employeeId) {
+        try {
+            String query = "SELECT e.employee_id, e.employee_code, "
+                    + "CONCAT(e.first_name, ' ', e.last_name) AS full_name, "
+                    + "d.department_name, e.employment_status, e.contact_number, "
+                    + "e.email, e.hire_date, e.salary "
+                    + "FROM employee e "
+                    + "LEFT JOIN department d ON e.department_id = d.department_id "
+                    + "WHERE e.employee_id = ?";
+
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, employeeId);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                // Update employee details labels
+                employeeDetails_id.setText(rs.getString("employee_code"));
+                employeeDetails_name.setText(rs.getString("full_name"));
+                employeeDetails_department.setText(rs.getString("department_name"));
+                employeeDetails_position.setText(rs.getString("employment_status")); // Using employment status as position for now
+                employeeDetails_contact.setText(rs.getString("contact_number"));
+                employeeDetails_email.setText(rs.getString("email"));
+
+                // Format hire date
+                java.sql.Date hireDate = rs.getDate("hire_date");
+                if (hireDate != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+                    employeeDetails_hireDate.setText(sdf.format(hireDate));
+                } else {
+                    employeeDetails_hireDate.setText("N/A");
+                }
+
+                // Set status
+                String status = rs.getString("employment_status");
+                employeeDetails_Status.setText(getStatusDisplayText(status));
+
+                // Enable action buttons
+                employeeDetails_ViewDetails_button.setEnabled(true);
+                employeeDetails_Edit_button.setEnabled(true);
+                employeeDetails_manageAccess_button.setEnabled(true);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading employee details: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void clearEmployeeDetails() {
+        employeeDetails_id.setText("-");
+        employeeDetails_name.setText("-");
+        employeeDetails_department.setText("-");
+        employeeDetails_position.setText("-");
+        employeeDetails_contact.setText("-");
+        employeeDetails_email.setText("-");
+        employeeDetails_hireDate.setText("-");
+        employeeDetails_Status.setText("-");
+
+        // Disable action buttons
+        employeeDetails_ViewDetails_button.setEnabled(false);
+        employeeDetails_Edit_button.setEnabled(false);
+        employeeDetails_manageAccess_button.setEnabled(false);
+
+        selectedEmployeeId = -1;
+    }
+
+    // Add combo box change listeners
+    private void addComboBoxListeners() {
+        department_combobox.addActionListener(e -> loadEmployeeData());
+        status_combobox.addActionListener(e -> loadEmployeeData());
     }
 
     /**
@@ -110,10 +355,20 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
         jLabel3.setText("Department :");
 
         department_combobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All" }));
+        department_combobox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                department_comboboxItemStateChanged(evt);
+            }
+        });
 
         jLabel4.setText("Status :");
 
         status_combobox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All" }));
+        status_combobox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                status_comboboxItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -493,7 +748,7 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addEmployee_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployee_buttonActionPerformed
-         // Get the parent EmployeeMainPanel
+        // Get the parent EmployeeMainPanel
         Container parent = this.getParent();
         while (parent != null && !(parent instanceof EmployeeMainPanel)) {
             parent = parent.getParent();
@@ -507,11 +762,23 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_addEmployee_buttonActionPerformed
 
     private void search_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_buttonActionPerformed
-        // TODO add your handling code here:
+        loadEmployeeData();
     }//GEN-LAST:event_search_buttonActionPerformed
 
     private void reset_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_buttonActionPerformed
-        // TODO add your handling code here:
+        // Clear search field
+        search_field.setText("");
+
+        // Reset combo boxes
+        department_combobox.setSelectedIndex(0); // "All"
+        status_combobox.setSelectedIndex(0); // "All"
+
+        // Reload data
+        loadEmployeeData();
+
+        // Clear selection and details
+        employeeListTable.clearSelection();
+        clearEmployeeDetails();
     }//GEN-LAST:event_reset_buttonActionPerformed
 
     private void employeeDetails_ViewDetails_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeDetails_ViewDetails_buttonActionPerformed
@@ -526,6 +793,51 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_employeeDetails_manageAccess_buttonActionPerformed
 
+    private void status_comboboxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_status_comboboxItemStateChanged
+        // Only process when item is selected (not deselected)
+        if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+            // Load employee data with new filter
+            loadEmployeeData();
+
+            // Clear employee details since selection might change
+            employeeListTable.clearSelection();
+            clearEmployeeDetails();
+
+            // Optional: Show status message
+            String selectedStatus = (String) status_combobox.getSelectedItem();
+            if (selectedStatus != null && !selectedStatus.equals("All")) {
+                System.out.println("Filtering employees by status: " + selectedStatus);
+            }
+        }
+    }//GEN-LAST:event_status_comboboxItemStateChanged
+
+    private void department_comboboxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_department_comboboxItemStateChanged
+        // Only process when item is selected (not deselected)
+        if (evt.getStateChange() == java.awt.event.ItemEvent.SELECTED) {
+            // Load employee data with new filter
+            loadEmployeeData();
+
+            // Clear employee details since selection might change
+            employeeListTable.clearSelection();
+            clearEmployeeDetails();
+
+            // Optional: Show status message
+            String selectedDept = (String) department_combobox.getSelectedItem();
+            if (selectedDept != null && !selectedDept.equals("All")) {
+                System.out.println("Filtering employees by department: " + selectedDept);
+            }
+        }
+    }//GEN-LAST:event_department_comboboxItemStateChanged
+
+    // Public method to refresh data (useful when called from other panels)
+    public void refreshEmployeeData() {
+        loadEmployeeData();
+    }
+
+// Method to get selected employee ID (useful for other operations)
+    public int getSelectedEmployeeId() {
+        return selectedEmployeeId;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addEmployee_button;
