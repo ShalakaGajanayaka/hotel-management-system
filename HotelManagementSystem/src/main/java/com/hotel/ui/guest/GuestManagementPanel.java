@@ -816,6 +816,17 @@ public GuestData getSelectedGuest() {
             return;
         }
 
+        // Show confirmation dialog
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Are you sure you want to edit this guest's details?",
+            "Confirm Edit",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
         // Get the parent GuestMainPanel
         Container parent = this.getParent();
         while (parent != null && !(parent instanceof GuestMainPanel)) {
