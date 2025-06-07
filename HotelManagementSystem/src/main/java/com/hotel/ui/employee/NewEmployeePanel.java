@@ -4,6 +4,7 @@
  */
 package main.java.com.hotel.ui.employee;
 
+import java.awt.Container;
 import main.java.com.hotel.config.DatabaseConnection;
 import javax.swing.JOptionPane;
 import java.sql.PreparedStatement;
@@ -21,6 +22,8 @@ import java.nio.charset.StandardCharsets;
  */
 public class NewEmployeePanel extends javax.swing.JPanel {
 
+    private int currentEmployeeId = -1;
+
     /**
      * Creates new form NewEmployeePanel
      */
@@ -28,6 +31,107 @@ public class NewEmployeePanel extends javax.swing.JPanel {
         initComponents();
         update_button.setEnabled(false);
         initializeComboBoxes();
+    }
+
+    public void loadEmployeeData(EmployeeManagementPanel.EmployeeData employee) {
+        try {
+            // Personal Information
+            personalInformation_firstName.setText(employee.firstName);
+            personalInformation_lastName.setText(employee.lastName);
+
+            // Gender
+            if ("Male".equals(employee.gender)) {
+                personalInformation_genderMale.setSelected(true);
+            } else if ("Female".equals(employee.gender)) {
+                personalInformation_genderFemale.setSelected(true);
+            } else if ("Other".equals(employee.gender)) {
+                personalInformation_genderOther.setSelected(true);
+            }
+
+            // Date of Birth
+            try {
+                if (employee.dateOfBirth != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date dob = sdf.parse(employee.dateOfBirth);
+                    personalInformation_dateOfBirth.setDate(dob);
+                }
+            } catch (Exception e) {
+                personalInformation_dateOfBirth.setDate(null);
+            }
+
+            // Employment Details
+            employmentDetails_employeeCode.setText(employee.employeeCode);
+
+            // Set department
+            if (employee.departmentName != null) {
+                for (int i = 0; i < employmentDetails_department.getItemCount(); i++) {
+                    if (employmentDetails_department.getItemAt(i).equals(employee.departmentName)) {
+                        employmentDetails_department.setSelectedIndex(i);
+                        break;
+                    }
+                }
+            }
+
+            // Set employment status
+            if (employee.employmentStatus != null) {
+                for (int i = 0; i < employmentDetails_employeeStatus.getItemCount(); i++) {
+                    if (employmentDetails_employeeStatus.getItemAt(i).equals(employee.employmentStatus)) {
+                        employmentDetails_employeeStatus.setSelectedIndex(i);
+                        break;
+                    }
+                }
+            }
+
+            // Hire Date
+            try {
+                if (employee.hireDate != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date hireDate = sdf.parse(employee.hireDate);
+                    employmentDetails_hireDate.setDate(hireDate);
+                }
+            } catch (Exception e) {
+                employmentDetails_hireDate.setDate(null);
+            }
+
+            // Salary
+            employmentDetails_salary.setText(employee.salary);
+
+            // Contact Information
+            contactInformation_phoneNumber.setText(employee.contactNumber);
+            contactInformation_email.setText(employee.email);
+
+            // Address - split the address if it contains multiple lines
+            if (employee.address != null) {
+                String[] addressParts = employee.address.split("\n", 2);
+                contactInformation_addressLine1.setText(addressParts[0].trim());
+                if (addressParts.length > 1) {
+                    contactInformation_addressLine2.setText(addressParts[1].trim());
+                }
+            }
+
+            contactInformation_city.setText(employee.city);
+            contactInformation_state.setText(employee.state);
+            contactInformation_country.setText(employee.country);
+            contactInformation_postalcode.setText(employee.postalCode);
+
+            // Store the employee ID for update
+            this.currentEmployeeId = employee.employeeId;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading employee data: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+// setSaveButtonEnabled method add කරන්න
+    public void setSaveButtonEnabled(boolean enabled) {
+        save_button.setEnabled(enabled);
+    }
+
+// setUpdateButtonEnabled method add කරන්න  
+    public void setUpdateButtonEnabled(boolean enabled) {
+        update_button.setEnabled(enabled);
     }
 
     /**
@@ -1062,7 +1166,33 @@ public class NewEmployeePanel extends javax.swing.JPanel {
     }
 
     private void update_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_update_buttonActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Validate all form data
+            if (validateFields()) {
+                // Update employee data in database
+                updateEmployeeData();
+
+                JOptionPane.showMessageDialog(this,
+                        "Employee information updated successfully!",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+
+                // Refresh the employee management panel
+                refreshEmployeeManagementPanel();
+
+                // Clear form and reset buttons
+                clearFields();
+                setSaveButtonEnabled(true);
+                setUpdateButtonEnabled(false);
+                currentEmployeeId = -1;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error updating employee data: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_update_buttonActionPerformed
 
     private void cancel_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_buttonActionPerformed
@@ -1076,6 +1206,134 @@ public class NewEmployeePanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_cancel_buttonActionPerformed
 
+    
+    private void updateEmployeeData() throws Exception {
+    Connection conn = DatabaseConnection.getConnection();
+    conn.setAutoCommit(false); // Start transaction
+
+    try {
+        // Update employee record
+        updateEmployeeRecord(conn);
+
+        // Update user account if it exists
+        updateUserAccount(conn);
+
+        conn.commit(); // Commit transaction
+
+    } catch (Exception e) {
+        conn.rollback(); // Rollback on error
+        throw e;
+    } finally {
+        conn.setAutoCommit(true);
+    }
+}
+
+// updateEmployeeRecord method add කරන්න
+private void updateEmployeeRecord(Connection conn) throws Exception {
+    String query = "UPDATE employee SET department_id=?, employee_code=?, first_name=?, last_name=?, "
+            + "gender=?, date_of_birth=?, contact_number=?, email=?, address=?, city=?, state=?, "
+            + "country=?, postal_code=?, employment_status=?, salary=? "
+            + "WHERE employee_id=?";
+
+    PreparedStatement pstmt = conn.prepareStatement(query);
+
+    pstmt.setInt(1, getDepartmentIdByName((String) employmentDetails_department.getSelectedItem()));
+    pstmt.setString(2, employmentDetails_employeeCode.getText().trim());
+    pstmt.setString(3, personalInformation_firstName.getText().trim());
+    pstmt.setString(4, personalInformation_lastName.getText().trim());
+    pstmt.setString(5, getSelectedGender());
+    pstmt.setDate(6, new java.sql.Date(personalInformation_dateOfBirth.getDate().getTime()));
+    pstmt.setString(7, contactInformation_phoneNumber.getText().trim());
+    pstmt.setString(8, contactInformation_email.getText().trim());
+
+    // Combine address lines
+    String fullAddress = contactInformation_addressLine1.getText().trim();
+    if (!contactInformation_addressLine2.getText().trim().isEmpty()) {
+        fullAddress += "\n" + contactInformation_addressLine2.getText().trim();
+    }
+    pstmt.setString(9, fullAddress);
+
+    pstmt.setString(10, contactInformation_city.getText().trim());
+    pstmt.setString(11, contactInformation_state.getText().trim().isEmpty() ? null : contactInformation_state.getText().trim());
+    pstmt.setString(12, contactInformation_country.getText().trim());
+    pstmt.setString(13, contactInformation_postalcode.getText().trim().isEmpty() ? null : contactInformation_postalcode.getText().trim());
+    pstmt.setString(14, getSelectedEmploymentStatus());
+
+    // Handle salary
+    if (!employmentDetails_salary.getText().trim().isEmpty()) {
+        try {
+            pstmt.setDouble(15, Double.parseDouble(employmentDetails_salary.getText().trim()));
+        } catch (NumberFormatException e) {
+            pstmt.setNull(15, java.sql.Types.DECIMAL);
+        }
+    } else {
+        pstmt.setNull(15, java.sql.Types.DECIMAL);
+    }
+
+    pstmt.setInt(16, currentEmployeeId);
+
+    int rowsAffected = pstmt.executeUpdate();
+
+    if (rowsAffected == 0) {
+        throw new SQLException("Updating employee failed, no rows affected.");
+    }
+}
+
+// updateUserAccount method add කරන්න
+private void updateUserAccount(Connection conn) throws Exception {
+    // Check if employee has a user account
+    String checkQuery = "SELECT user_id FROM employee WHERE employee_id = ? AND user_id IS NOT NULL";
+    PreparedStatement checkPstmt = conn.prepareStatement(checkQuery);
+    checkPstmt.setInt(1, currentEmployeeId);
+    ResultSet rs = checkPstmt.executeQuery();
+
+    if (rs.next()) {
+        int userId = rs.getInt("user_id");
+        
+        // Update user account
+        String updateQuery = "UPDATE user SET email=?, first_name=?, last_name=? WHERE user_id=?";
+        PreparedStatement updatePstmt = conn.prepareStatement(updateQuery);
+        updatePstmt.setString(1, contactInformation_email.getText().trim());
+        updatePstmt.setString(2, personalInformation_firstName.getText().trim());
+        updatePstmt.setString(3, personalInformation_lastName.getText().trim());
+        updatePstmt.setInt(4, userId);
+        
+        updatePstmt.executeUpdate();
+    }
+}
+
+// getDepartmentIdByName method add කරන්න
+private int getDepartmentIdByName(String departmentName) throws Exception {
+    String query = "SELECT department_id FROM department WHERE department_name = ?";
+    Connection conn = DatabaseConnection.getConnection();
+    PreparedStatement pstmt = conn.prepareStatement(query);
+    pstmt.setString(1, departmentName);
+    ResultSet rs = pstmt.executeQuery();
+    
+    if (rs.next()) {
+        return rs.getInt("department_id");
+    }
+    
+    // Default to first department if not found
+    return 1;
+}
+
+// refreshEmployeeManagementPanel method add කරන්න
+private void refreshEmployeeManagementPanel() {
+    // Get the parent EmployeeMainPanel
+    Container parent = this.getParent();
+    while (parent != null && !(parent instanceof EmployeeMainPanel)) {
+        parent = parent.getParent();
+    }
+
+    if (parent instanceof EmployeeMainPanel) {
+        EmployeeMainPanel employeeMainPanel = (EmployeeMainPanel) parent;
+        // Switch back to the Employee Management tab
+        employeeMainPanel.getEmployeesTabs().setSelectedIndex(0);
+        // Refresh the employee list
+        employeeMainPanel.getEmployeeManagementPanel().refreshEmployeeData();
+    }
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;

@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Vector;
 
 /**
@@ -26,6 +27,7 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
 
     private DefaultTableModel tableModel;
     private int selectedEmployeeId = -1;
+    private EmployeeData selectedEmployeeData = null;
 
     /**
      * Creates new form EmployeeManagementPanel
@@ -35,6 +37,163 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
         initializeComponents();
         loadEmployeeData();
         setupTableSelectionListener();
+    }
+
+    // First, add this class at the top of EmployeeManagementPanel (after imports)
+    public static class EmployeeData {
+
+        public int employeeId;
+        public int userId;
+        public String employeeCode;
+        public String firstName;
+        public String lastName;
+        public String gender;
+        public String dateOfBirth;
+        public String contactNumber;
+        public String email;
+        public String address;
+        public String city;
+        public String state;
+        public String country;
+        public String postalCode;
+        public String hireDate;
+        public String employmentStatus;
+        public String salary;
+        public String departmentName;
+        public int departmentId;
+
+        public String getFullName() {
+            return firstName + " " + lastName;
+        }
+
+        public String getFullAddress() {
+            StringBuilder addr = new StringBuilder();
+            if (address != null && !address.trim().isEmpty()) {
+                addr.append(address);
+            }
+            if (city != null && !city.trim().isEmpty()) {
+                if (addr.length() > 0) {
+                    addr.append(", ");
+                }
+                addr.append(city);
+            }
+            if (state != null && !state.trim().isEmpty()) {
+                if (addr.length() > 0) {
+                    addr.append(", ");
+                }
+                addr.append(state);
+            }
+            if (country != null && !country.trim().isEmpty()) {
+                if (addr.length() > 0) {
+                    addr.append(", ");
+                }
+                addr.append(country);
+            }
+            if (postalCode != null && !postalCode.trim().isEmpty()) {
+                if (addr.length() > 0) {
+                    addr.append(" ");
+                }
+                addr.append(postalCode);
+            }
+            return addr.toString();
+        }
+    }
+
+    private void loadEmployeeDetails(int employeeId) {
+        try {
+            String query = "SELECT e.employee_id, e.user_id, e.employee_code, "
+                    + "e.first_name, e.last_name, e.gender, e.date_of_birth, "
+                    + "e.contact_number, e.email, e.address, e.city, e.state, "
+                    + "e.country, e.postal_code, e.hire_date, e.employment_status, "
+                    + "e.salary, d.department_name, d.department_id "
+                    + "FROM employee e "
+                    + "LEFT JOIN department d ON e.department_id = d.department_id "
+                    + "WHERE e.employee_id = ?";
+
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(query);
+            pstmt.setInt(1, employeeId);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                // Store complete employee data
+                selectedEmployeeData = new EmployeeData();
+                selectedEmployeeData.employeeId = rs.getInt("employee_id");
+                selectedEmployeeData.userId = rs.getInt("user_id");
+                selectedEmployeeData.employeeCode = rs.getString("employee_code");
+                selectedEmployeeData.firstName = rs.getString("first_name");
+                selectedEmployeeData.lastName = rs.getString("last_name");
+                selectedEmployeeData.gender = rs.getString("gender");
+                selectedEmployeeData.dateOfBirth = rs.getString("date_of_birth");
+                selectedEmployeeData.contactNumber = rs.getString("contact_number");
+                selectedEmployeeData.email = rs.getString("email");
+                selectedEmployeeData.address = rs.getString("address");
+                selectedEmployeeData.city = rs.getString("city");
+                selectedEmployeeData.state = rs.getString("state");
+                selectedEmployeeData.country = rs.getString("country");
+                selectedEmployeeData.postalCode = rs.getString("postal_code");
+                selectedEmployeeData.hireDate = rs.getString("hire_date");
+                selectedEmployeeData.employmentStatus = rs.getString("employment_status");
+                selectedEmployeeData.salary = rs.getString("salary");
+                selectedEmployeeData.departmentName = rs.getString("department_name");
+                selectedEmployeeData.departmentId = rs.getInt("department_id");
+
+                // Update employee details labels (existing code)
+                employeeDetails_id.setText(selectedEmployeeData.employeeCode);
+                employeeDetails_name.setText(selectedEmployeeData.getFullName());
+                employeeDetails_department.setText(selectedEmployeeData.departmentName);
+                employeeDetails_position.setText(selectedEmployeeData.employmentStatus);
+                employeeDetails_contact.setText(selectedEmployeeData.contactNumber);
+                employeeDetails_email.setText(selectedEmployeeData.email);
+
+                // Format hire date
+                if (selectedEmployeeData.hireDate != null) {
+                    try {
+                        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat outputFormat = new SimpleDateFormat("MM/dd/yyyy");
+                        Date hireDate = inputFormat.parse(selectedEmployeeData.hireDate);
+                        employeeDetails_hireDate.setText(outputFormat.format(hireDate));
+                    } catch (Exception e) {
+                        employeeDetails_hireDate.setText(selectedEmployeeData.hireDate);
+                    }
+                } else {
+                    employeeDetails_hireDate.setText("N/A");
+                }
+
+                // Set status
+                employeeDetails_Status.setText(getStatusDisplayText(selectedEmployeeData.employmentStatus));
+
+                // Enable action buttons
+                employeeDetails_ViewDetails_button.setEnabled(true);
+                employeeDetails_Edit_button.setEnabled(true);
+                employeeDetails_manageAccess_button.setEnabled(true);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading employee details: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void clearEmployeeDetails() {
+        employeeDetails_id.setText("-");
+        employeeDetails_name.setText("-");
+        employeeDetails_department.setText("-");
+        employeeDetails_position.setText("-");
+        employeeDetails_contact.setText("-");
+        employeeDetails_email.setText("-");
+        employeeDetails_hireDate.setText("-");
+        employeeDetails_Status.setText("-");
+
+        // Disable action buttons
+        employeeDetails_ViewDetails_button.setEnabled(false);
+        employeeDetails_Edit_button.setEnabled(false);
+        employeeDetails_manageAccess_button.setEnabled(false);
+
+        selectedEmployeeId = -1;
+        selectedEmployeeData = null; // Clear selected employee data
     }
 
     private void initializeComponents() {
@@ -188,75 +347,6 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
                 }
             }
         });
-    }
-
-    private void loadEmployeeDetails(int employeeId) {
-        try {
-            String query = "SELECT e.employee_id, e.employee_code, "
-                    + "CONCAT(e.first_name, ' ', e.last_name) AS full_name, "
-                    + "d.department_name, e.employment_status, e.contact_number, "
-                    + "e.email, e.hire_date, e.salary "
-                    + "FROM employee e "
-                    + "LEFT JOIN department d ON e.department_id = d.department_id "
-                    + "WHERE e.employee_id = ?";
-
-            Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query);
-            pstmt.setInt(1, employeeId);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                // Update employee details labels
-                employeeDetails_id.setText(rs.getString("employee_code"));
-                employeeDetails_name.setText(rs.getString("full_name"));
-                employeeDetails_department.setText(rs.getString("department_name"));
-                employeeDetails_position.setText(rs.getString("employment_status")); // Using employment status as position for now
-                employeeDetails_contact.setText(rs.getString("contact_number"));
-                employeeDetails_email.setText(rs.getString("email"));
-
-                // Format hire date
-                java.sql.Date hireDate = rs.getDate("hire_date");
-                if (hireDate != null) {
-                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-                    employeeDetails_hireDate.setText(sdf.format(hireDate));
-                } else {
-                    employeeDetails_hireDate.setText("N/A");
-                }
-
-                // Set status
-                String status = rs.getString("employment_status");
-                employeeDetails_Status.setText(getStatusDisplayText(status));
-
-                // Enable action buttons
-                employeeDetails_ViewDetails_button.setEnabled(true);
-                employeeDetails_Edit_button.setEnabled(true);
-                employeeDetails_manageAccess_button.setEnabled(true);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error loading employee details: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void clearEmployeeDetails() {
-        employeeDetails_id.setText("-");
-        employeeDetails_name.setText("-");
-        employeeDetails_department.setText("-");
-        employeeDetails_position.setText("-");
-        employeeDetails_contact.setText("-");
-        employeeDetails_email.setText("-");
-        employeeDetails_hireDate.setText("-");
-        employeeDetails_Status.setText("-");
-
-        // Disable action buttons
-        employeeDetails_ViewDetails_button.setEnabled(false);
-        employeeDetails_Edit_button.setEnabled(false);
-        employeeDetails_manageAccess_button.setEnabled(false);
-
-        selectedEmployeeId = -1;
     }
 
     // Add combo box change listeners
@@ -786,7 +876,47 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_employeeDetails_ViewDetails_buttonActionPerformed
 
     private void employeeDetails_Edit_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeDetails_Edit_buttonActionPerformed
-        // TODO add your handling code here:
+        if (selectedEmployeeData == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Please select an employee to edit",
+                    "No Employee Selected",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Show confirmation dialog
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to edit this employee's details?",
+                "Confirm Edit",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // Get the parent EmployeeMainPanel
+        Container parent = this.getParent();
+        while (parent != null && !(parent instanceof EmployeeMainPanel)) {
+            parent = parent.getParent();
+        }
+
+        if (parent instanceof EmployeeMainPanel) {
+            EmployeeMainPanel employeeMainPanel = (EmployeeMainPanel) parent;
+
+            // Switch to the New Employee tab
+            employeeMainPanel.getEmployeesTabs().setSelectedIndex(1);
+
+            // Get the NewEmployeePanel
+            NewEmployeePanel newEmployeePanel = employeeMainPanel.getNewEmployeePanel();
+
+            // Load employee data into the form
+            newEmployeePanel.loadEmployeeData(selectedEmployeeData);
+
+            // Disable save button and enable update button
+            newEmployeePanel.setSaveButtonEnabled(false);
+            newEmployeePanel.setUpdateButtonEnabled(true);
+        }
     }//GEN-LAST:event_employeeDetails_Edit_buttonActionPerformed
 
     private void employeeDetails_manageAccess_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeDetails_manageAccess_buttonActionPerformed
