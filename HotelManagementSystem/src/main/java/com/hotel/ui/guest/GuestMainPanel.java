@@ -84,4 +84,16 @@ public class GuestMainPanel extends javax.swing.JPanel {
     private main.java.com.hotel.ui.guest.NewGuestPanel newGuestPanel1;
     private javax.swing.JPanel newGuestTab;
     // End of variables declaration//GEN-END:variables
+
+    public javax.swing.JTabbedPane getGuestsTabs() {
+        return guestsTabs;
+    }
+    
+    public NewGuestPanel getNewGuestPanel() {
+        return newGuestPanel1;
+    }
+
+    public GuestManagementPanel getGuestManagementPanel() {
+        return guestManagementPanel1;
+    }
 }

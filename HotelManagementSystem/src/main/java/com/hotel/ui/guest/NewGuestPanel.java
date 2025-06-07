@@ -4,6 +4,15 @@
  */
 package main.java.com.hotel.ui.guest;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.sql.*;
+import java.util.Date;
+import java.util.regex.Pattern;
+import main.java.com.hotel.config.DatabaseConnection;
+import java.text.SimpleDateFormat;
+import java.awt.Container;
+
 /**
  *
  * @author shalaka
@@ -17,6 +26,96 @@ public class NewGuestPanel extends javax.swing.JPanel {
         initComponents();
     }
 
+    public void loadGuestData(GuestManagementPanel.GuestData guest) {
+        // Personal Information
+        personalInformation_fistName.setText(guest.firstName);
+        personalInformation_lastName.setText(guest.lastName);
+
+        // Gender
+        if ("Male".equals(guest.gender)) {
+            personalInformation_genderMale.setSelected(true);
+        } else if ("Female".equals(guest.gender)) {
+            personalInformation_genderFemale.setSelected(true);
+        } else if ("Other".equals(guest.gender)) {
+            personalInformation_genderOther.setSelected(true);
+        }
+
+        // Date of Birth
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date dob = sdf.parse(guest.dateOfBirth);
+            personalInformation_dateOfBirth.setDate(dob);
+        } catch (Exception e) {
+            personalInformation_dateOfBirth.setDate(null);
+        }
+
+        personalInformation_nationality.setText(guest.nationality);
+
+        // Contact Information
+        contactInfomamtion_phoneNumber.setText(guest.phone);
+        contactInfomamtion_email.setText(guest.email);
+
+        // Address
+        if (guest.address != null) {
+            String[] addressParts = guest.address.split(",", 2);
+            contactInfomamtion_addressLine1.setText(addressParts[0].trim());
+            if (addressParts.length > 1) {
+                contactInfomamtion_addressLine2.setText(addressParts[1].trim());
+            }
+        }
+
+        contactInfomamtion_city.setText(guest.city);
+        contactInfomamtion_state.setText(guest.state);
+        contactInfomamtion_country.setText(guest.country);
+        contactInfomamtion_postalCode.setText(guest.postalCode);
+
+        // Identification
+        if (guest.idType != null) {
+            for (int i = 0; i < identification_idType.getItemCount(); i++) {
+                if (identification_idType.getItemAt(i).equals(guest.idType)) {
+                    identification_idType.setSelectedIndex(i);
+                    break;
+                }
+            }
+            identification_idNumber.setText(guest.idNumber);
+            identification_issuingCountry.setText(guest.idIssueCountry);
+            try {
+                if (guest.idExpireDate != null) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    Date expireDate = sdf.parse(guest.idExpireDate);
+                    identification_expirationDate.setDate(expireDate);
+                } else {
+                    identification_expirationDate.setDate(null);
+                }
+            } catch (Exception e) {
+                identification_expirationDate.setDate(null);
+            }
+        } else {
+            identification_idType.setSelectedIndex(0);
+            identification_idNumber.setText("");
+            identification_issuingCountry.setText("");
+            identification_expirationDate.setDate(null);
+        }
+
+        // Preferences
+        preference_vipStatus.setSelectedItem(guest.vipStatus ? "Yes" : "No");
+        preference_loyaltyProgramEnroll.setSelected(guest.loyaltyPoints > 0);
+        preference_specialRequests.setText(guest.specialRequests);
+
+        // Store the guest ID for update
+        this.currentGuestId = guest.guestId;
+    }
+
+    public void setSaveButtonEnabled(boolean enabled) {
+        save_button.setEnabled(enabled);
+    }
+
+    public void setUpdateButtonEnabled(boolean enabled) {
+        update_buton.setEnabled(enabled);
+    }
+
+    private int currentGuestId = -1;
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -26,6 +125,7 @@ public class NewGuestPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -33,60 +133,61 @@ public class NewGuestPanel extends javax.swing.JPanel {
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        personalInformation_fistName = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        personalInformation_lastName = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jRadioButton3 = new javax.swing.JRadioButton();
+        personalInformation_genderMale = new javax.swing.JRadioButton();
+        personalInformation_genderFemale = new javax.swing.JRadioButton();
+        personalInformation_genderOther = new javax.swing.JRadioButton();
         jLabel7 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        personalInformation_dateOfBirth = new com.toedter.calendar.JDateChooser();
         jLabel8 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        personalInformation_nationality = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        contactInfomamtion_phoneNumber = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        contactInfomamtion_email = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
+        contactInfomamtion_addressLine1 = new javax.swing.JTextField();
+        contactInfomamtion_addressLine2 = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
+        contactInfomamtion_city = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
-        jTextField9 = new javax.swing.JTextField();
+        contactInfomamtion_state = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        jTextField10 = new javax.swing.JTextField();
+        contactInfomamtion_country = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
+        contactInfomamtion_postalCode = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        identification_idType = new javax.swing.JComboBox<>();
         jLabel20 = new javax.swing.JLabel();
-        jTextField12 = new javax.swing.JTextField();
+        identification_idNumber = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
-        jTextField13 = new javax.swing.JTextField();
+        identification_issuingCountry = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        identification_expirationDate = new com.toedter.calendar.JDateChooser();
         jPanel7 = new javax.swing.JPanel();
         jLabel23 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        preference_roomPreference = new javax.swing.JComboBox<>();
         jLabel25 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        preference_specialRequests = new javax.swing.JTextArea();
         jLabel26 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        preference_vipStatus = new javax.swing.JComboBox<>();
         jLabel27 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        preference_loyaltyProgramEnroll = new javax.swing.JCheckBox();
+        cancel_button = new javax.swing.JButton();
+        save_button = new javax.swing.JButton();
+        update_buton = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(930, 660));
 
@@ -105,11 +206,14 @@ public class NewGuestPanel extends javax.swing.JPanel {
 
         jLabel6.setText("Gender :");
 
-        jRadioButton1.setText("Male");
+        buttonGroup1.add(personalInformation_genderMale);
+        personalInformation_genderMale.setText("Male");
 
-        jRadioButton2.setText("Female");
+        buttonGroup1.add(personalInformation_genderFemale);
+        personalInformation_genderFemale.setText("Female");
 
-        jRadioButton3.setText("Other");
+        buttonGroup1.add(personalInformation_genderOther);
+        personalInformation_genderOther.setText("Other");
 
         jLabel7.setText("Date of Birth :");
 
@@ -126,24 +230,24 @@ public class NewGuestPanel extends javax.swing.JPanel {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(personalInformation_fistName, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField2))
+                        .addComponent(personalInformation_lastName))
                     .addComponent(jLabel6)
                     .addComponent(jLabel7)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jRadioButton2)
-                            .addComponent(jRadioButton1)
-                            .addComponent(jRadioButton3)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(personalInformation_genderFemale)
+                            .addComponent(personalInformation_genderMale)
+                            .addComponent(personalInformation_genderOther)
+                            .addComponent(personalInformation_dateOfBirth, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField3)))
+                        .addComponent(personalInformation_nationality)))
                 .addContainerGap(143, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -154,27 +258,27 @@ public class NewGuestPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(personalInformation_fistName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(personalInformation_lastName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton1)
+                .addComponent(personalInformation_genderMale)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton2)
+                .addComponent(personalInformation_genderFemale)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jRadioButton3)
+                .addComponent(personalInformation_genderOther)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(personalInformation_dateOfBirth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(personalInformation_nationality, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -211,43 +315,43 @@ public class NewGuestPanel extends javax.swing.JPanel {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(contactInfomamtion_phoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(contactInfomamtion_email, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel11)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(contactInfomamtion_city, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel15)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(contactInfomamtion_state, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel13)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(contactInfomamtion_addressLine2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel12)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(contactInfomamtion_addressLine1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel16)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(contactInfomamtion_country, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel17)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(contactInfomamtion_postalCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(182, Short.MAX_VALUE))
         );
 
-        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jTextField10, jTextField11, jTextField4, jTextField5, jTextField6, jTextField7, jTextField8, jTextField9});
+        jPanel4Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {contactInfomamtion_addressLine1, contactInfomamtion_addressLine2, contactInfomamtion_city, contactInfomamtion_country, contactInfomamtion_email, contactInfomamtion_phoneNumber, contactInfomamtion_postalCode, contactInfomamtion_state});
 
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,37 +361,37 @@ public class NewGuestPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(contactInfomamtion_phoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(contactInfomamtion_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel12)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(contactInfomamtion_addressLine1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(contactInfomamtion_addressLine2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(contactInfomamtion_city, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
-                    .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(contactInfomamtion_state, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(contactInfomamtion_country, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(contactInfomamtion_postalCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -319,15 +423,11 @@ public class NewGuestPanel extends javax.swing.JPanel {
 
         jLabel19.setText("ID Type :");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        identification_idType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select ID Type", "Passport", "National ID", "Driver License", "Other" }));
 
         jLabel20.setText("ID Number :");
 
-        jTextField12.setText("jTextField12");
-
         jLabel21.setText("Issuing Country :");
-
-        jTextField13.setText("jTextField13");
 
         jLabel22.setText("Expiration Date :");
 
@@ -346,10 +446,10 @@ public class NewGuestPanel extends javax.swing.JPanel {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField12)
-                            .addComponent(jTextField13)
-                            .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))))
+                            .addComponent(identification_idType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(identification_idNumber)
+                            .addComponent(identification_issuingCountry)
+                            .addComponent(identification_expirationDate, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE))))
                 .addContainerGap(252, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -360,19 +460,19 @@ public class NewGuestPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel19)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(identification_idType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel20)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(identification_idNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel21)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(identification_issuingCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel22)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(identification_expirationDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -383,21 +483,21 @@ public class NewGuestPanel extends javax.swing.JPanel {
 
         jLabel24.setText("Room Preference :");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        preference_roomPreference.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Room" }));
 
         jLabel25.setText("Special Requirements :");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        preference_specialRequests.setColumns(20);
+        preference_specialRequests.setRows(5);
+        jScrollPane2.setViewportView(preference_specialRequests);
 
         jLabel26.setText("VIP Status :");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        preference_vipStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No", "Yes" }));
 
         jLabel27.setText("Loyalty Program :");
 
-        jCheckBox1.setText("Enroll");
+        preference_loyaltyProgramEnroll.setText("Enroll");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -414,14 +514,14 @@ public class NewGuestPanel extends javax.swing.JPanel {
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox1)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(preference_loyaltyProgramEnroll)
+                            .addComponent(preference_roomPreference, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(preference_vipStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel7Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jComboBox2, jComboBox3});
+        jPanel7Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {preference_roomPreference, preference_vipStatus});
 
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -431,7 +531,7 @@ public class NewGuestPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel24)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(preference_roomPreference, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel25)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -439,11 +539,11 @@ public class NewGuestPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel26)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(preference_vipStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel27)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBox1)
+                .addComponent(preference_loyaltyProgramEnroll)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -468,9 +568,21 @@ public class NewGuestPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton1.setText("Cancel");
+        cancel_button.setText("Cancel");
 
-        jButton2.setText("Save");
+        save_button.setText("Save");
+        save_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                save_buttonActionPerformed(evt);
+            }
+        });
+
+        update_buton.setText("Update");
+        update_buton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                update_butonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -485,9 +597,11 @@ public class NewGuestPanel extends javax.swing.JPanel {
                         .addComponent(jLabel1)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(cancel_button)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
+                        .addComponent(update_buton)
+                        .addGap(18, 18, 18)
+                        .addComponent(save_button)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -501,8 +615,9 @@ public class NewGuestPanel extends javax.swing.JPanel {
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(cancel_button)
+                    .addComponent(save_button)
+                    .addComponent(update_buton))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
 
@@ -520,16 +635,438 @@ public class NewGuestPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void save_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save_buttonActionPerformed
+        try {
+            // Validate all form data
+            if (validateFormData()) {
+                // Save guest data to database using prepared statement method
+                saveGuestData();
+                // Alternative: Use saveGuestDataAlternative() if you prefer using your executeIUD method
+
+                JOptionPane.showMessageDialog(this,
+                        "Guest registered successfully!",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+                clearForm();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error saving guest data: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_save_buttonActionPerformed
+
+    private void update_butonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_update_butonActionPerformed
+        try {
+            // Validate all form data
+            if (validateFormData()) {
+                // Update guest data in database
+                updateGuestData();
+                
+                JOptionPane.showMessageDialog(this,
+                    "Guest information updated successfully!",
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+                // Refresh the guest management panel
+                refreshGuestManagementPanel();
+                
+                // Clear form and reset buttons
+                clearForm();
+                setSaveButtonEnabled(true);
+                setUpdateButtonEnabled(false);
+                currentGuestId = -1;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                "Error updating guest data: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_update_butonActionPerformed
+
+    private void updateGuestData() throws Exception {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = DatabaseConnection.getConnection();
+
+            String sql = "UPDATE guest SET first_name=?, last_name=?, gender=?, date_of_birth=?, " +
+                    "contact_number=?, email=?, address=?, city=?, state=?, country=?, postal_code=?, " +
+                    "nationality=?, id_type=?, id_number=?, id_issue_country=?, id_expiredate=?, preference_room=?, special_requests=?, " +
+                    "vip_status=?, loyalty_points=? WHERE guest_id=?";
+
+            pstmt = conn.prepareStatement(sql);
+
+            // Personal Information
+            pstmt.setString(1, personalInformation_fistName.getText().trim());
+            pstmt.setString(2, personalInformation_lastName.getText().trim());
+
+            // Gender
+            String gender = null;
+            if (personalInformation_genderMale.isSelected()) {
+                gender = "Male";
+            } else if (personalInformation_genderFemale.isSelected()) {
+                gender = "Female";
+            } else if (personalInformation_genderOther.isSelected()) {
+                gender = "Other";
+            }
+            pstmt.setString(3, gender);
+
+            // Date of Birth
+            pstmt.setDate(4, new java.sql.Date(personalInformation_dateOfBirth.getDate().getTime()));
+
+            // Contact Information
+            pstmt.setString(5, contactInfomamtion_phoneNumber.getText().trim());
+            pstmt.setString(6, isEmptyOrNull(contactInfomamtion_email.getText()) ? null : contactInfomamtion_email.getText().trim());
+
+            // Address (combine address lines)
+            String fullAddress = contactInfomamtion_addressLine1.getText().trim();
+            if (!isEmptyOrNull(contactInfomamtion_addressLine2.getText())) {
+                fullAddress += ", " + contactInfomamtion_addressLine2.getText().trim();
+            }
+            pstmt.setString(7, isEmptyOrNull(fullAddress) ? null : fullAddress);
+
+            pstmt.setString(8, isEmptyOrNull(contactInfomamtion_city.getText()) ? null : contactInfomamtion_city.getText().trim());
+            pstmt.setString(9, isEmptyOrNull(contactInfomamtion_state.getText()) ? null : contactInfomamtion_state.getText().trim());
+            pstmt.setString(10, contactInfomamtion_country.getText().trim());
+            pstmt.setString(11, isEmptyOrNull(contactInfomamtion_postalCode.getText()) ? null : contactInfomamtion_postalCode.getText().trim());
+            pstmt.setString(12, personalInformation_nationality.getText().trim());
+
+            // Identification
+            if (identification_idType.getSelectedIndex() > 0) {
+                pstmt.setString(13, identification_idType.getSelectedItem().toString());
+                pstmt.setString(14, identification_idNumber.getText().trim());
+                pstmt.setString(15, identification_issuingCountry.getText().trim());
+                if (identification_expirationDate.getDate() != null) {
+                    pstmt.setDate(16, new java.sql.Date(identification_expirationDate.getDate().getTime()));
+                } else {
+                    pstmt.setNull(16, Types.DATE);
+                }
+            } else {
+                pstmt.setNull(13, Types.VARCHAR);
+                pstmt.setNull(14, Types.VARCHAR);
+                pstmt.setNull(15, Types.VARCHAR);
+                pstmt.setNull(16, Types.DATE);
+            }
+
+            // Preferences
+            if (preference_roomPreference.getSelectedIndex() > 0) {
+                pstmt.setNull(17, Types.INTEGER); // For now, set as null
+            } else {
+                pstmt.setNull(17, Types.INTEGER);
+            }
+
+            pstmt.setString(18, isEmptyOrNull(preference_specialRequests.getText()) ? null : preference_specialRequests.getText().trim());
+
+            // VIP Status
+            boolean isVip = preference_vipStatus.getSelectedIndex() > 0
+                    && !preference_vipStatus.getSelectedItem().toString().equals("None");
+            pstmt.setBoolean(19, isVip);
+
+            // Loyalty Points
+            int loyaltyPoints = preference_loyaltyProgramEnroll.isSelected() ? 100 : 0;
+            pstmt.setInt(20, loyaltyPoints);
+
+            // Guest ID for WHERE clause
+            pstmt.setInt(21, currentGuestId);
+
+            // Execute the update
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new SQLException("Updating guest failed, no rows affected.");
+            }
+
+        } finally {
+            if (pstmt != null) {
+                pstmt.close();
+            }
+        }
+    }
+
+    private void refreshGuestManagementPanel() {
+        // Get the parent GuestMainPanel
+        Container parent = this.getParent();
+        while (parent != null && !(parent instanceof GuestMainPanel)) {
+            parent = parent.getParent();
+        }
+
+        if (parent instanceof GuestMainPanel) {
+            GuestMainPanel guestMainPanel = (GuestMainPanel) parent;
+            // Switch back to the Guest Management tab
+            guestMainPanel.getGuestsTabs().setSelectedIndex(0);
+            // Refresh the guest list
+            guestMainPanel.getGuestManagementPanel().refreshGuestsData();
+        }
+    }
+    
+    private boolean validateFormData() {
+        StringBuilder errorMessages = new StringBuilder();
+
+        // Validate Personal Information
+        if (isEmptyOrNull(personalInformation_fistName.getText())) {
+            errorMessages.append("• First Name is required\n");
+        }
+
+        if (isEmptyOrNull(personalInformation_lastName.getText())) {
+            errorMessages.append("• Last Name is required\n");
+        }
+
+        if (!personalInformation_genderMale.isSelected()
+                && !personalInformation_genderFemale.isSelected()
+                && !personalInformation_genderOther.isSelected()) {
+            errorMessages.append("• Gender selection is required\n");
+        }
+
+        if (personalInformation_dateOfBirth.getDate() == null) {
+            errorMessages.append("• Date of Birth is required\n");
+        } else {
+            // Check if age is reasonable (between 0 and 120 years)
+            Date birthDate = personalInformation_dateOfBirth.getDate();
+            Date currentDate = new Date();
+            long ageInMillis = currentDate.getTime() - birthDate.getTime();
+            int age = (int) (ageInMillis / (365.25 * 24 * 60 * 60 * 1000));
+
+            if (age < 0) {
+                errorMessages.append("• Date of Birth cannot be in the future\n");
+            } else if (age > 120) {
+                errorMessages.append("• Date of Birth seems unrealistic\n");
+            }
+        }
+
+        if (isEmptyOrNull(personalInformation_nationality.getText())) {
+            errorMessages.append("• Nationality is required\n");
+        }
+
+        // Validate Contact Information
+        if (isEmptyOrNull(contactInfomamtion_phoneNumber.getText())) {
+            errorMessages.append("• Phone Number is required\n");
+        } else if (!isValidPhoneNumber(contactInfomamtion_phoneNumber.getText())) {
+            errorMessages.append("• Phone Number format is invalid\n");
+        }
+
+        if (!isEmptyOrNull(contactInfomamtion_email.getText())
+                && !isValidEmail(contactInfomamtion_email.getText())) {
+            errorMessages.append("• Email format is invalid\n");
+        }
+
+        if (isEmptyOrNull(contactInfomamtion_country.getText())) {
+            errorMessages.append("• Country is required\n");
+        }
+
+        // Validate Identification (Optional but if provided, must be complete)
+        if (identification_idType.getSelectedIndex() > 0
+                || !isEmptyOrNull(identification_idNumber.getText())
+                || !isEmptyOrNull(identification_issuingCountry.getText())
+                || identification_expirationDate.getDate() != null) {
+
+            if (identification_idType.getSelectedIndex() == 0) {
+                errorMessages.append("• ID Type must be selected when providing identification\n");
+            }
+
+            if (isEmptyOrNull(identification_idNumber.getText())) {
+                errorMessages.append("• ID Number is required when providing identification\n");
+            }
+
+            if (isEmptyOrNull(identification_issuingCountry.getText())) {
+                errorMessages.append("• Issuing Country is required when providing identification\n");
+            }
+
+            if (identification_expirationDate.getDate() != null) {
+                Date expiryDate = identification_expirationDate.getDate();
+                Date currentDate = new Date();
+                if (expiryDate.before(currentDate)) {
+                    errorMessages.append("• ID has expired\n");
+                }
+            }
+        }
+
+        // Show validation errors if any
+        if (errorMessages.length() > 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Please correct the following errors:\n\n" + errorMessages.toString(),
+                    "Validation Error",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+    private void saveGuestData() throws Exception {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            // Get database connection using your existing DatabaseConnection class
+            conn = DatabaseConnection.getConnection();
+
+            String sql = "INSERT INTO guest (first_name, last_name, gender, date_of_birth, "
+                    + "contact_number, email, address, city, state, country, postal_code, "
+                    + "nationality, id_type, id_number, id_issue_country, id_expiredate, preference_room, special_requests, "
+                    + "vip_status, loyalty_points) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            pstmt = conn.prepareStatement(sql);
+
+            // Personal Information
+            pstmt.setString(1, personalInformation_fistName.getText().trim());
+            pstmt.setString(2, personalInformation_lastName.getText().trim());
+
+            // Gender
+            String gender = null;
+            if (personalInformation_genderMale.isSelected()) {
+                gender = "Male";
+            } else if (personalInformation_genderFemale.isSelected()) {
+                gender = "Female";
+            } else if (personalInformation_genderOther.isSelected()) {
+                gender = "Other";
+            }
+            pstmt.setString(3, gender);
+
+            // Date of Birth
+            pstmt.setDate(4, new java.sql.Date(personalInformation_dateOfBirth.getDate().getTime()));
+
+            // Contact Information
+            pstmt.setString(5, contactInfomamtion_phoneNumber.getText().trim());
+            pstmt.setString(6, isEmptyOrNull(contactInfomamtion_email.getText()) ? null : contactInfomamtion_email.getText().trim());
+
+            // Address (combine address lines)
+            String fullAddress = contactInfomamtion_addressLine1.getText().trim();
+            if (!isEmptyOrNull(contactInfomamtion_addressLine2.getText())) {
+                fullAddress += ", " + contactInfomamtion_addressLine2.getText().trim();
+            }
+            pstmt.setString(7, isEmptyOrNull(fullAddress) ? null : fullAddress);
+
+            pstmt.setString(8, isEmptyOrNull(contactInfomamtion_city.getText()) ? null : contactInfomamtion_city.getText().trim());
+            pstmt.setString(9, isEmptyOrNull(contactInfomamtion_state.getText()) ? null : contactInfomamtion_state.getText().trim());
+            pstmt.setString(10, contactInfomamtion_country.getText().trim());
+            pstmt.setString(11, isEmptyOrNull(contactInfomamtion_postalCode.getText()) ? null : contactInfomamtion_postalCode.getText().trim());
+            pstmt.setString(12, personalInformation_nationality.getText().trim());
+
+            // Identification
+            if (identification_idType.getSelectedIndex() > 0) {
+                pstmt.setString(13, identification_idType.getSelectedItem().toString());
+                pstmt.setString(14, identification_idNumber.getText().trim());
+                pstmt.setString(15, identification_issuingCountry.getText().trim());
+                if (identification_expirationDate.getDate() != null) {
+                    pstmt.setDate(16, new java.sql.Date(identification_expirationDate.getDate().getTime()));
+                } else {
+                    pstmt.setNull(16, Types.DATE);
+                }
+            } else {
+                pstmt.setNull(13, Types.VARCHAR);
+                pstmt.setNull(14, Types.VARCHAR);
+                pstmt.setNull(15, Types.VARCHAR);
+                pstmt.setNull(16, Types.DATE);
+            }
+
+            // Preferences
+            if (preference_roomPreference.getSelectedIndex() > 0) {
+                pstmt.setNull(17, Types.INTEGER); // For now, set as null
+            } else {
+                pstmt.setNull(17, Types.INTEGER);
+            }
+
+            pstmt.setString(18, isEmptyOrNull(preference_specialRequests.getText()) ? null : preference_specialRequests.getText().trim());
+
+            // VIP Status
+            boolean isVip = preference_vipStatus.getSelectedIndex() > 0
+                    && !preference_vipStatus.getSelectedItem().toString().equals("None");
+            pstmt.setBoolean(19, isVip);
+
+            // Loyalty Points (initial value)
+            int initialPoints = preference_loyaltyProgramEnroll.isSelected() ? 100 : 0;
+            pstmt.setInt(20, initialPoints);
+
+            // Execute the insert
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new SQLException("Creating guest failed, no rows affected.");
+            }
+
+        } finally {
+            // Close resources
+            if (pstmt != null) {
+                pstmt.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+    }
+
+// Helper validation methods
+    private boolean isEmptyOrNull(String text) {
+        return text == null || text.trim().isEmpty();
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        return pattern.matcher(email).matches();
+    }
+
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        // Remove all non-digit characters
+        String digitsOnly = phoneNumber.replaceAll("[^0-9]", "");
+
+        // Check if it has at least 7 digits and at most 15 digits
+        return digitsOnly.length() >= 7 && digitsOnly.length() <= 15;
+    }
+
+    private void clearForm() {
+        // Clear Personal Information
+        personalInformation_fistName.setText("");
+        personalInformation_lastName.setText("");
+        buttonGroup1.clearSelection();
+        personalInformation_dateOfBirth.setDate(null);
+        personalInformation_nationality.setText("");
+
+        // Clear Contact Information
+        contactInfomamtion_phoneNumber.setText("");
+        contactInfomamtion_email.setText("");
+        contactInfomamtion_addressLine1.setText("");
+        contactInfomamtion_addressLine2.setText("");
+        contactInfomamtion_city.setText("");
+        contactInfomamtion_state.setText("");
+        contactInfomamtion_country.setText("");
+        contactInfomamtion_postalCode.setText("");
+
+        // Clear Identification
+        identification_idType.setSelectedIndex(0);
+        identification_idNumber.setText("");
+        identification_issuingCountry.setText("");
+        identification_expirationDate.setDate(null);
+
+        // Clear Preferences
+        preference_roomPreference.setSelectedIndex(0);
+        preference_specialRequests.setText("");
+        preference_vipStatus.setSelectedIndex(0);
+        preference_loyaltyProgramEnroll.setSelected(false);
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private com.toedter.calendar.JDateChooser jDateChooser1;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton cancel_button;
+    private javax.swing.JTextField contactInfomamtion_addressLine1;
+    private javax.swing.JTextField contactInfomamtion_addressLine2;
+    private javax.swing.JTextField contactInfomamtion_city;
+    private javax.swing.JTextField contactInfomamtion_country;
+    private javax.swing.JTextField contactInfomamtion_email;
+    private javax.swing.JTextField contactInfomamtion_phoneNumber;
+    private javax.swing.JTextField contactInfomamtion_postalCode;
+    private javax.swing.JTextField contactInfomamtion_state;
+    private com.toedter.calendar.JDateChooser identification_expirationDate;
+    private javax.swing.JTextField identification_idNumber;
+    private javax.swing.JComboBox<String> identification_idType;
+    private javax.swing.JTextField identification_issuingCountry;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -564,24 +1101,20 @@ public class NewGuestPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
-    private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private com.toedter.calendar.JDateChooser personalInformation_dateOfBirth;
+    private javax.swing.JTextField personalInformation_fistName;
+    private javax.swing.JRadioButton personalInformation_genderFemale;
+    private javax.swing.JRadioButton personalInformation_genderMale;
+    private javax.swing.JRadioButton personalInformation_genderOther;
+    private javax.swing.JTextField personalInformation_lastName;
+    private javax.swing.JTextField personalInformation_nationality;
+    private javax.swing.JCheckBox preference_loyaltyProgramEnroll;
+    private javax.swing.JComboBox<String> preference_roomPreference;
+    private javax.swing.JTextArea preference_specialRequests;
+    private javax.swing.JComboBox<String> preference_vipStatus;
+    private javax.swing.JButton save_button;
+    private javax.swing.JButton update_buton;
     // End of variables declaration//GEN-END:variables
 }
