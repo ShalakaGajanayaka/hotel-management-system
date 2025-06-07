@@ -82,12 +82,27 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
         jLabel1.setText("Employee Management");
 
         addEmployee_button.setText("+ Add Employee");
+        addEmployee_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addEmployee_buttonActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Search :");
 
         search_button.setText("search");
+        search_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                search_buttonActionPerformed(evt);
+            }
+        });
 
         reset_button.setText("Reset");
+        reset_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reset_buttonActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Department :");
 
@@ -225,10 +240,25 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
         jLabel26.setText("Status :");
 
         employeeDetails_ViewDetails_button.setText("View Details");
+        employeeDetails_ViewDetails_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                employeeDetails_ViewDetails_buttonActionPerformed(evt);
+            }
+        });
 
         employeeDetails_Edit_button.setText("Edit");
+        employeeDetails_Edit_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                employeeDetails_Edit_buttonActionPerformed(evt);
+            }
+        });
 
         employeeDetails_manageAccess_button.setText("Manage Access");
+        employeeDetails_manageAccess_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                employeeDetails_manageAccess_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -458,6 +488,30 @@ public class EmployeeManagementPanel extends javax.swing.JPanel {
             .addComponent(jScrollPane1)
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void addEmployee_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEmployee_buttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addEmployee_buttonActionPerformed
+
+    private void search_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_buttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_buttonActionPerformed
+
+    private void reset_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_buttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reset_buttonActionPerformed
+
+    private void employeeDetails_ViewDetails_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeDetails_ViewDetails_buttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_employeeDetails_ViewDetails_buttonActionPerformed
+
+    private void employeeDetails_Edit_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeDetails_Edit_buttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_employeeDetails_Edit_buttonActionPerformed
+
+    private void employeeDetails_manageAccess_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employeeDetails_manageAccess_buttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_employeeDetails_manageAccess_buttonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
