@@ -27,26 +27,28 @@ public class InventoryMainPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
+        inventoryManagementTab = new javax.swing.JPanel();
         inventoryManagementPanel1 = new main.java.com.hotel.ui.inventory.InventoryManagementPanel();
         jPanel3 = new javax.swing.JPanel();
+        inventoryTransactionTab = new javax.swing.JPanel();
+        inventoryTransactionPanel1 = new main.java.com.hotel.ui.inventory.InventoryTransactionPanel();
 
         setPreferredSize(new java.awt.Dimension(930, 660));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout inventoryManagementTabLayout = new javax.swing.GroupLayout(inventoryManagementTab);
+        inventoryManagementTab.setLayout(inventoryManagementTabLayout);
+        inventoryManagementTabLayout.setHorizontalGroup(
+            inventoryManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, inventoryManagementTabLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
                 .addComponent(inventoryManagementPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(inventoryManagementPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
+        inventoryManagementTabLayout.setVerticalGroup(
+            inventoryManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(inventoryManagementPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jTabbedPane1.addTab("Inventory Management", jPanel1);
+        jTabbedPane1.addTab("Inventory Management", inventoryManagementTab);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -56,10 +58,25 @@ public class InventoryMainPanel extends javax.swing.JPanel {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 690, Short.MAX_VALUE)
+            .addGap(0, 720, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Add Inventory", jPanel3);
+
+        javax.swing.GroupLayout inventoryTransactionTabLayout = new javax.swing.GroupLayout(inventoryTransactionTab);
+        inventoryTransactionTab.setLayout(inventoryTransactionTabLayout);
+        inventoryTransactionTabLayout.setHorizontalGroup(
+            inventoryTransactionTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, inventoryTransactionTabLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(inventoryTransactionPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        inventoryTransactionTabLayout.setVerticalGroup(
+            inventoryTransactionTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(inventoryTransactionPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Inventory Transaction", inventoryTransactionTab);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -76,7 +93,9 @@ public class InventoryMainPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private main.java.com.hotel.ui.inventory.InventoryManagementPanel inventoryManagementPanel1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel inventoryManagementTab;
+    private main.java.com.hotel.ui.inventory.InventoryTransactionPanel inventoryTransactionPanel1;
+    private javax.swing.JPanel inventoryTransactionTab;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
