@@ -30,6 +30,7 @@ public class ServicesMainPanel extends javax.swing.JPanel {
         servicesManagementTab = new javax.swing.JPanel();
         servicesManagementPanel1 = new main.java.com.hotel.ui.service.ServicesManagementPanel();
         jPanel2 = new javax.swing.JPanel();
+        newServicePanel1 = new main.java.com.hotel.ui.service.NewServicePanel();
 
         setPreferredSize(new java.awt.Dimension(930, 660));
 
@@ -44,7 +45,7 @@ public class ServicesMainPanel extends javax.swing.JPanel {
         servicesManagementTabLayout.setVerticalGroup(
             servicesManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(servicesManagementTabLayout.createSequentialGroup()
-                .addComponent(servicesManagementPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 719, Short.MAX_VALUE)
+                .addComponent(servicesManagementPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 684, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -54,11 +55,13 @@ public class ServicesMainPanel extends javax.swing.JPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 930, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(newServicePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 725, Short.MAX_VALUE)
+            .addComponent(newServicePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Add Services", jPanel2);
@@ -79,6 +82,7 @@ public class ServicesMainPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private main.java.com.hotel.ui.service.NewServicePanel newServicePanel1;
     private main.java.com.hotel.ui.service.ServicesManagementPanel servicesManagementPanel1;
     private javax.swing.JPanel servicesManagementTab;
     // End of variables declaration//GEN-END:variables
