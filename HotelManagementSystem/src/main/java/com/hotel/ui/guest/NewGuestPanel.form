@@ -61,6 +61,8 @@
                           <Group type="102" alignment="0" attributes="0">
                               <Component id="cancel_button" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
+                              <Component id="update_buton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="save_button" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -81,6 +83,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="cancel_button" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="save_button" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="update_buton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace pref="38" max="32767" attributes="0"/>
                   </Group>
@@ -754,6 +757,11 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="save_buttonActionPerformed"/>
               </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="update_buton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Update"/>
+              </Properties>
             </Component>
           </SubComponents>
         </Container>

@@ -95,6 +95,7 @@ public class NewGuestPanel extends javax.swing.JPanel {
         preference_loyaltyProgramEnroll = new javax.swing.JCheckBox();
         cancel_button = new javax.swing.JButton();
         save_button = new javax.swing.JButton();
+        update_buton = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(930, 660));
 
@@ -484,6 +485,8 @@ public class NewGuestPanel extends javax.swing.JPanel {
             }
         });
 
+        update_buton.setText("Update");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -499,6 +502,8 @@ public class NewGuestPanel extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(cancel_button)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(update_buton)
+                        .addGap(18, 18, 18)
                         .addComponent(save_button)))
                 .addContainerGap())
         );
@@ -514,7 +519,8 @@ public class NewGuestPanel extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cancel_button)
-                    .addComponent(save_button))
+                    .addComponent(save_button)
+                    .addComponent(update_buton))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
 
@@ -858,5 +864,6 @@ public class NewGuestPanel extends javax.swing.JPanel {
     private javax.swing.JTextArea preference_specialRequests;
     private javax.swing.JComboBox<String> preference_vipStatus;
     private javax.swing.JButton save_button;
+    private javax.swing.JButton update_buton;
     // End of variables declaration//GEN-END:variables
 }

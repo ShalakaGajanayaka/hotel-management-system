@@ -3,7 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/shalaka/Documents/GitHub/hotel-management-system/HotelManagementSystem/src/main/java/com/hotel/ui/booking/BookingManagementPanel.java</file>
+            <file>file:/C:/Users/shalaka/Documents/GitHub/hotel-management-system/HotelManagementSystem/src/main/java/com/hotel/ui/booking/NewBookingPanel.java</file>
+            <file>file:/C:/Users/shalaka/Documents/GitHub/hotel-management-system/HotelManagementSystem/src/main/java/com/hotel/config/DatabaseConnection.java</file>
             <file>file:/C:/Users/shalaka/Documents/GitHub/hotel-management-system/HotelManagementSystem/src/main/java/com/hotel/ui/common/DashboardOverviewPanel.java</file>
+            <file>file:/C:/Users/shalaka/Documents/GitHub/hotel-management-system/HotelManagementSystem/src/main/java/com/hotel/ui/booking/BookingsMainPanel.java</file>
+            <file>file:/C:/Users/shalaka/Documents/GitHub/hotel-management-system/HotelManagementSystem/src/main/java/com/hotel/ui/common/SidebarPanel.java</file>
+            <file>file:/C:/Users/shalaka/Documents/GitHub/hotel-management-system/HotelManagementSystem/src/main/java/com/hotel/ui/guest/GuestManagementPanel.java</file>
+            <file>file:/C:/Users/shalaka/Documents/GitHub/hotel-management-system/HotelManagementSystem/src/main/java/com/hotel/ui/guest/GuestMainPanel.java</file>
+            <file>file:/C:/Users/shalaka/Documents/GitHub/hotel-management-system/HotelManagementSystem/src/main/java/com/hotel/ui/auth/LoginFrame.java</file>
+            <file>file:/C:/Users/shalaka/Documents/GitHub/hotel-management-system/HotelManagementSystem/src/main/java/com/hotel/ui/guest/NewGuestPanel.java</file>
+            <file>file:/C:/Users/shalaka/Documents/GitHub/hotel-management-system/HotelManagementSystem/src/main/java/com/hotel/ui/dashboard/DashboardFrame.java</file>
         </group>
     </open-files>
 </project-private>
