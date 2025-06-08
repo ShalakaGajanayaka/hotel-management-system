@@ -37,379 +37,377 @@ public class GuestManagementPanel extends javax.swing.JPanel {
     }
 
     // Guest data class to hold guest information
-public static class GuestData {
-    public int guestId;
-    public String firstName;
-    public String lastName;
-    public String email;
-    public String phone;
-    public String address;
-    public String city;
-    public String state;
-    public String country;
-    public String postalCode;
-    public String nationality;
-    public String gender;
-    public String dateOfBirth;
-    public String idType;
-    public String idNumber;
-    public String idIssueCountry;
-    public String idExpireDate;
-    public boolean vipStatus;
-    public int loyaltyPoints;
-    public String specialRequests;
-    public String createdAt;
-    public String currentBooking;
-    
-    public String getFullName() {
-        return firstName + " " + lastName;
+    public static class GuestData {
+
+        public int guestId;
+        public String firstName;
+        public String lastName;
+        public String email;
+        public String phone;
+        public String address;
+        public String city;
+        public String state;
+        public String country;
+        public String postalCode;
+        public String nationality;
+        public String gender;
+        public String dateOfBirth;
+        public String idType;
+        public String idNumber;
+        public String idIssueCountry;
+        public String idExpireDate;
+        public boolean vipStatus;
+        public int loyaltyPoints;
+        public String specialRequests;
+        public String createdAt;
+        public String currentBooking;
+
+        public String getFullName() {
+            return firstName + " " + lastName;
+        }
+
+        public String getFullAddress() {
+            StringBuilder addr = new StringBuilder();
+            if (address != null && !address.trim().isEmpty()) {
+                addr.append(address);
+            }
+            if (city != null && !city.trim().isEmpty()) {
+                if (addr.length() > 0) {
+                    addr.append(", ");
+                }
+                addr.append(city);
+            }
+            if (state != null && !state.trim().isEmpty()) {
+                if (addr.length() > 0) {
+                    addr.append(", ");
+                }
+                addr.append(state);
+            }
+            if (country != null && !country.trim().isEmpty()) {
+                if (addr.length() > 0) {
+                    addr.append(", ");
+                }
+                addr.append(country);
+            }
+            if (postalCode != null && !postalCode.trim().isEmpty()) {
+                if (addr.length() > 0) {
+                    addr.append(" ");
+                }
+                addr.append(postalCode);
+            }
+            return addr.toString();
+        }
+
+        public String getIdString() {
+            if (idType != null && idNumber != null) {
+                return idType + " #" + idNumber;
+            }
+            return "No ID provided";
+        }
     }
-    
-    public String getFullAddress() {
-        StringBuilder addr = new StringBuilder();
-        if (address != null && !address.trim().isEmpty()) {
-            addr.append(address);
-        }
-        if (city != null && !city.trim().isEmpty()) {
-            if (addr.length() > 0) addr.append(", ");
-            addr.append(city);
-        }
-        if (state != null && !state.trim().isEmpty()) {
-            if (addr.length() > 0) addr.append(", ");
-            addr.append(state);
-        }
-        if (country != null && !country.trim().isEmpty()) {
-            if (addr.length() > 0) addr.append(", ");
-            addr.append(country);
-        }
-        if (postalCode != null && !postalCode.trim().isEmpty()) {
-            if (addr.length() > 0) addr.append(" ");
-            addr.append(postalCode);
-        }
-        return addr.toString();
-    }
-    
-    public String getIdString() {
-        if (idType != null && idNumber != null) {
-            return idType + " #" + idNumber;
-        }
-        return "No ID provided";
-    }
-}
 
 // Initialize the panel with data loading
-public void initializeGuestManagementPanel() {
-    initializeComboBoxes();
-    loadGuestsData();
-    setupTableSelectionListener();
-    clearSelectedGuestDetails();
-}
+    public void initializeGuestManagementPanel() {
+        initializeComboBoxes();
+        loadGuestsData();
+        setupTableSelectionListener();
+        clearSelectedGuestDetails();
+    }
 
 // Initialize combo boxes with proper values
-private void initializeComboBoxes() {
-    // Filter options
-    filter_guests.setModel(new DefaultComboBoxModel<>(new String[] {
-        "All Guests", "VIP Guests", "Regular Guests", "With Current Booking", "No Current Booking"
-    }));
-    
-    // Sort options
-    sortBy.setModel(new DefaultComboBoxModel<>(new String[] {
-        "Name (A-Z)", "Name (Z-A)", "Registration Date (Newest)", "Registration Date (Oldest)", 
-        "Loyalty Points (High-Low)", "Loyalty Points (Low-High)"
-    }));
-    
-    // Add action listeners
-    filter_guests.addActionListener(e -> filterAndDisplayGuests());
-    sortBy.addActionListener(e -> filterAndDisplayGuests());
-    search_button.addActionListener(e -> searchGuests());
-    pageNumber_previouse_button.addActionListener(e -> previousPage());
-    pageNumber_next_button.addActionListener(e -> nextPage());
-    
-    // Add reset button functionality
-    jButton3.addActionListener(e -> resetFilters());
-}
+    private void initializeComboBoxes() {
+        // Filter options
+        filter_guests.setModel(new DefaultComboBoxModel<>(new String[]{
+            "All Guests", "VIP Guests", "Regular Guests", "With Current Booking", "No Current Booking"
+        }));
+
+        // Sort options
+        sortBy.setModel(new DefaultComboBoxModel<>(new String[]{
+            "Name (A-Z)", "Name (Z-A)", "Registration Date (Newest)", "Registration Date (Oldest)",
+            "Loyalty Points (High-Low)", "Loyalty Points (Low-High)"
+        }));
+
+
+
+    }
 
 // Load all guests data from database
-private void loadGuestsData() {
-    try {
-        allGuests.clear();
-        
-        // Simplified query to avoid GROUP BY issues
-        String query = "SELECT g.*, " +
-                      "(SELECT CONCAT('Booking #', b.booking_number, ', Room ', r.room_number, ', ', " +
-                      "DATE_FORMAT(b.check_in_date, '%b %d'), '-', " +
-                      "DATE_FORMAT(b.check_out_date, '%d')) " +
-                      "FROM booking b " +
-                      "JOIN booking_room br ON b.booking_id = br.booking_id " +
-                      "JOIN room r ON br.room_id = r.room_id " +
-                      "WHERE b.guest_id = g.guest_id " +
-                      "AND b.status IN ('Confirmed', 'Checked-in') " +
-                      "AND b.check_out_date >= CURDATE() " +
-                      "ORDER BY b.check_in_date DESC " +
-                      "LIMIT 1) as current_booking " +
-                      "FROM guest g " +
-                      "ORDER BY g.created_at DESC";
-        
-        ResultSet rs = DatabaseConnection.executeSearch(query);
-        
-        while (rs.next()) {
-            GuestData guest = new GuestData();
-            guest.guestId = rs.getInt("guest_id");
-            guest.firstName = rs.getString("first_name");
-            guest.lastName = rs.getString("last_name");
-            guest.email = rs.getString("email");
-            guest.phone = rs.getString("contact_number");
-            guest.address = rs.getString("address");
-            guest.city = rs.getString("city");
-            guest.state = rs.getString("state");
-            guest.country = rs.getString("country");
-            guest.postalCode = rs.getString("postal_code");
-            guest.nationality = rs.getString("nationality");
-            guest.gender = rs.getString("gender");
-            guest.dateOfBirth = rs.getString("date_of_birth");
-            guest.idType = rs.getString("id_type");
-            guest.idNumber = rs.getString("id_number");
-            guest.idIssueCountry = rs.getString("id_issue_country");
-            guest.idExpireDate = rs.getString("id_expiredate");
-            guest.vipStatus = rs.getBoolean("vip_status");
-            guest.loyaltyPoints = rs.getInt("loyalty_points");
-            guest.specialRequests = rs.getString("special_requests");
-            guest.createdAt = rs.getString("created_at");
-            guest.currentBooking = rs.getString("current_booking");
-            
-            allGuests.add(guest);
+    private void loadGuestsData() {
+        try {
+            allGuests.clear();
+
+            // Simplified query to avoid GROUP BY issues
+            String query = "SELECT g.*, "
+                    + "(SELECT CONCAT('Booking #', b.booking_number, ', Room ', r.room_number, ', ', "
+                    + "DATE_FORMAT(b.check_in_date, '%b %d'), '-', "
+                    + "DATE_FORMAT(b.check_out_date, '%d')) "
+                    + "FROM booking b "
+                    + "JOIN booking_room br ON b.booking_id = br.booking_id "
+                    + "JOIN room r ON br.room_id = r.room_id "
+                    + "WHERE b.guest_id = g.guest_id "
+                    + "AND b.status IN ('Confirmed', 'Checked-in') "
+                    + "AND b.check_out_date >= CURDATE() "
+                    + "ORDER BY b.check_in_date DESC "
+                    + "LIMIT 1) as current_booking "
+                    + "FROM guest g "
+                    + "ORDER BY g.created_at DESC";
+
+            ResultSet rs = DatabaseConnection.executeSearch(query);
+
+            while (rs.next()) {
+                GuestData guest = new GuestData();
+                guest.guestId = rs.getInt("guest_id");
+                guest.firstName = rs.getString("first_name");
+                guest.lastName = rs.getString("last_name");
+                guest.email = rs.getString("email");
+                guest.phone = rs.getString("contact_number");
+                guest.address = rs.getString("address");
+                guest.city = rs.getString("city");
+                guest.state = rs.getString("state");
+                guest.country = rs.getString("country");
+                guest.postalCode = rs.getString("postal_code");
+                guest.nationality = rs.getString("nationality");
+                guest.gender = rs.getString("gender");
+                guest.dateOfBirth = rs.getString("date_of_birth");
+                guest.idType = rs.getString("id_type");
+                guest.idNumber = rs.getString("id_number");
+                guest.idIssueCountry = rs.getString("id_issue_country");
+                guest.idExpireDate = rs.getString("id_expiredate");
+                guest.vipStatus = rs.getBoolean("vip_status");
+                guest.loyaltyPoints = rs.getInt("loyalty_points");
+                guest.specialRequests = rs.getString("special_requests");
+                guest.createdAt = rs.getString("created_at");
+                guest.currentBooking = rs.getString("current_booking");
+
+                allGuests.add(guest);
+            }
+
+            filterAndDisplayGuests();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error loading guests data: " + e.getMessage(),
+                    "Database Error",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-        
-        filterAndDisplayGuests();
-        
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, 
-            "Error loading guests data: " + e.getMessage(), 
-            "Database Error", 
-            JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
     }
-}
 
 // Filter and display guests based on selected criteria
-private void filterAndDisplayGuests() {
-    filteredGuests.clear();
-    
-    String filterValue = filter_guests.getSelectedItem().toString();
-    String searchText = search_field.getText().toLowerCase().trim();
-    
-    for (GuestData guest : allGuests) {
-        boolean includeGuest = true;
-        
-        // Apply search filter
-        if (!searchText.isEmpty()) {
-            boolean matchesSearch = guest.getFullName().toLowerCase().contains(searchText) ||
-                                  (guest.email != null && guest.email.toLowerCase().contains(searchText)) ||
-                                  (guest.phone != null && guest.phone.contains(searchText)) ||
-                                  (guest.nationality != null && guest.nationality.toLowerCase().contains(searchText));
-            if (!matchesSearch) {
-                includeGuest = false;
-            }
-        }
-        
-        // Apply category filter
-        if (includeGuest) {
-            switch (filterValue) {
-                case "VIP Guests":
-                    includeGuest = guest.vipStatus;
-                    break;
-                case "Regular Guests":
-                    includeGuest = !guest.vipStatus;
-                    break;
-                case "With Current Booking":
-                    includeGuest = guest.currentBooking != null;
-                    break;
-                case "No Current Booking":
-                    includeGuest = guest.currentBooking == null;
-                    break;
-                // "All Guests" - no additional filtering
-            }
-        }
-        
-        if (includeGuest) {
-            filteredGuests.add(guest);
-        }
-    }
-    
-    // Apply sorting
-    sortGuests();
-    
-    // Update pagination
-    updatePagination();
-    
-    // Display current page
-    displayCurrentPage();
-}
+    private void filterAndDisplayGuests() {
+        filteredGuests.clear();
 
-// Sort guests based on selected criteria
-private void sortGuests() {
-    String sortValue = sortBy.getSelectedItem().toString();
-    
-    switch (sortValue) {
-        case "Name (A-Z)":
-            filteredGuests.sort((a, b) -> a.getFullName().compareToIgnoreCase(b.getFullName()));
-            break;
-        case "Name (Z-A)":
-            filteredGuests.sort((a, b) -> b.getFullName().compareToIgnoreCase(a.getFullName()));
-            break;
-        case "Registration Date (Newest)":
-            filteredGuests.sort((a, b) -> b.createdAt.compareTo(a.createdAt));
-            break;
-        case "Registration Date (Oldest)":
-            filteredGuests.sort((a, b) -> a.createdAt.compareTo(b.createdAt));
-            break;
-        case "Loyalty Points (High-Low)":
-            filteredGuests.sort((a, b) -> Integer.compare(b.loyaltyPoints, a.loyaltyPoints));
-            break;
-        case "Loyalty Points (Low-High)":
-            filteredGuests.sort((a, b) -> Integer.compare(a.loyaltyPoints, b.loyaltyPoints));
-            break;
-    }
-}
+        String filterValue = filter_guests.getSelectedItem().toString();
+        String searchText = search_field.getText().toLowerCase().trim();
 
-// Update pagination information
-private void updatePagination() {
-    totalPages = (int) Math.ceil((double) filteredGuests.size() / itemsPerPage);
-    if (totalPages == 0) totalPages = 1;
-    
-    if (currentPage > totalPages) {
-        currentPage = totalPages;
-    }
-    if (currentPage < 1) {
-        currentPage = 1;
-    }
-    
-    pageNumber.setText("Page " + currentPage + " of " + totalPages);
-    pageNumber_previouse_button.setEnabled(currentPage > 1);
-    pageNumber_next_button.setEnabled(currentPage < totalPages);
-}
+        for (GuestData guest : allGuests) {
+            boolean includeGuest = true;
 
-// Display current page data in table
-private void displayCurrentPage() {
-    String[] columnNames = {"Name", "Contact", "Nationality", "Status"};
-    DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return false;
-        }
-    };
-    
-    int startIndex = (currentPage - 1) * itemsPerPage;
-    int endIndex = Math.min(startIndex + itemsPerPage, filteredGuests.size());
-    
-    for (int i = startIndex; i < endIndex; i++) {
-        GuestData guest = filteredGuests.get(i);
-        Object[] row = {
-            guest.getFullName(),
-            guest.phone + " / " + (guest.email != null ? guest.email : "No email"),
-            guest.nationality != null ? guest.nationality : "Not specified",
-            guest.vipStatus ? "VIP" : "Regular"
-        };
-        model.addRow(row);
-    }
-    
-    guestsTable.setModel(model);
-    
-    // Clear selection if no data
-    if (filteredGuests.isEmpty()) {
-        clearSelectedGuestDetails();
-    }
-}
-
-// Setup table selection listener
-private void setupTableSelectionListener() {
-    guestsTable.getSelectionModel().addListSelectionListener(e -> {
-        if (!e.getValueIsAdjusting()) {
-            int selectedRow = guestsTable.getSelectedRow();
-            if (selectedRow >= 0) {
-                int guestIndex = (currentPage - 1) * itemsPerPage + selectedRow;
-                if (guestIndex < filteredGuests.size()) {
-                    selectedGuest = filteredGuests.get(guestIndex);
-                    displaySelectedGuestDetails();
+            // Apply search filter
+            if (!searchText.isEmpty()) {
+                boolean matchesSearch = guest.getFullName().toLowerCase().contains(searchText)
+                        || (guest.email != null && guest.email.toLowerCase().contains(searchText))
+                        || (guest.phone != null && guest.phone.contains(searchText))
+                        || (guest.nationality != null && guest.nationality.toLowerCase().contains(searchText));
+                if (!matchesSearch) {
+                    includeGuest = false;
                 }
             }
+
+            // Apply category filter
+            if (includeGuest) {
+                switch (filterValue) {
+                    case "VIP Guests":
+                        includeGuest = guest.vipStatus;
+                        break;
+                    case "Regular Guests":
+                        includeGuest = !guest.vipStatus;
+                        break;
+                    case "With Current Booking":
+                        includeGuest = guest.currentBooking != null;
+                        break;
+                    case "No Current Booking":
+                        includeGuest = guest.currentBooking == null;
+                        break;
+                    // "All Guests" - no additional filtering
+                }
+            }
+
+            if (includeGuest) {
+                filteredGuests.add(guest);
+            }
         }
-    });
-}
+
+        // Apply sorting
+        sortGuests();
+
+        // Update pagination
+        updatePagination();
+
+        // Display current page
+        displayCurrentPage();
+    }
+
+// Sort guests based on selected criteria
+    private void sortGuests() {
+        String sortValue = sortBy.getSelectedItem().toString();
+
+        switch (sortValue) {
+            case "Name (A-Z)":
+                filteredGuests.sort((a, b) -> a.getFullName().compareToIgnoreCase(b.getFullName()));
+                break;
+            case "Name (Z-A)":
+                filteredGuests.sort((a, b) -> b.getFullName().compareToIgnoreCase(a.getFullName()));
+                break;
+            case "Registration Date (Newest)":
+                filteredGuests.sort((a, b) -> b.createdAt.compareTo(a.createdAt));
+                break;
+            case "Registration Date (Oldest)":
+                filteredGuests.sort((a, b) -> a.createdAt.compareTo(b.createdAt));
+                break;
+            case "Loyalty Points (High-Low)":
+                filteredGuests.sort((a, b) -> Integer.compare(b.loyaltyPoints, a.loyaltyPoints));
+                break;
+            case "Loyalty Points (Low-High)":
+                filteredGuests.sort((a, b) -> Integer.compare(a.loyaltyPoints, b.loyaltyPoints));
+                break;
+        }
+    }
+
+// Update pagination information
+    private void updatePagination() {
+        totalPages = (int) Math.ceil((double) filteredGuests.size() / itemsPerPage);
+        if (totalPages == 0) {
+            totalPages = 1;
+        }
+
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+        if (currentPage < 1) {
+            currentPage = 1;
+        }
+
+
+    }
+
+// Display current page data in table
+    private void displayCurrentPage() {
+        String[] columnNames = {"Name", "Contact", "Nationality", "Status"};
+        DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        int startIndex = (currentPage - 1) * itemsPerPage;
+        int endIndex = Math.min(startIndex + itemsPerPage, filteredGuests.size());
+
+        for (int i = startIndex; i < endIndex; i++) {
+            GuestData guest = filteredGuests.get(i);
+            Object[] row = {
+                guest.getFullName(),
+                guest.phone + " / " + (guest.email != null ? guest.email : "No email"),
+                guest.nationality != null ? guest.nationality : "Not specified",
+                guest.vipStatus ? "VIP" : "Regular"
+            };
+            model.addRow(row);
+        }
+
+        guestsTable.setModel(model);
+
+        // Clear selection if no data
+        if (filteredGuests.isEmpty()) {
+            clearSelectedGuestDetails();
+        }
+    }
+
+// Setup table selection listener
+    private void setupTableSelectionListener() {
+        guestsTable.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                int selectedRow = guestsTable.getSelectedRow();
+                if (selectedRow >= 0) {
+                    int guestIndex = (currentPage - 1) * itemsPerPage + selectedRow;
+                    if (guestIndex < filteredGuests.size()) {
+                        selectedGuest = filteredGuests.get(guestIndex);
+                        displaySelectedGuestDetails();
+                    }
+                }
+            }
+        });
+    }
 
 // Display selected guest details
-private void displaySelectedGuestDetails() {
-    if (selectedGuest != null) {
-        selectedGuestDetails_name.setText(selectedGuest.getFullName());
-        selectedGuestDetails_email.setText(selectedGuest.email != null ? selectedGuest.email : "No email provided");
-        selectedGuestDetails_id.setText(selectedGuest.getIdString());
-        selectedGuestDetails_phone.setText(selectedGuest.phone);
-        selectedGuestDetails_address.setText(selectedGuest.getFullAddress());
-        selectedGuestDetails_vipStatus.setText(selectedGuest.vipStatus ? "VIP Guest" : "Regular Guest");
-        selectedGuestDetails_loyaltyPoints.setText(String.valueOf(selectedGuest.loyaltyPoints));
-        selectedGuestDetails_currentBooking.setText(
-            selectedGuest.currentBooking != null ? selectedGuest.currentBooking : "No current booking"
-        );
+    private void displaySelectedGuestDetails() {
+        if (selectedGuest != null) {
+            selectedGuestDetails_name.setText(selectedGuest.getFullName());
+            selectedGuestDetails_email.setText(selectedGuest.email != null ? selectedGuest.email : "No email provided");
+            selectedGuestDetails_id.setText(selectedGuest.getIdString());
+            selectedGuestDetails_phone.setText(selectedGuest.phone);
+            selectedGuestDetails_address.setText(selectedGuest.getFullAddress());
+            selectedGuestDetails_vipStatus.setText(selectedGuest.vipStatus ? "VIP Guest" : "Regular Guest");
+            selectedGuestDetails_loyaltyPoints.setText(String.valueOf(selectedGuest.loyaltyPoints));
+            selectedGuestDetails_currentBooking.setText(
+                    selectedGuest.currentBooking != null ? selectedGuest.currentBooking : "No current booking"
+            );
+            
+            // Enable all buttons when a guest is selected
+            setSelectedGuestButtonsEnabled(true);
+        }
     }
-}
 
 // Clear selected guest details
-private void clearSelectedGuestDetails() {
-    selectedGuestDetails_name.setText("Select a guest to view details");
-    selectedGuestDetails_email.setText("");
-    selectedGuestDetails_id.setText("");
-    selectedGuestDetails_phone.setText("");
-    selectedGuestDetails_address.setText("");
-    selectedGuestDetails_vipStatus.setText("");
-    selectedGuestDetails_loyaltyPoints.setText("");
-    selectedGuestDetails_currentBooking.setText("");
-}
+    private void clearSelectedGuestDetails() {
+        selectedGuestDetails_name.setText("Select a guest to view details");
+        selectedGuestDetails_email.setText("");
+        selectedGuestDetails_id.setText("");
+        selectedGuestDetails_phone.setText("");
+        selectedGuestDetails_address.setText("");
+        selectedGuestDetails_vipStatus.setText("");
+        selectedGuestDetails_loyaltyPoints.setText("");
+        selectedGuestDetails_currentBooking.setText("");
+        
+        // Disable all buttons when no guest is selected
+        setSelectedGuestButtonsEnabled(false);
+    }
+
+    private void setSelectedGuestButtonsEnabled(boolean enabled) {
+        selectedGuestDetails_viewDetailsButton.setEnabled(enabled);
+        selectedGuestDetails_edit_Button.setEnabled(enabled);
+        selectedGuestDetails_viewHistory_button.setEnabled(enabled);
+        selectedGuestDetails_Contact_button.setEnabled(enabled);
+    }
 
 // Search functionality
-private void searchGuests() {
-    currentPage = 1;
-    filterAndDisplayGuests();
-}
+    private void searchGuests() {
+        currentPage = 1;
+        filterAndDisplayGuests();
+    }
 
 // Reset all filters
-private void resetFilters() {
-    search_field.setText("");
-    filter_guests.setSelectedIndex(0);
-    sortBy.setSelectedIndex(0);
-    currentPage = 1;
-    filterAndDisplayGuests();
-}
-
-// Pagination methods
-private void previousPage() {
-    if (currentPage > 1) {
-        currentPage--;
-        displayCurrentPage();
-        updatePagination();
-        guestsTable.clearSelection();
-        clearSelectedGuestDetails();
+    private void resetFilters() {
+        search_field.setText("");
+        filter_guests.setSelectedIndex(0);
+        sortBy.setSelectedIndex(0);
+        currentPage = 1;
+        filterAndDisplayGuests();
     }
-}
 
-private void nextPage() {
-    if (currentPage < totalPages) {
-        currentPage++;
-        displayCurrentPage();
-        updatePagination();
-        guestsTable.clearSelection();
-        clearSelectedGuestDetails();
-    }
-}
+
+
+    
 
 // Refresh data method - call this when a new guest is added
-public void refreshGuestsData() {
-    loadGuestsData();
-}
+    public void refreshGuestsData() {
+        loadGuestsData();
+    }
 
 // Get selected guest for other operations
-public GuestData getSelectedGuest() {
-    return selectedGuest;
-}
+    public GuestData getSelectedGuest() {
+        return selectedGuest;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -428,7 +426,7 @@ public GuestData getSelectedGuest() {
         jLabel2 = new javax.swing.JLabel();
         search_field = new javax.swing.JTextField();
         search_button = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        resetButton = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         filter_guests = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
@@ -437,9 +435,6 @@ public GuestData getSelectedGuest() {
         jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         guestsTable = new javax.swing.JTable();
-        pageNumber = new javax.swing.JLabel();
-        pageNumber_previouse_button = new javax.swing.JButton();
-        pageNumber_next_button = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -477,16 +472,36 @@ public GuestData getSelectedGuest() {
         jLabel2.setText("Search :");
 
         search_button.setText("search");
+        search_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                search_buttonActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Reset");
+        resetButton.setText("Reset");
+        resetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetButtonActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Filter :");
 
         filter_guests.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All Guests" }));
+        filter_guests.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                filter_guestsItemStateChanged(evt);
+            }
+        });
 
         jLabel4.setText("Sort by :");
 
         sortBy.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Name" }));
+        sortBy.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                sortByItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -510,7 +525,7 @@ public GuestData getSelectedGuest() {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(sortBy, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(resetButton)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -521,7 +536,7 @@ public GuestData getSelectedGuest() {
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(search_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(search_button)
-                        .addComponent(jButton3))
+                        .addComponent(resetButton))
                     .addComponent(jLabel2))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -557,12 +572,6 @@ public GuestData getSelectedGuest() {
         });
         jScrollPane2.setViewportView(guestsTable);
 
-        pageNumber.setText("Page 1 of 5");
-
-        pageNumber_previouse_button.setText("< previouse");
-
-        pageNumber_next_button.setText("next >");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -572,15 +581,8 @@ public GuestData getSelectedGuest() {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 902, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(pageNumber_previouse_button)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(pageNumber)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(pageNumber_next_button)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(jLabel5)
+                        .addGap(0, 851, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -589,12 +591,7 @@ public GuestData getSelectedGuest() {
                 .addContainerGap()
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(pageNumber)
-                    .addComponent(pageNumber_previouse_button)
-                    .addComponent(pageNumber_next_button))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -808,20 +805,20 @@ public GuestData getSelectedGuest() {
     }//GEN-LAST:event_addGuest_buttonActionPerformed
 
     private void selectedGuestDetails_edit_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectedGuestDetails_edit_ButtonActionPerformed
-           if (selectedGuest == null) {
+        if (selectedGuest == null) {
             JOptionPane.showMessageDialog(this,
-                "Please select a guest to edit",
-                "No Guest Selected",
-                JOptionPane.WARNING_MESSAGE);
+                    "Please select a guest to edit",
+                    "No Guest Selected",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         // Show confirmation dialog
         int confirm = JOptionPane.showConfirmDialog(this,
-            "Are you sure you want to edit this guest's details?",
-            "Confirm Edit",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
+                "Are you sure you want to edit this guest's details?",
+                "Confirm Edit",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
 
         if (confirm != JOptionPane.YES_OPTION) {
             return;
@@ -835,28 +832,48 @@ public GuestData getSelectedGuest() {
 
         if (parent instanceof GuestMainPanel) {
             GuestMainPanel guestMainPanel = (GuestMainPanel) parent;
-            
+
             // Switch to the New Guest tab
             guestMainPanel.getGuestsTabs().setSelectedIndex(1);
-            
+
             // Get the NewGuestPanel
             NewGuestPanel newGuestPanel = guestMainPanel.getNewGuestPanel();
-            
+
             // Load guest data into the form
             newGuestPanel.loadGuestData(selectedGuest);
-            
+
             // Disable save button and enable update button
             newGuestPanel.setSaveButtonEnabled(false);
             newGuestPanel.setUpdateButtonEnabled(true);
         }
     }//GEN-LAST:event_selectedGuestDetails_edit_ButtonActionPerformed
 
+    private void search_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_buttonActionPerformed
+        currentPage = 1;
+        filterAndDisplayGuests();
+    }//GEN-LAST:event_search_buttonActionPerformed
+
+    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
+        search_field.setText("");
+        filter_guests.setSelectedIndex(0);
+        sortBy.setSelectedIndex(0);
+        currentPage = 1;
+        filterAndDisplayGuests();
+    }//GEN-LAST:event_resetButtonActionPerformed
+
+    private void filter_guestsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filter_guestsItemStateChanged
+        filterAndDisplayGuests();        // TODO add your handling code here:
+    }//GEN-LAST:event_filter_guestsItemStateChanged
+
+    private void sortByItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_sortByItemStateChanged
+        filterAndDisplayGuests();
+    }//GEN-LAST:event_sortByItemStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addGuest_button;
     private javax.swing.JComboBox<String> filter_guests;
     private javax.swing.JTable guestsTable;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel12;
@@ -877,9 +894,7 @@ public GuestData getSelectedGuest() {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel pageNumber;
-    private javax.swing.JButton pageNumber_next_button;
-    private javax.swing.JButton pageNumber_previouse_button;
+    private javax.swing.JButton resetButton;
     private javax.swing.JButton search_button;
     private javax.swing.JTextField search_field;
     private javax.swing.JButton selectedGuestDetails_Contact_button;

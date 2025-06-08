@@ -4,6 +4,8 @@
  */
 package main.java.com.hotel.ui.reports;
 
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author shalaka
@@ -31,15 +33,15 @@ public class ReportsMainPanel extends javax.swing.JPanel {
         jPanel9 = new javax.swing.JPanel();
         jPanel10 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        jButton29 = new javax.swing.JButton();
-        jButton30 = new javax.swing.JButton();
-        jButton31 = new javax.swing.JButton();
-        jButton32 = new javax.swing.JButton();
-        jButton33 = new javax.swing.JButton();
-        jButton34 = new javax.swing.JButton();
-        jButton35 = new javax.swing.JButton();
-        jButton36 = new javax.swing.JButton();
-        jButton37 = new javax.swing.JButton();
+        reportCategories_financialReports = new javax.swing.JButton();
+        reportCategories_occupancyReports = new javax.swing.JButton();
+        reportCategories_GuestReports = new javax.swing.JButton();
+        reportCategories_BookingReports = new javax.swing.JButton();
+        reportCategories_inventoryReports = new javax.swing.JButton();
+        reportCategories_maintenanceReport = new javax.swing.JButton();
+        reportCategories_EmployeeReports = new javax.swing.JButton();
+        reportCategories_customReports = new javax.swing.JButton();
+        reportCategories_scheduleReports = new javax.swing.JButton();
         jPanel11 = new javax.swing.JPanel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -69,23 +71,68 @@ public class ReportsMainPanel extends javax.swing.JPanel {
 
         jLabel11.setText("Report Categories");
 
-        jButton29.setText("Financial Reports");
+        reportCategories_financialReports.setText("Financial Reports");
+        reportCategories_financialReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportCategories_financialReportsActionPerformed(evt);
+            }
+        });
 
-        jButton30.setText("Occupancy Reports");
+        reportCategories_occupancyReports.setText("Occupancy Reports");
+        reportCategories_occupancyReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportCategories_occupancyReportsActionPerformed(evt);
+            }
+        });
 
-        jButton31.setText("Guest Reports");
+        reportCategories_GuestReports.setText("Guest Reports");
+        reportCategories_GuestReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportCategories_GuestReportsActionPerformed(evt);
+            }
+        });
 
-        jButton32.setText("Booking Reports");
+        reportCategories_BookingReports.setText("Booking Reports");
+        reportCategories_BookingReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportCategories_BookingReportsActionPerformed(evt);
+            }
+        });
 
-        jButton33.setText("Inventory Reports");
+        reportCategories_inventoryReports.setText("Inventory Reports");
+        reportCategories_inventoryReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportCategories_inventoryReportsActionPerformed(evt);
+            }
+        });
 
-        jButton34.setText("Maintenance Reports");
+        reportCategories_maintenanceReport.setText("Maintenance Reports");
+        reportCategories_maintenanceReport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportCategories_maintenanceReportActionPerformed(evt);
+            }
+        });
 
-        jButton35.setText("Employee Reports");
+        reportCategories_EmployeeReports.setText("Employee Reports");
+        reportCategories_EmployeeReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportCategories_EmployeeReportsActionPerformed(evt);
+            }
+        });
 
-        jButton36.setText("Custom Reports");
+        reportCategories_customReports.setText("Custom Reports");
+        reportCategories_customReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportCategories_customReportsActionPerformed(evt);
+            }
+        });
 
-        jButton37.setText("Scheduled Reports");
+        reportCategories_scheduleReports.setText("Scheduled Reports");
+        reportCategories_scheduleReports.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reportCategories_scheduleReportsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -97,15 +144,15 @@ public class ReportsMainPanel extends javax.swing.JPanel {
                     .addGroup(jPanel10Layout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jButton29, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton30, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
-                    .addComponent(jButton31, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton32, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton33, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton35, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton36, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton37, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(reportCategories_financialReports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(reportCategories_occupancyReports, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE)
+                    .addComponent(reportCategories_GuestReports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(reportCategories_BookingReports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(reportCategories_inventoryReports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(reportCategories_maintenanceReport, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(reportCategories_EmployeeReports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(reportCategories_customReports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(reportCategories_scheduleReports, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
@@ -114,23 +161,23 @@ public class ReportsMainPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel11)
                 .addGap(18, 18, 18)
-                .addComponent(jButton29)
+                .addComponent(reportCategories_financialReports)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton30)
+                .addComponent(reportCategories_occupancyReports)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton31)
+                .addComponent(reportCategories_GuestReports)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton32)
+                .addComponent(reportCategories_BookingReports)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton33)
+                .addComponent(reportCategories_inventoryReports)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton35)
+                .addComponent(reportCategories_EmployeeReports)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton34)
+                .addComponent(reportCategories_maintenanceReport)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton36)
+                .addComponent(reportCategories_customReports)
                 .addGap(18, 18, 18)
-                .addComponent(jButton37)
+                .addComponent(reportCategories_scheduleReports)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -351,41 +398,52 @@ public class ReportsMainPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void reportCategories_occupancyReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportCategories_occupancyReportsActionPerformed
+        OccupancyReportDialogPanel dialog = new OccupancyReportDialogPanel((java.awt.Frame) SwingUtilities.getWindowAncestor(this), true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_reportCategories_occupancyReportsActionPerformed
+
+    private void reportCategories_financialReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportCategories_financialReportsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reportCategories_financialReportsActionPerformed
+
+    private void reportCategories_GuestReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportCategories_GuestReportsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reportCategories_GuestReportsActionPerformed
+
+    private void reportCategories_BookingReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportCategories_BookingReportsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reportCategories_BookingReportsActionPerformed
+
+    private void reportCategories_inventoryReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportCategories_inventoryReportsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reportCategories_inventoryReportsActionPerformed
+
+    private void reportCategories_EmployeeReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportCategories_EmployeeReportsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reportCategories_EmployeeReportsActionPerformed
+
+    private void reportCategories_maintenanceReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportCategories_maintenanceReportActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reportCategories_maintenanceReportActionPerformed
+
+    private void reportCategories_customReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportCategories_customReportsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reportCategories_customReportsActionPerformed
+
+    private void reportCategories_scheduleReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportCategories_scheduleReportsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reportCategories_scheduleReportsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton16;
-    private javax.swing.JButton jButton17;
-    private javax.swing.JButton jButton18;
-    private javax.swing.JButton jButton19;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton20;
     private javax.swing.JButton jButton21;
     private javax.swing.JButton jButton22;
     private javax.swing.JButton jButton23;
-    private javax.swing.JButton jButton29;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton30;
-    private javax.swing.JButton jButton31;
-    private javax.swing.JButton jButton32;
-    private javax.swing.JButton jButton33;
-    private javax.swing.JButton jButton34;
-    private javax.swing.JButton jButton35;
-    private javax.swing.JButton jButton36;
-    private javax.swing.JButton jButton37;
     private javax.swing.JButton jButton38;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox2;
     private com.toedter.calendar.JDateChooser jDateChooser3;
     private com.toedter.calendar.JDateChooser jDateChooser4;
@@ -398,20 +456,23 @@ public class ReportsMainPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton reportCategories_BookingReports;
+    private javax.swing.JButton reportCategories_EmployeeReports;
+    private javax.swing.JButton reportCategories_GuestReports;
+    private javax.swing.JButton reportCategories_customReports;
+    private javax.swing.JButton reportCategories_financialReports;
+    private javax.swing.JButton reportCategories_inventoryReports;
+    private javax.swing.JButton reportCategories_maintenanceReport;
+    private javax.swing.JButton reportCategories_occupancyReports;
+    private javax.swing.JButton reportCategories_scheduleReports;
     // End of variables declaration//GEN-END:variables
 }

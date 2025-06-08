@@ -123,15 +123,15 @@
                                       <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
-                                  <Component id="jButton29" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jButton30" alignment="0" pref="358" max="32767" attributes="0"/>
-                                  <Component id="jButton31" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jButton32" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jButton33" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jButton34" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jButton35" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jButton36" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="jButton37" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="reportCategories_financialReports" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="reportCategories_occupancyReports" alignment="0" pref="358" max="32767" attributes="0"/>
+                                  <Component id="reportCategories_GuestReports" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="reportCategories_BookingReports" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="reportCategories_inventoryReports" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="reportCategories_maintenanceReport" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="reportCategories_EmployeeReports" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="reportCategories_customReports" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="reportCategories_scheduleReports" alignment="0" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
@@ -143,23 +143,23 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButton29" min="-2" max="-2" attributes="0"/>
+                              <Component id="reportCategories_financialReports" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jButton30" min="-2" max="-2" attributes="0"/>
+                              <Component id="reportCategories_occupancyReports" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jButton31" min="-2" max="-2" attributes="0"/>
+                              <Component id="reportCategories_GuestReports" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jButton32" min="-2" max="-2" attributes="0"/>
+                              <Component id="reportCategories_BookingReports" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jButton33" min="-2" max="-2" attributes="0"/>
+                              <Component id="reportCategories_inventoryReports" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jButton35" min="-2" max="-2" attributes="0"/>
+                              <Component id="reportCategories_EmployeeReports" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jButton34" min="-2" max="-2" attributes="0"/>
+                              <Component id="reportCategories_maintenanceReport" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jButton36" min="-2" max="-2" attributes="0"/>
+                              <Component id="reportCategories_customReports" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="jButton37" min="-2" max="-2" attributes="0"/>
+                              <Component id="reportCategories_scheduleReports" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -171,50 +171,77 @@
                         <Property name="text" type="java.lang.String" value="Report Categories"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton29">
+                    <Component class="javax.swing.JButton" name="reportCategories_financialReports">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Financial Reports"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportCategories_financialReportsActionPerformed"/>
+                      </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton30">
+                    <Component class="javax.swing.JButton" name="reportCategories_occupancyReports">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Occupancy Reports"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportCategories_occupancyReportsActionPerformed"/>
+                      </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton31">
+                    <Component class="javax.swing.JButton" name="reportCategories_GuestReports">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Guest Reports"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportCategories_GuestReportsActionPerformed"/>
+                      </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton32">
+                    <Component class="javax.swing.JButton" name="reportCategories_BookingReports">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Booking Reports"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportCategories_BookingReportsActionPerformed"/>
+                      </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton33">
+                    <Component class="javax.swing.JButton" name="reportCategories_inventoryReports">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Inventory Reports"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportCategories_inventoryReportsActionPerformed"/>
+                      </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton34">
+                    <Component class="javax.swing.JButton" name="reportCategories_maintenanceReport">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Maintenance Reports"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportCategories_maintenanceReportActionPerformed"/>
+                      </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton35">
+                    <Component class="javax.swing.JButton" name="reportCategories_EmployeeReports">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Employee Reports"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportCategories_EmployeeReportsActionPerformed"/>
+                      </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton36">
+                    <Component class="javax.swing.JButton" name="reportCategories_customReports">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Custom Reports"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportCategories_customReportsActionPerformed"/>
+                      </Events>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton37">
+                    <Component class="javax.swing.JButton" name="reportCategories_scheduleReports">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Scheduled Reports"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="reportCategories_scheduleReportsActionPerformed"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>

@@ -32,15 +32,15 @@ public class SettingsMainPanel extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
+        settingsCategories_hotelInformation = new javax.swing.JButton();
+        settingsCategories_userManagement = new javax.swing.JButton();
+        settingsCategories_taxAndCurrency = new javax.swing.JButton();
+        settingsCategories_bookingPolicies = new javax.swing.JButton();
+        settingsCategories_emailTemplates = new javax.swing.JButton();
+        settingsCategories_smsSettings = new javax.swing.JButton();
+        settingsCategories_backupAndRestore = new javax.swing.JButton();
+        settingsCategories_systemPreferences = new javax.swing.JButton();
+        settingsCategories_auditLogs = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -75,23 +75,68 @@ public class SettingsMainPanel extends javax.swing.JPanel {
 
         jLabel2.setText("Settings Categories");
 
-        jButton1.setText("Hotel Information");
+        settingsCategories_hotelInformation.setText("Hotel Information");
+        settingsCategories_hotelInformation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingsCategories_hotelInformationActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("User Management");
+        settingsCategories_userManagement.setText("User Management");
+        settingsCategories_userManagement.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingsCategories_userManagementActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Tax & Currency");
+        settingsCategories_taxAndCurrency.setText("Tax & Currency");
+        settingsCategories_taxAndCurrency.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingsCategories_taxAndCurrencyActionPerformed(evt);
+            }
+        });
 
-        jButton4.setText("Booking Policies");
+        settingsCategories_bookingPolicies.setText("Booking Policies");
+        settingsCategories_bookingPolicies.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingsCategories_bookingPoliciesActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("Email Templates");
+        settingsCategories_emailTemplates.setText("Email Templates");
+        settingsCategories_emailTemplates.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingsCategories_emailTemplatesActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("SMS Settings");
+        settingsCategories_smsSettings.setText("SMS Settings");
+        settingsCategories_smsSettings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingsCategories_smsSettingsActionPerformed(evt);
+            }
+        });
 
-        jButton7.setText("Backup & Restore");
+        settingsCategories_backupAndRestore.setText("Backup & Restore");
+        settingsCategories_backupAndRestore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingsCategories_backupAndRestoreActionPerformed(evt);
+            }
+        });
 
-        jButton8.setText("System Preferences");
+        settingsCategories_systemPreferences.setText("System Preferences");
+        settingsCategories_systemPreferences.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingsCategories_systemPreferencesActionPerformed(evt);
+            }
+        });
 
-        jButton9.setText("Audit Logs");
+        settingsCategories_auditLogs.setText("Audit Logs");
+        settingsCategories_auditLogs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                settingsCategories_auditLogsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -101,15 +146,15 @@ public class SettingsMainPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
-                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(settingsCategories_hotelInformation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(settingsCategories_userManagement, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(settingsCategories_taxAndCurrency, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(settingsCategories_bookingPolicies, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(settingsCategories_emailTemplates, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(settingsCategories_smsSettings, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(settingsCategories_backupAndRestore, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(settingsCategories_systemPreferences, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
+                    .addComponent(settingsCategories_auditLogs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -118,23 +163,23 @@ public class SettingsMainPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addComponent(settingsCategories_hotelInformation)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
+                .addComponent(settingsCategories_userManagement)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton3)
+                .addComponent(settingsCategories_taxAndCurrency)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4)
+                .addComponent(settingsCategories_bookingPolicies)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton5)
+                .addComponent(settingsCategories_emailTemplates)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton6)
+                .addComponent(settingsCategories_smsSettings)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton7)
+                .addComponent(settingsCategories_backupAndRestore)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton8)
+                .addComponent(settingsCategories_systemPreferences)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton9)
+                .addComponent(settingsCategories_auditLogs)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -376,22 +421,51 @@ public class SettingsMainPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void settingsCategories_userManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsCategories_userManagementActionPerformed
+        UserManagementDialogPanel dialog = new UserManagementDialogPanel(null, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_settingsCategories_userManagementActionPerformed
+
+    private void settingsCategories_hotelInformationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsCategories_hotelInformationActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_settingsCategories_hotelInformationActionPerformed
+
+    private void settingsCategories_taxAndCurrencyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsCategories_taxAndCurrencyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_settingsCategories_taxAndCurrencyActionPerformed
+
+    private void settingsCategories_bookingPoliciesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsCategories_bookingPoliciesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_settingsCategories_bookingPoliciesActionPerformed
+
+    private void settingsCategories_emailTemplatesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsCategories_emailTemplatesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_settingsCategories_emailTemplatesActionPerformed
+
+    private void settingsCategories_backupAndRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsCategories_backupAndRestoreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_settingsCategories_backupAndRestoreActionPerformed
+
+    private void settingsCategories_smsSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsCategories_smsSettingsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_settingsCategories_smsSettingsActionPerformed
+
+    private void settingsCategories_systemPreferencesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsCategories_systemPreferencesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_settingsCategories_systemPreferencesActionPerformed
+
+    private void settingsCategories_auditLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsCategories_auditLogsActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_settingsCategories_auditLogsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -418,5 +492,14 @@ public class SettingsMainPanel extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    private javax.swing.JButton settingsCategories_auditLogs;
+    private javax.swing.JButton settingsCategories_backupAndRestore;
+    private javax.swing.JButton settingsCategories_bookingPolicies;
+    private javax.swing.JButton settingsCategories_emailTemplates;
+    private javax.swing.JButton settingsCategories_hotelInformation;
+    private javax.swing.JButton settingsCategories_smsSettings;
+    private javax.swing.JButton settingsCategories_systemPreferences;
+    private javax.swing.JButton settingsCategories_taxAndCurrency;
+    private javax.swing.JButton settingsCategories_userManagement;
     // End of variables declaration//GEN-END:variables
 }
