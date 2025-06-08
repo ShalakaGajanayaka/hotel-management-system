@@ -422,7 +422,9 @@ public class SettingsMainPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void settingsCategories_userManagementActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsCategories_userManagementActionPerformed
-        // TODO add your handling code here:
+        UserManagementDialogPanel dialog = new UserManagementDialogPanel(null, true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }//GEN-LAST:event_settingsCategories_userManagementActionPerformed
 
     private void settingsCategories_hotelInformationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_settingsCategories_hotelInformationActionPerformed
