@@ -4,6 +4,8 @@
  */
 package main.java.com.hotel.ui.reports;
 
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author shalaka
@@ -397,7 +399,9 @@ public class ReportsMainPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void reportCategories_occupancyReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportCategories_occupancyReportsActionPerformed
-        
+        OccupancyReportDialogPanel dialog = new OccupancyReportDialogPanel((java.awt.Frame) SwingUtilities.getWindowAncestor(this), true);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }//GEN-LAST:event_reportCategories_occupancyReportsActionPerformed
 
     private void reportCategories_financialReportsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reportCategories_financialReportsActionPerformed
