@@ -39,6 +39,8 @@ public class BookingsMainPanel extends javax.swing.JPanel {
         bookingManagementPanel1 = new main.java.com.hotel.ui.booking.BookingManagementPanel();
         newBookingTab = new javax.swing.JPanel();
         newBookingPanel1 = new main.java.com.hotel.ui.booking.NewBookingPanel();
+        bookingDetailsTab = new javax.swing.JPanel();
+        bookingDetailsPanel1 = new main.java.com.hotel.ui.booking.BookingDetailsPanel();
 
         setPreferredSize(new java.awt.Dimension(930, 695));
 
@@ -76,6 +78,23 @@ public class BookingsMainPanel extends javax.swing.JPanel {
 
         jTabbedPane1.addTab("New Booking", newBookingTab);
 
+        javax.swing.GroupLayout bookingDetailsTabLayout = new javax.swing.GroupLayout(bookingDetailsTab);
+        bookingDetailsTab.setLayout(bookingDetailsTabLayout);
+        bookingDetailsTabLayout.setHorizontalGroup(
+            bookingDetailsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bookingDetailsTabLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(bookingDetailsPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        bookingDetailsTabLayout.setVerticalGroup(
+            bookingDetailsTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bookingDetailsTabLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(bookingDetailsPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Booking Details", bookingDetailsTab);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -90,6 +109,8 @@ public class BookingsMainPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private main.java.com.hotel.ui.booking.BookingDetailsPanel bookingDetailsPanel1;
+    private javax.swing.JPanel bookingDetailsTab;
     private main.java.com.hotel.ui.booking.BookingManagementPanel bookingManagementPanel1;
     private javax.swing.JPanel bookingManagementTab;
     private javax.swing.JTabbedPane jTabbedPane1;
