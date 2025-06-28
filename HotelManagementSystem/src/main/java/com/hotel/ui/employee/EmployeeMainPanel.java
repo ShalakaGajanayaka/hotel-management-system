@@ -31,8 +31,6 @@ public class EmployeeMainPanel extends javax.swing.JPanel {
         employeeManagementPanel1 = new main.java.com.hotel.ui.employee.EmployeeManagementPanel();
         newEmployeeTab = new javax.swing.JPanel();
         newEmployeePanel1 = new main.java.com.hotel.ui.employee.NewEmployeePanel();
-        employeeScheduleTab = new javax.swing.JPanel();
-        employeeSchedulePanel1 = new main.java.com.hotel.ui.employee.EmployeeSchedulePanel();
 
         setPreferredSize(new java.awt.Dimension(930, 660));
 
@@ -47,7 +45,7 @@ public class EmployeeMainPanel extends javax.swing.JPanel {
         employeeManagementTabLayout.setVerticalGroup(
             employeeManagementTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(employeeManagementTabLayout.createSequentialGroup()
-                .addComponent(employeeManagementPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 714, Short.MAX_VALUE)
+                .addComponent(employeeManagementPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 684, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -63,25 +61,10 @@ public class EmployeeMainPanel extends javax.swing.JPanel {
         );
         newEmployeeTabLayout.setVerticalGroup(
             newEmployeeTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(newEmployeePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(newEmployeePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Add New Employee", newEmployeeTab);
-
-        javax.swing.GroupLayout employeeScheduleTabLayout = new javax.swing.GroupLayout(employeeScheduleTab);
-        employeeScheduleTab.setLayout(employeeScheduleTabLayout);
-        employeeScheduleTabLayout.setHorizontalGroup(
-            employeeScheduleTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, employeeScheduleTabLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(employeeSchedulePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        employeeScheduleTabLayout.setVerticalGroup(
-            employeeScheduleTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(employeeSchedulePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Employee Schedule", employeeScheduleTab);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -99,8 +82,6 @@ public class EmployeeMainPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private main.java.com.hotel.ui.employee.EmployeeManagementPanel employeeManagementPanel1;
     private javax.swing.JPanel employeeManagementTab;
-    private main.java.com.hotel.ui.employee.EmployeeSchedulePanel employeeSchedulePanel1;
-    private javax.swing.JPanel employeeScheduleTab;
     private javax.swing.JTabbedPane jTabbedPane1;
     private main.java.com.hotel.ui.employee.NewEmployeePanel newEmployeePanel1;
     private javax.swing.JPanel newEmployeeTab;
