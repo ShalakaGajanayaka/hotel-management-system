@@ -31,6 +31,8 @@ public class MaintenanceMainPanel extends javax.swing.JPanel {
         maintenanceManagementPanel1 = new main.java.com.hotel.ui.maintenance.MaintenanceManagementPanel();
         newmaintenanceRequestTab = new javax.swing.JPanel();
         newMaintenanceRequestPanel1 = new main.java.com.hotel.ui.maintenance.NewMaintenanceRequestPanel();
+        scheduledMaintenanceTab = new javax.swing.JPanel();
+        sheduleMaintenancePanel1 = new main.java.com.hotel.ui.maintenance.SheduleMaintenancePanel();
 
         setPreferredSize(new java.awt.Dimension(930, 660));
 
@@ -68,6 +70,21 @@ public class MaintenanceMainPanel extends javax.swing.JPanel {
 
         jTabbedPane1.addTab("New Maintenance Request", newmaintenanceRequestTab);
 
+        javax.swing.GroupLayout scheduledMaintenanceTabLayout = new javax.swing.GroupLayout(scheduledMaintenanceTab);
+        scheduledMaintenanceTab.setLayout(scheduledMaintenanceTabLayout);
+        scheduledMaintenanceTabLayout.setHorizontalGroup(
+            scheduledMaintenanceTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, scheduledMaintenanceTabLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(sheduleMaintenancePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        scheduledMaintenanceTabLayout.setVerticalGroup(
+            scheduledMaintenanceTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(sheduleMaintenancePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Scheduled Maintenance", scheduledMaintenanceTab);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -87,5 +104,7 @@ public class MaintenanceMainPanel extends javax.swing.JPanel {
     private javax.swing.JPanel maintenanceManagementTab;
     private main.java.com.hotel.ui.maintenance.NewMaintenanceRequestPanel newMaintenanceRequestPanel1;
     private javax.swing.JPanel newmaintenanceRequestTab;
+    private javax.swing.JPanel scheduledMaintenanceTab;
+    private main.java.com.hotel.ui.maintenance.SheduleMaintenancePanel sheduleMaintenancePanel1;
     // End of variables declaration//GEN-END:variables
 }
