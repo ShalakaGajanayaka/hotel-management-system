@@ -41,6 +41,8 @@ public class RoomMainPanel extends javax.swing.JPanel {
         newRoomPanel1 = new main.java.com.hotel.ui.room.NewRoomPanel();
         roomCategoryTab = new javax.swing.JPanel();
         roomCategoryPanel1 = new main.java.com.hotel.ui.room.RoomCategoryPanel();
+        roomStatusTab = new javax.swing.JPanel();
+        roomStatusPanel1 = new main.java.com.hotel.ui.room.RoomStatusPanel();
 
         setPreferredSize(new java.awt.Dimension(930, 695));
 
@@ -69,7 +71,7 @@ public class RoomMainPanel extends javax.swing.JPanel {
         );
         newRoomTabLayout.setVerticalGroup(
             newRoomTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(newRoomPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
+            .addComponent(newRoomPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("New Room", newRoomTab);
@@ -84,10 +86,25 @@ public class RoomMainPanel extends javax.swing.JPanel {
         );
         roomCategoryTabLayout.setVerticalGroup(
             roomCategoryTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(roomCategoryPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
+            .addComponent(roomCategoryPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Room Category", roomCategoryTab);
+
+        javax.swing.GroupLayout roomStatusTabLayout = new javax.swing.GroupLayout(roomStatusTab);
+        roomStatusTab.setLayout(roomStatusTabLayout);
+        roomStatusTabLayout.setHorizontalGroup(
+            roomStatusTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, roomStatusTabLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(roomStatusPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        roomStatusTabLayout.setVerticalGroup(
+            roomStatusTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(roomStatusPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Room Status", roomStatusTab);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -110,5 +127,7 @@ public class RoomMainPanel extends javax.swing.JPanel {
     private javax.swing.JPanel roomCategoryTab;
     private main.java.com.hotel.ui.room.RoomManagementPanel roomManagementPanel1;
     private javax.swing.JPanel roomManagementTab;
+    private main.java.com.hotel.ui.room.RoomStatusPanel roomStatusPanel1;
+    private javax.swing.JPanel roomStatusTab;
     // End of variables declaration//GEN-END:variables
 }
