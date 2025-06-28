@@ -31,6 +31,7 @@ public class GuestMainPanel extends javax.swing.JPanel {
         guestManagementPanel1 = new main.java.com.hotel.ui.guest.GuestManagementPanel();
         newGuestTab = new javax.swing.JPanel();
         newGuestPanel1 = new main.java.com.hotel.ui.guest.NewGuestPanel();
+        guestFeedbackTab = new javax.swing.JPanel();
 
         setPreferredSize(new java.awt.Dimension(930, 660));
 
@@ -64,6 +65,19 @@ public class GuestMainPanel extends javax.swing.JPanel {
 
         guestsTabs.addTab("New Guest", newGuestTab);
 
+        javax.swing.GroupLayout guestFeedbackTabLayout = new javax.swing.GroupLayout(guestFeedbackTab);
+        guestFeedbackTab.setLayout(guestFeedbackTabLayout);
+        guestFeedbackTabLayout.setHorizontalGroup(
+            guestFeedbackTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 930, Short.MAX_VALUE)
+        );
+        guestFeedbackTabLayout.setVerticalGroup(
+            guestFeedbackTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 625, Short.MAX_VALUE)
+        );
+
+        guestsTabs.addTab("Guest Feedback", guestFeedbackTab);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -78,6 +92,7 @@ public class GuestMainPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel guestFeedbackTab;
     private main.java.com.hotel.ui.guest.GuestManagementPanel guestManagementPanel1;
     private javax.swing.JPanel guestManagementTab;
     private javax.swing.JTabbedPane guestsTabs;
