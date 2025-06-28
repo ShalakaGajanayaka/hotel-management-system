@@ -39,6 +39,8 @@ public class RoomMainPanel extends javax.swing.JPanel {
         roomManagementPanel1 = new main.java.com.hotel.ui.room.RoomManagementPanel();
         newRoomTab = new javax.swing.JPanel();
         newRoomPanel1 = new main.java.com.hotel.ui.room.NewRoomPanel();
+        roomCategoryTab = new javax.swing.JPanel();
+        roomCategoryPanel1 = new main.java.com.hotel.ui.room.RoomCategoryPanel();
 
         setPreferredSize(new java.awt.Dimension(930, 695));
 
@@ -67,10 +69,25 @@ public class RoomMainPanel extends javax.swing.JPanel {
         );
         newRoomTabLayout.setVerticalGroup(
             newRoomTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(newRoomPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 690, Short.MAX_VALUE)
+            .addComponent(newRoomPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("New Room", newRoomTab);
+
+        javax.swing.GroupLayout roomCategoryTabLayout = new javax.swing.GroupLayout(roomCategoryTab);
+        roomCategoryTab.setLayout(roomCategoryTabLayout);
+        roomCategoryTabLayout.setHorizontalGroup(
+            roomCategoryTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, roomCategoryTabLayout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addComponent(roomCategoryPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        roomCategoryTabLayout.setVerticalGroup(
+            roomCategoryTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(roomCategoryPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Room Category", roomCategoryTab);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -89,6 +106,8 @@ public class RoomMainPanel extends javax.swing.JPanel {
     private javax.swing.JTabbedPane jTabbedPane1;
     private main.java.com.hotel.ui.room.NewRoomPanel newRoomPanel1;
     private javax.swing.JPanel newRoomTab;
+    private main.java.com.hotel.ui.room.RoomCategoryPanel roomCategoryPanel1;
+    private javax.swing.JPanel roomCategoryTab;
     private main.java.com.hotel.ui.room.RoomManagementPanel roomManagementPanel1;
     private javax.swing.JPanel roomManagementTab;
     // End of variables declaration//GEN-END:variables
