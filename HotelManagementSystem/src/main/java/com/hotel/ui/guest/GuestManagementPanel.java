@@ -632,6 +632,11 @@ public class GuestManagementPanel extends javax.swing.JPanel {
         jLabel25.setText("Loyalty Points :");
 
         selectedGuestDetails_viewDetailsButton.setText("View Details");
+        selectedGuestDetails_viewDetailsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectedGuestDetails_viewDetailsButtonActionPerformed(evt);
+            }
+        });
 
         selectedGuestDetails_edit_Button.setText("Edit");
         selectedGuestDetails_edit_Button.addActionListener(new java.awt.event.ActionListener() {
@@ -869,6 +874,31 @@ public class GuestManagementPanel extends javax.swing.JPanel {
         filterAndDisplayGuests();
     }//GEN-LAST:event_sortByItemStateChanged
 
+    private void selectedGuestDetails_viewDetailsButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        if (selectedGuest == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Please select a guest to view details",
+                    "No Guest Selected",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Get the parent frame
+        java.awt.Frame parentFrame = null;
+        Container parent = this.getParent();
+        while (parent != null) {
+            if (parent instanceof java.awt.Frame) {
+                parentFrame = (java.awt.Frame) parent;
+                break;
+            }
+            parent = parent.getParent();
+        }
+
+        // Create and show the guest details dialog
+        GuestDetailsDialogPanel dialog = new GuestDetailsDialogPanel(parentFrame, true, selectedGuest);
+        dialog.setLocationRelativeTo(parentFrame);
+        dialog.setVisible(true);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addGuest_button;

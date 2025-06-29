@@ -4,11 +4,19 @@
  */
 package main.java.com.hotel.ui.guest;
 
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.text.SimpleDateFormat;
+import javax.swing.table.DefaultTableModel;
+import main.java.com.hotel.config.DatabaseConnection;
+
 /**
  *
  * @author shalaka
  */
 public class GuestDetailsDialogPanel extends javax.swing.JDialog {
+
+    private GuestManagementPanel.GuestData guestData;
 
     /**
      * Creates new form GuestDetailsDialogPanel
@@ -16,6 +24,159 @@ public class GuestDetailsDialogPanel extends javax.swing.JDialog {
     public GuestDetailsDialogPanel(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+    }
+
+    /**
+     * Creates new form GuestDetailsDialogPanel with guest data
+     */
+    public GuestDetailsDialogPanel(java.awt.Frame parent, boolean modal, GuestManagementPanel.GuestData guestData) {
+        super(parent, modal);
+        this.guestData = guestData;
+        initComponents();
+        populateGuestDetails();
+    }
+
+    /**
+     * Populate the dialog with guest details
+     */
+    private void populateGuestDetails() {
+        if (guestData == null) {
+            return;
+        }
+
+        // Guest ID
+        jLabel2.setText("G" + String.format("%04d", guestData.guestId));
+
+        // Personal Information
+        jLabel6.setText(guestData.getFullName());
+        jLabel7.setText(guestData.gender != null ? guestData.gender : "Not specified");
+        jLabel9.setText(guestData.nationality != null ? guestData.nationality : "Not specified");
+        jLabel12.setText(guestData.dateOfBirth != null ? guestData.dateOfBirth : "Not specified");
+        jLabel14.setText(guestData.idNumber != null ? guestData.idNumber : "Not specified");
+        jLabel15.setText(guestData.idExpireDate != null ? guestData.idExpireDate : "Not specified");
+        jLabel18.setText(guestData.idType != null ? guestData.idType : "Not specified");
+
+        // Contact Information
+        jLabel20.setText(guestData.phone != null ? guestData.phone : "Not specified");
+        jLabel21.setText(guestData.email != null ? guestData.email : "Not specified");
+        
+        // Address
+        String fullAddress = guestData.getFullAddress();
+        if (fullAddress.isEmpty()) {
+            jLabel24.setText("No address provided");
+            jLabel26.setText("");
+            jLabel27.setText("");
+        } else {
+            String[] addressParts = fullAddress.split(", ");
+            if (addressParts.length >= 1) {
+                jLabel24.setText(addressParts[0]);
+            }
+            if (addressParts.length >= 2) {
+                jLabel26.setText(addressParts[1]);
+            }
+            if (addressParts.length >= 3) {
+                jLabel27.setText(addressParts[2]);
+            }
+            // If there are more parts, combine them into the last label
+            if (addressParts.length > 3) {
+                StringBuilder remaining = new StringBuilder(addressParts[2]);
+                for (int i = 3; i < addressParts.length; i++) {
+                    remaining.append(", ").append(addressParts[i]);
+                }
+                jLabel27.setText(remaining.toString());
+            }
+        }
+
+        // Status & Preferences
+        jLabel30.setText(guestData.currentBooking != null ? "In house" : "Not checked in");
+        jLabel33.setText("Standard"); // Default room preference
+        jTextArea1.setText(guestData.specialRequests != null ? guestData.specialRequests : "No special requirements");
+
+        // Loyalty & VIP
+        jLabel53.setText(guestData.vipStatus ? "Enrolled" : "Not enrolled");
+        jLabel55.setText(String.valueOf(guestData.loyaltyPoints));
+        jLabel57.setText(guestData.vipStatus ? "Gold" : "Regular");
+        jLabel59.setText(guestData.createdAt != null ? guestData.createdAt : "Not available");
+
+        // Booking History - This would need to be populated from database
+        // For now, we'll leave it as is since it requires additional database queries
+        loadBookingHistory();
+    }
+
+    /**
+     * Load booking history for the guest
+     */
+    private void loadBookingHistory() {
+        if (guestData == null) {
+            return;
+        }
+
+        try {
+            // Query to get booking history for this guest
+            String query = "SELECT b.booking_number, "
+                    + "b.check_in_date, "
+                    + "r.room_number, "
+                    + "DATEDIFF(b.check_out_date, b.check_in_date) as nights, "
+                    + "b.total_amount "
+                    + "FROM booking b "
+                    + "JOIN booking_room br ON b.booking_id = br.booking_id "
+                    + "JOIN room r ON br.room_id = r.room_id "
+                    + "WHERE b.guest_id = ? "
+                    + "ORDER BY b.check_in_date DESC "
+                    + "LIMIT 10";
+
+            // Create table model
+            String[] columnNames = {"Booking", "Date", "Room", "Nights", "Amount"};
+            DefaultTableModel model = new DefaultTableModel(columnNames, 0) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
+
+            // Execute query with guest ID parameter
+            PreparedStatement pstmt = DatabaseConnection.getConnection().prepareStatement(query);
+            pstmt.setInt(1, guestData.guestId);
+            ResultSet rs = pstmt.executeQuery();
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
+            int totalStays = 0;
+            double totalSpent = 0.0;
+
+            while (rs.next()) {
+                String bookingNumber = rs.getString("booking_number");
+                java.util.Date checkInDate = rs.getDate("check_in_date");
+                String roomNumber = rs.getString("room_number");
+                int nights = rs.getInt("nights");
+                double amount = rs.getDouble("total_amount");
+
+                // Format date
+                String date = checkInDate != null ? dateFormat.format(checkInDate) : "N/A";
+
+                // Add row to table
+                Object[] row = {bookingNumber, date, roomNumber, nights, String.format("$%.2f", amount)};
+                model.addRow(row);
+
+                totalStays++;
+                totalSpent += amount;
+            }
+
+            // Update table
+            jTable1.setModel(model);
+
+            // Update summary labels
+            jLabel36.setText(String.valueOf(totalStays));
+            jLabel38.setText(String.format("$%.2f", totalSpent));
+
+            rs.close();
+            pstmt.close();
+
+        } catch (Exception e) {
+            System.out.println("Error loading booking history: " + e.getMessage());
+            // Set default values if there's an error
+            jLabel36.setText("0");
+            jLabel38.setText("$0.00");
+        }
     }
 
     /**
@@ -100,7 +261,7 @@ public class GuestDetailsDialogPanel extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Guest Details");
-        setPreferredSize(new java.awt.Dimension(840, 660));
+        setPreferredSize(new java.awt.Dimension(840, 900));
 
         jLabel1.setText("Guest ID :");
 
@@ -433,7 +594,7 @@ public class GuestDetailsDialogPanel extends javax.swing.JDialog {
                                 .addComponent(jLabel58)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jLabel59)))
-                        .addGap(0, 191, Short.MAX_VALUE))
+                        .addGap(0, 221, Short.MAX_VALUE))
                     .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -633,7 +794,7 @@ public class GuestDetailsDialogPanel extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
         );
 
         pack();
